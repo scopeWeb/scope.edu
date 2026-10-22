@@ -3,7 +3,7 @@
 const dot=(x,y)=>`M${x-1.3} ${y}a1.3 1.3 0 1 0 2.6 0a1.3 1.3 0 1 0-2.6 0`;
 window.SCOPE={
 fb:"https://www.facebook.com/profile.php?id=61576867631685",
-endpoint:"https://script.google.com/macros/s/AKfycbxcAh06Df1momPvTg_QFEkJSCq42tDLJyUS6GGoNWGFfQqJWqTpp_AW9VeY5U7zSE3kvw/exec", // paste NEW Apps Script web-app URL here (see README); empty = form says "not connected"
+endpoint:"https://script.google.com/macros/s/AKfycbwZmXQ_yAEoMsEu6aexo8QLNKooN8ZCOF5r6HtSVEfPVoruXuc6AW42JiVSamdtCGnN2w/exec", // paste NEW Apps Script web-app URL here (see README); empty = form says "not connected"
 turnstileSiteKey:"0x4AAAAAAFhBicfXcfrqVcNW", // public Cloudflare Turnstile site key; secret belongs in Apps Script properties
 pay:{to:"01521407522",amount:650}, // bKash Send Money number; course fees are configured per live course below
 icons:{
