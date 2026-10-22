@@ -42,6 +42,7 @@ function doGet(e) {
 function doPost(e) {
   const p = (e && e.parameter) || {};
   if (p.website) return json_({ ok: true }); // honeypot: bots see success, nothing is saved
+  if ((p.type === 'enrol' || p.type === 'interest') && !verifyTurnstile_(p['cf-turnstile-response'])) return json_({ ok: false, error: 'captcha' });
   const lock = LockService.getScriptLock();
   try {
     lock.waitLock(20000);
@@ -51,6 +52,18 @@ function doPost(e) {
   } finally {
     try { lock.releaseLock(); } catch (x) {}
   }
+}
+
+function verifyTurnstile_(token) {
+  const secret = PropertiesService.getScriptProperties().getProperty('TURNSTILE_SECRET_KEY');
+  if (!secret || !token) return false;
+  try {
+    const response = UrlFetchApp.fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'post', payload: { secret: secret, response: token }, muteHttpExceptions: true
+    });
+    const result = JSON.parse(response.getContentText());
+    return result.success === true && result.hostname === 'scopeweb.github.io';
+  } catch (err) { return false; }
 }
 
 function enrol_(p) {
