@@ -3,7 +3,7 @@
 const dot=(x,y)=>`M${x-1.3} ${y}a1.3 1.3 0 1 0 2.6 0a1.3 1.3 0 1 0-2.6 0`;
 window.SCOPE={
 fb:"https://www.facebook.com/profile.php?id=61576867631685",
-endpoint:"https://script.google.com/macros/s/AKfycbwhERwdBKKH2CabZTTuPyBu8DnuAjSpyZB76PPngxc023tP2G-jMC8rgQNgVVLKy5ob/exec", // paste NEW Apps Script web-app URL here (see README); empty = form says "not connected"
+endpoint:"https://script.google.com/macros/s/AKfycbxcAh06Df1momPvTg_QFEkJSCq42tDLJyUS6GGoNWGFfQqJWqTpp_AW9VeY5U7zSE3kvw/exec", // paste NEW Apps Script web-app URL here (see README); empty = form says "not connected"
 pay:{to:"01521407522",amount:650}, // bKash Send Money number; course fees are configured per live course below
 icons:{
 meal:{p:"M3 3v18h18M7 15l4-4 3 3 6-7M15 7h5v5"},
