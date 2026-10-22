@@ -22,7 +22,7 @@ Edit `assets/js/data.js` to update course details. The bKash number is in `pay.t
 Overwrite `assets/img/logo.png` (favicon, original) and `assets/img/logo-trim.png` (header: same logo with empty white margin removed).
 ## Registrations: Google Sheets (not connected until you do this)
 1. Create a NEW Google Sheet (any name). Open **Extensions > Apps Script**, delete the sample code, paste all of `tools/apps-script.gs`, Save.
-2. **Deploy > New deployment > Web app**. Execute as: **Me**. Who has access: **Anyone**. Deploy and allow the permissions it asks for (Sheets and Gmail sending).
+2. **Deploy > New deployment > Web app**. Execute as: **Me**. Who has access: **Anyone**. Deploy and allow the permissions it asks for (Sheets, Gmail sending, and external requests for Turnstile validation).
 3. In Apps Script **Project Settings > Script properties**, add `TURNSTILE_SECRET_KEY` with the Turnstile Secret Key. Never put this secret in website files or GitHub. The public Site Key is configured in `assets/js/data.js` as `turnstileSiteKey`.
 4. Copy the web-app URL (ends with `/exec`) and paste it into `endpoint` in `assets/js/data.js`.
 5. Open the live site's registration page. One form serves all live courses; select MEAL or MIS before entering payment details. The first MEAL submission creates a `MEAL Registrations` tab, and the first MIS submission creates a `MIS Registrations` tab. Existing `Registrations` rows remain supported.
@@ -30,7 +30,7 @@ Overwrite `assets/img/logo.png` (favicon, original) and `assets/img/logo-trim.pn
 7. Paste your Meet link in `MEET_LINK` if you want it in the payment confirmation email. After each real bKash payment, check the TrxID in the matching course tab and set **Status** to Verified. The trigger sends email to the registrant and fills **Verified email sent** with the sent time. If it fails, the cell note records the error; use **SCOPE > Retry unsent verification emails** after fixing the issue. The registrant confirmation page checks the status in either course tab and changes its badge to green after verification.
 8. After changing Apps Script code or Script Properties, deploy a new version from **Deploy > Manage deployments > Edit > New version**. Turnstile validates on the server; submissions are rejected if the secret property is missing or validation fails.
 If you edit the script later, use **Deploy > Manage deployments > Edit > New version**, otherwise the live URL keeps the old code.
-The Sheet stays private; the web app accepts submissions and exposes only the verified/pending state for a registration when queried with its unguessable reference. Duplicate TrxIDs are rejected. Gmail sending from a normal Google account is limited to about 100 emails a day. A honeypot field is included; add Turnstile/reCAPTCHA if spam appears. Never put credentials in the site.
+The Sheet stays private; the web app accepts submissions and exposes only the verified/pending state for a registration when queried with its unguessable reference. Duplicate TrxIDs are rejected. Gmail sending from a normal Google account is limited to about 100 emails a day. A honeypot and Cloudflare Turnstile protect the forms; Turnstile tokens are verified server-side. Never put credentials in the site.
 ## bKash payment (manual)
 Students use **Send Money** to the number in `data.js`, then enter their own bKash number and the TrxID. The site cannot check the payment itself (GitHub Pages has no server), so you verify each TrxID in your bKash history. Never put bKash API keys or PINs in the site.
 ## Motion
