@@ -20,7 +20,11 @@
       <small id="wardSourceNote">ওয়ার্ড (ইপিআই) স্বাস্থ্যসেবা পরিকল্পনার এলাকা; নির্বাচনী ওয়ার্ড নয়। গ্রাম-সীমানার নির্ভরযোগ্য উন্মুক্ত polygon data পাওয়া যায়নি।</small>
       <small id="areaHint">বিভাগ → জেলা → উপজেলা → ইউনিয়ন বেছে নিন। ওয়ার্ড আলাদা তালিকায়।</small>
     </section>
-    <section class="control-group"><h2 data-i18n="adminBoundary">প্রশাসনিক সীমানা</h2><label class="admin-color-control"><span data-i18n="adminColorLabel">প্রশাসনিক সীমানার রং</span><input id="adminColor" type="color" value="#a9d8a6" aria-label="Administrative boundary color"></label></section>
+    <section class="control-group"><h2 data-i18n="adminBoundary">প্রশাসনিক সীমানা</h2>
+      <label class="admin-color-control"><span data-i18n="adminColorLabel">এলাকার ভরাটের রং</span><input id="adminColor" type="color" value="#a9d8a6" aria-label="Administrative area fill color"></label>
+      <label class="admin-color-control"><span data-i18n="adminLineColor">বর্ডার লাইনের রং</span><input id="adminLineColor" type="color" value="#ffffff" aria-label="Boundary line color"></label>
+      <label><span data-i18n="adminLineWidth">বর্ডার লাইনের পুরুত্ব</span><input id="adminLineWidth" type="range" min="0.5" max="4" step="0.1" value="1.1" aria-label="Boundary line thickness"><output id="adminLineWidthValue" for="adminLineWidth">1.1 px</output></label>
+    </section>
     <section class="control-group"><h2 data-i18n="mapTitle">মানচিত্রের শিরোনাম</h2><input id="mapTitle" maxlength="100" value="বাংলাদেশের তথ্যমানচিত্র" aria-label="Map title"></section>
     <section class="control-group"><h2 data-i18n="category">নিজের তথ্যের category</h2>
       <div class="add-layer"><input id="layerName" maxlength="40" placeholder="যেমন: স্বাস্থ্যকেন্দ্র" aria-label="Category name"><input id="layerColor" type="color" value="#16B8A6" aria-label="Category color"><button id="addLayer" class="primary">+ <span data-i18n="addCategory">category যোগ</span></button></div>
