@@ -28,10 +28,10 @@
     <section class="control-group"><h2 data-i18n="riverSettings">নদীর layer</h2>
       <label class="check-row"><input id="riversEnabled" type="checkbox"><span data-i18n="showRivers">মানচিত্রে নদী দেখান</span></label>
       <div id="riverLevelOptions" class="river-level-options" hidden>
-        <label class="check-row"><input class="river-level" type="checkbox" value="1" checked><span data-i18n="riverLevel1">Level 1 · প্রধান নদী (order 6+)</span></label>
-        <label class="check-row"><input class="river-level" type="checkbox" value="2"><span data-i18n="riverLevel2">Level 2 · বড় শাখা নদী (order 4–5)</span></label>
-        <label class="check-row"><input class="river-level" type="checkbox" value="3"><span data-i18n="riverLevel3">Level 3 · ছোট শাখা নদী (order 2–3)</span></label>
-        <label class="check-row"><input class="river-level" type="checkbox" value="4"><span data-i18n="riverLevel4">Level 4 · ছোট জলধারা (order 1)</span></label>
+        <div class="river-level-row"><label class="check-row"><input class="river-level" type="checkbox" value="1" checked><span data-i18n="riverLevel1">Level 1 · প্রধান নদী (order 6+)</span></label><label class="river-name-row"><input class="river-name-level" type="checkbox" value="1"><span data-i18n="riverNames">নাম</span></label></div>
+        <div class="river-level-row"><label class="check-row"><input class="river-level" type="checkbox" value="2"><span data-i18n="riverLevel2">Level 2 · বড় শাখা নদী (order 4–5)</span></label><label class="river-name-row"><input class="river-name-level" type="checkbox" value="2"><span data-i18n="riverNames">নাম</span></label></div>
+        <div class="river-level-row"><label class="check-row"><input class="river-level" type="checkbox" value="3"><span data-i18n="riverLevel3">Level 3 · ছোট শাখা নদী (order 2–3)</span></label><label class="river-name-row"><input class="river-name-level" type="checkbox" value="3"><span data-i18n="riverNames">নাম</span></label></div>
+        <div class="river-level-row"><label class="check-row"><input class="river-level" type="checkbox" value="4"><span data-i18n="riverLevel4">Level 4 · ছোট জলধারা (order 1)</span></label><label class="river-name-row"><input class="river-name-level" type="checkbox" value="4"><span data-i18n="riverNames">নাম</span></label></div>
       </div>
       <p class="quiet" data-i18n="riverHelp">নদী দেখাতে প্রথম checkbox দিন, তারপর প্রয়োজনীয় level বাছুন।</p>
     </section>
@@ -50,7 +50,7 @@
   </aside>
   <section class="canvas-wrap"><div class="canvas-top"><div><span id="levelBadge" class="level-badge">বিভাগ</span><b id="featureCount">মানচিত্র লোড হচ্ছে…</b></div><div class="map-legend" id="legend"></div></div>
     <div class="map-frame" id="mapFrame"><svg id="mapSvg" viewBox="0 0 960 680" role="img" aria-label="বাংলাদেশের প্রশাসনিক মানচিত্র" xmlns="http://www.w3.org/2000/svg"><rect width="960" height="680" fill="#f4f8f7"/><text x="480" y="340" text-anchor="middle" fill="#496579">মানচিত্র লোড হচ্ছে…</text></svg><div id="mapToast" class="map-toast" hidden></div></div>
-    <div class="map-foot"><span id="mapPrompt">এলাকা বেছে নিলে মানচিত্রটি বিস্তারিত হবে।</span><span>সীমানা: <a href="https://ecds.bbs.gov.bd/Home/AboutUs" target="_blank" rel="noopener" id="boundarySource">BBS 2022 boundary layer</a> · নদী: <a href="https://www.hydrosheds.org/products/hydrorivers" target="_blank" rel="noopener" id="riverSource">HydroRIVERS v10 · Strahler order</a> · Map Studio</span></div>
+    <div class="map-foot"><span id="mapPrompt">এলাকা বেছে নিলে মানচিত্রটি বিস্তারিত হবে।</span><span>সীমানা: <a href="https://ecds.bbs.gov.bd/Home/AboutUs" target="_blank" rel="noopener" id="boundarySource">BBS 2022 boundary layer</a> · নদীর রেখা: <a href="https://www.hydrosheds.org/products/hydrorivers" target="_blank" rel="noopener" id="riverSource">HydroRIVERS v10 · Strahler order</a> · নাম: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · Map Studio</span></div>
     <div class="disclaimer" id="disclaimer">অপারেশনাল সিদ্ধান্তের আগে বর্তমান সরকারি নথির সঙ্গে মিলিয়ে নিন; ward/union সীমানা বদলাতে পারে।</div>
   </section>
 </main>
