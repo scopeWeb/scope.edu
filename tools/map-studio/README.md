@@ -10,6 +10,7 @@ Static browser app, linked from the SCOPE site navigation. It draws administrati
 - PNG download and browser print-to-PDF.
 - Optional river overlay with four independently selectable stream-order levels, saved with the user's project and included in PNG/PDF exports.
 - English/Bangla controls, SCOPE logo and brand palette.
+- Map editor toolbar to switch area-label language, hide labels, show or hide internal boundaries, change boundary color/width, and rename any clicked area with a custom spelling. These settings and names persist locally and are included in project JSON export.
 
 ## Boundary data
 
@@ -19,6 +20,12 @@ The bundled boundaries come from the BBS 2022 administrative boundary layer serv
 - [ArcGIS boundary service](https://www.arcgisbd.com/server/rest/services/ADB005/CRIIPS/MapServer)
 
 Check the source and current administrative records before using the map for official or operational decisions. If BBS updates its boundaries, regenerate the four JavaScript files in `data/` and preserve the expected property names (`Division`, `District`, `Upazila`, `UnName`, `Municipal`, `CityCorp`).
+
+### Area labels and boundary display
+
+The toolbar can hide internal administrative separators while keeping a dissolved outline of Bangladesh visible on the nationwide map. Filled areas keep their own borders when the separators are hidden. Users can restore all internal boundaries at any time, set their color and thickness in the toolbar, toggle map labels, switch between English and Bengali labels, and click **Rename areas** to save a custom spelling. Overrides are keyed to the selected area's administrative identity, so changing display language does not erase them.
+
+The bundled Bengali reference names for divisions, districts, and available upazilas are from [Open Admin Data](https://github.com/open-admin-data/bangladesh-administrative-divisions) (CC BY 4.0). Union names use [bd-geo-info](https://github.com/mdtanvirahamedshanto/bd-geo-info) (MIT). Those reference lists do not match every BBS spelling; unmatched names fall back to the BBS label and can be corrected with the custom-name editor. The dissolved country outline is derived from the bundled BBS 2022 division polygons.
 
 ### Road and highway lines
 
