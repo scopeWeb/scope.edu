@@ -20,6 +20,14 @@ The bundled boundaries come from the BBS 2022 administrative boundary layer serv
 
 Check the source and current administrative records before using the map for official or operational decisions. If BBS updates its boundaries, regenerate the four JavaScript files in `data/` and preserve the expected property names (`Division`, `District`, `Upazila`, `UnName`, `Municipal`, `CityCorp`).
 
+### Road and highway lines
+
+The map combines the Roads and Highways Department (RHD) hosted **RHD All Road Single Line** GIS layer with OpenStreetMap road classes. RHD National, Regional, and Zilla roads are grouped into Levels 1–3 and drawn with a stronger stroke over the OSM reference lines. Level 3 is enabled by default so secondary connections are visible in the nationwide view. The RHD layer is a useful backbone, but its published GIS service and OSM are not guaranteed to contain every road or bridge connection; verify operational routes against current RHD/LGED records.
+
+- [RHD All Road Single Line GIS service](https://gis.rhd.gov.bd/server/rest/services/Hosted/RHD_Road_Single_Line/FeatureServer/0)
+- [RHD Online Road Network](https://rhd.gov.bd/OnlineRoadNetwork/Default.asp)
+- [OpenStreetMap attribution and licence](https://www.openstreetmap.org/copyright)
+
 ### River lines
 
 The optional river overlay is derived from the Asia release of HydroRIVERS v10. Its actual Strahler stream-order attribute is grouped into four selectable levels:

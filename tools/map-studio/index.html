@@ -38,10 +38,10 @@
     <section class="control-group transport-group"><h2 data-i18n="roadSettings">সড়ক ও মহাসড়ক</h2>
       <label class="check-row"><input id="roadsEnabled" type="checkbox"><span data-i18n="showRoads">সড়ক দেখান</span></label>
       <div id="roadLevelOptions" class="river-level-options" hidden>
-        <label class="check-row"><input class="road-level" type="checkbox" value="1"><span data-i18n="roadLevel1">Level 1 · প্রধান মহাসড়ক</span></label>
-        <label class="check-row"><input class="road-level" type="checkbox" value="2"><span data-i18n="roadLevel2">Level 2 · মাধ্যমিক সড়ক</span></label>
-        <label class="check-row"><input class="road-level" type="checkbox" value="3"><span data-i18n="roadLevel3">Level 3 · তৃতীয় শ্রেণির সড়ক</span></label>
-      </div><p class="quiet" data-i18n="roadHelp">সড়ক layer চালু করে দরকারি শ্রেণি বেছে নিন।</p>
+        <label class="check-row"><input class="road-level" type="checkbox" value="1"><span data-i18n="roadLevel1">Level 1 · জাতীয় মহাসড়ক + OSM প্রধান সড়ক</span></label>
+        <label class="check-row"><input class="road-level" type="checkbox" value="2"><span data-i18n="roadLevel2">Level 2 · আঞ্চলিক সড়ক + OSM secondary</span></label>
+        <label class="check-row"><input class="road-level" type="checkbox" value="3"><span data-i18n="roadLevel3">Level 3 · জেলা সড়ক + OSM tertiary</span></label>
+      </div><p class="quiet" data-i18n="roadHelp">RHD-এর জাতীয়, আঞ্চলিক ও জেলা সড়কের সঙ্গে OSM road details দেখায়।</p>
     </section>
     <section class="control-group transport-group"><h2 data-i18n="railSettings">রেলপথ</h2>
       <label class="check-row"><input id="railEnabled" type="checkbox"><span data-i18n="showRail">রেলপথ দেখান</span></label>
@@ -75,8 +75,8 @@
   </aside>
   <section class="canvas-wrap"><div class="canvas-top"><div><span id="levelBadge" class="level-badge">বিভাগ</span><b id="featureCount">মানচিত্র লোড হচ্ছে…</b></div><div class="map-legend" id="legend"></div></div>
     <div class="map-frame" id="mapFrame"><svg id="mapSvg" viewBox="0 0 960 680" role="img" aria-label="বাংলাদেশের প্রশাসনিক মানচিত্র" xmlns="http://www.w3.org/2000/svg"><rect width="960" height="680" fill="#f4f8f7"/><text x="480" y="340" text-anchor="middle" fill="#496579">মানচিত্র লোড হচ্ছে…</text></svg><div id="mapToast" class="map-toast" hidden></div></div>
-    <div class="map-foot"><span id="mapPrompt">এলাকা বেছে নিলে মানচিত্রটি বিস্তারিত হবে।</span><span>সীমানা: <a href="https://ecds.bbs.gov.bd/Home/AboutUs" target="_blank" rel="noopener" id="boundarySource">BBS 2022 boundary layer</a> · নদীর রেখা: <a href="https://www.hydrosheds.org/products/hydrorivers" target="_blank" rel="noopener" id="riverSource">HydroRIVERS v10 · Strahler order</a> · পরিবহন: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap / HOTOSM</a>, <a href="https://new.caab.gov.bd/airportsf.html" target="_blank" rel="noopener">CAAB</a> · Map Studio</span></div>
-    <div class="disclaimer" id="disclaimer">পরিবহন data সাধারণ reference; সড়ক/রেল OSM-ভিত্তিক, বিমান route নির্দেশক। জরুরি সিদ্ধান্তের আগে বর্তমান সরকারি উৎস যাচাই করুন।</div>
+    <div class="map-foot"><span id="mapPrompt">এলাকা বেছে নিলে মানচিত্রটি বিস্তারিত হবে।</span><span>সীমানা: <a href="https://ecds.bbs.gov.bd/Home/AboutUs" target="_blank" rel="noopener" id="boundarySource">BBS 2022 boundary layer</a> · নদীর রেখা: <a href="https://www.hydrosheds.org/products/hydrorivers" target="_blank" rel="noopener" id="riverSource">HydroRIVERS v10 · Strahler order</a> · সড়ক: <a href="https://gis.rhd.gov.bd/server/rest/services/Hosted/RHD_Road_Single_Line/FeatureServer/0" target="_blank" rel="noopener">RHD GIS road network</a> · রেল: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · বিমান: <a href="https://new.caab.gov.bd/airportsf.html" target="_blank" rel="noopener">CAAB</a> · Map Studio</span></div>
+    <div class="disclaimer" id="disclaimer">সড়কের মূল রুট RHD GIS থেকে; অতিরিক্ত সড়ক ও রেল OpenStreetMap থেকে। OSM coverage অসম্পূর্ণ হতে পারে। বিমান route নির্দেশক; সরকারি বা operational কাজে উৎস যাচাই করুন।</div>
   </section>
 </main>
 <script src="map-studio.js"></script>
