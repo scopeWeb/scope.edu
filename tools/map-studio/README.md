@@ -8,6 +8,7 @@ Static browser app, linked from the SCOPE site navigation. It draws administrati
 - Custom category layers, colors, place labels and notes. Click the map to add a location.
 - Browser auto-save and project JSON import/export.
 - PNG download and browser print-to-PDF.
+- Bundled river lines that remain visible from division down to union/EPI ward scale, with a river legend and source credit.
 - English/Bangla controls, SCOPE logo and brand palette.
 
 ## Boundary data
@@ -18,6 +19,12 @@ The bundled boundaries come from the BBS 2022 administrative boundary layer serv
 - [ArcGIS boundary service](https://www.arcgisbd.com/server/rest/services/ADB005/CRIIPS/MapServer)
 
 Check the source and current administrative records before using the map for official or operational decisions. If BBS updates its boundaries, regenerate the four JavaScript files in `data/` and preserve the expected property names (`Division`, `District`, `Upazila`, `UnName`, `Municipal`, `CityCorp`).
+
+### River lines
+
+The map overlays 2,076 generalized river line features from the public BIWTA_Topo ArcGIS layer named “Rivers (World Mapping Initiative)”. The data is bundled in `data/rivers.js`, rendered above area fills at every map extent, and included in PNG/PDF exports. Attribution is shown in the map footer. This generalized reference network is not a complete or current BWDB river inventory; small rivers, canals and recent channel changes may be missing.
+
+- [Rivers (World Mapping Initiative) ArcGIS layer](https://services.arcgis.com/zmBQLV64TsFvEpV0/ArcGIS/rest/services/BIWTA_Topo/FeatureServer/7)
 
 ### EPI wards and villages
 
