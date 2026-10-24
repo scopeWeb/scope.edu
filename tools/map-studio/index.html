@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Map Studio | SCOPE</title>
+<meta name="description" content="Create informative maps of Bangladesh with SCOPE Map Studio.">
+<meta name="theme-color" content="#102A43"><link rel="icon" href="../../assets/img/logo.png">
+<link rel="stylesheet" href="../../assets/css/site.css"><link rel="stylesheet" href="map-studio.css">
+</head>
+<body class="map-page">
+<header class="map-head"><a href="../../index.html" class="map-brand"><img src="../../assets/img/logo-trim.png" alt="SCOPE"></a><div><span class="eyebrow">SCOPE · MAP STUDIO</span><h1 id="pageTitle">বাংলাদেশ তথ্যমানচিত্র</h1><p id="pageDesc">প্রশাসনিক এলাকা বেছে নিন, নিজের তথ্য যোগ করুন, মানচিত্র তৈরি করুন।</p></div><button class="lang-toggle" id="langToggle">English</button></header>
+<main class="studio">
+  <aside class="panel" aria-label="Map settings">
+    <section class="control-group"><h2 data-i18n="area">এলাকা নির্বাচন</h2>
+      <label><span data-i18n="division">বিভাগ</span><select id="division"><option value="">সব বিভাগ</option></select></label>
+      <label><span data-i18n="district">জেলা</span><select id="district" disabled><option value="">সব জেলা</option></select></label>
+      <label><span data-i18n="upazila">উপজেলা</span><select id="upazila" disabled><option value="">সব উপজেলা</option></select></label>
+      <label><span data-i18n="union">ইউনিয়ন / ওয়ার্ড এলাকা</span><select id="union" disabled><option value="">সব ইউনিয়ন / ওয়ার্ড এলাকা</option></select></label>
+      <small id="areaHint">বিভাগ → জেলা → উপজেলা → ইউনিয়ন/ওয়ার্ড পর্যন্ত বেছে নিন।</small>
+    </section>
+    <section class="control-group"><h2 data-i18n="mapTitle">মানচিত্রের শিরোনাম</h2><input id="mapTitle" maxlength="100" value="বাংলাদেশের তথ্যমানচিত্র" aria-label="Map title"></section>
+    <section class="control-group"><h2 data-i18n="category">নিজের তথ্যের category</h2>
+      <div class="add-layer"><input id="layerName" maxlength="40" placeholder="যেমন: স্বাস্থ্যকেন্দ্র" aria-label="Category name"><input id="layerColor" type="color" value="#16B8A6" aria-label="Category color"><button id="addLayer" class="primary">+ <span data-i18n="addCategory">category যোগ</span></button></div>
+      <p class="quiet" data-i18n="categoryHelp">একেকটি category একটি map layer। যেমন: হাসপাতাল, স্কুল, আশ্রয়কেন্দ্র, প্রশিক্ষণ কেন্দ্র।</p>
+      <div id="layers" class="layers"></div>
+      <label><span data-i18n="fillLayer">এলাকা ভরাটের layer</span><select id="fillLayer"></select></label><button id="fillMode" class="secondary" data-i18n="fillMode">ক্লিক করে এলাকা রঙে ভরাট করুন</button><p class="quiet" id="fillHelp">একটি layer বেছে নিয়ে জেলা, উপজেলা বা ইউনিয়ন/ওয়ার্ডে ক্লিক করুন।</p><button id="chakmaDemo" class="secondary">চাকমা উদাহরণ দেখুন</button>
+    </section>
+    <section class="control-group"><h2 data-i18n="csvTitle">Excel থেকে অনেক স্থান যোগ</h2><p class="quiet" data-i18n="csvHelp">CSV কলাম: name, latitude, longitude, category, note। Excel থেকে Save As → CSV UTF-8 করুন।</p><div class="two-buttons"><button id="importCsv" class="secondary" data-i18n="importCsv">CSV import</button><button id="csvTemplate" class="secondary" data-i18n="csvTemplate">নমুনা CSV</button></div><input id="csvFile" type="file" accept=".csv,text/csv" hidden></section>
+    <section class="control-group"><h2 data-i18n="addPlace">স্থান যোগ করুন</h2><p id="placeHelp">প্রথমে category বেছে নিন, তারপর মানচিত্রে যেখানে স্থানটি আছে সেখানে ক্লিক করুন।</p><label><span data-i18n="chooseLayer">Category</span><select id="placeLayer"></select></label><button id="placeMode" class="secondary" data-i18n="pickPoint">মানচিত্রে স্থান বেছে নিন</button>
+      <form id="pointForm" class="point-form" hidden><label><span data-i18n="placeName">স্থানের নাম</span><input id="pointName" maxlength="60" required></label><label><span data-i18n="note">বিবরণ (ঐচ্ছিক)</span><input id="pointNote" maxlength="120"></label><div class="form-actions"><button type="button" id="cancelPoint" class="secondary" data-i18n="cancel">বাতিল</button><button class="primary" data-i18n="savePlace">স্থান সংরক্ষণ</button></div></form>
+    </section>
+    <section class="control-group actions"><h2 data-i18n="exportHeading">সংরক্ষণ ও export</h2><button id="exportPng" class="primary">PNG ডাউনলোড</button><button id="printPdf" class="secondary">PDF / Print</button><div class="two-buttons"><button id="saveProject" class="secondary" data-i18n="saveProject">Project JSON</button><button id="loadProject" class="secondary" data-i18n="loadProject">Project খুলুন</button><input id="projectFile" type="file" accept="application/json,.json" hidden></div><button id="clearProject" class="text-button" data-i18n="clearProject">নিজের map data মুছুন</button><div id="saveStatus" class="save-status" aria-live="polite"></div></section>
+  </aside>
+  <section class="canvas-wrap"><div class="canvas-top"><div><span id="levelBadge" class="level-badge">বিভাগ</span><b id="featureCount">মানচিত্র লোড হচ্ছে…</b></div><div class="map-legend" id="legend"></div></div>
+    <div class="map-frame" id="mapFrame"><svg id="mapSvg" viewBox="0 0 960 680" role="img" aria-label="বাংলাদেশের প্রশাসনিক মানচিত্র" xmlns="http://www.w3.org/2000/svg"><rect width="960" height="680" fill="#f4f8f7"/><text x="480" y="340" text-anchor="middle" fill="#496579">মানচিত্র লোড হচ্ছে…</text></svg><div id="mapToast" class="map-toast" hidden></div></div>
+    <div class="map-foot"><span id="mapPrompt">এলাকা বেছে নিলে মানচিত্রটি বিস্তারিত হবে।</span><span>সীমানা: <a href="https://ecds.bbs.gov.bd/Home/AboutUs" target="_blank" rel="noopener" id="boundarySource">BBS 2022 boundary layer</a> · Map Studio V1</span></div>
+    <div class="disclaimer" id="disclaimer">অপারেশনাল সিদ্ধান্তের আগে বর্তমান সরকারি নথির সঙ্গে মিলিয়ে নিন; ward/union সীমানা বদলাতে পারে।</div>
+  </section>
+</main>
+<script src="map-studio.js"></script>
+</body></html>
