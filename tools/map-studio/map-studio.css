@@ -8,3 +8,4 @@
 .place-list{margin:0 0 8px 32px;font-size:12px;color:#52697b}.place-list summary{cursor:pointer;padding:4px 0}.place-list p{display:flex;justify-content:space-between;gap:6px;align-items:flex-start;margin:3px 0;padding:5px;border-radius:6px;background:#f4f8fa}.place-list p button{border:0;background:transparent;color:#b42318;font-size:16px;cursor:pointer;line-height:1}
 
 .map-frame.fill-mode{cursor:crosshair;outline:3px dashed var(--ms-teal);outline-offset:-7px}.map-page #fillMode.active{background:var(--ms-navy);color:#fff}.admin-feature[style*="fill-opacity"]{stroke:#fff}
+.admin-color-control{display:flex!important;align-items:center;justify-content:space-between;gap:12px}.admin-color-control input[type=color]{width:60px;height:38px;padding:3px;border:1px solid var(--ms-border);border-radius:8px;background:#fff;cursor:pointer;flex:none}
