@@ -25,3 +25,7 @@
 .control-group .river-name-row{display:flex;align-items:center;gap:4px;margin:4px 0;color:#52697b;font-size:11px;font-weight:650;white-space:nowrap;cursor:pointer}
 .river-name-row input[type=checkbox]{width:15px;height:15px;flex:none;margin:0;accent-color:var(--ms-teal);cursor:pointer}
 .river-name-label{font:700 11px Sora,"Noto Sans Bengali",sans-serif;fill:#11435c;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+
+.transport-group .river-level-options{gap:4px}.transport-group .quiet{line-height:1.5}.transport-line{fill:none;pointer-events:none;vector-effect:non-scaling-stroke}.road-level-1{stroke:#c83e35;stroke-width:1.7}.road-level-2{stroke:#e18a2d;stroke-width:1.15}.road-level-3{stroke:#d5a84e;stroke-width:.7}.rail-line{stroke:#4d3a70;stroke-width:1.15}.rail-broad{stroke:#6f42a5}.rail-meter{stroke:#9a6b32}.rail-dual{stroke:#c04451;stroke-width:1.5}.rail-unknown{stroke:#687889;stroke-dasharray:3 2}.flight-route{stroke:#147c9d;stroke-width:1.6;stroke-dasharray:6 4}.airport-dot{fill:#087766;stroke:#fff;stroke-width:1.5;vector-effect:non-scaling-stroke}.transport-label{font:700 9px Sora,"Noto Sans Bengali",sans-serif;fill:#11435c;paint-order:stroke;stroke:#fff;stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+
+.transport-swatch{width:14px!important;height:0!important;border-top:2px solid #147c9d;border-radius:0!important}

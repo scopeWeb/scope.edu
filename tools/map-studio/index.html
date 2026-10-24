@@ -35,6 +35,31 @@
       </div>
       <p class="quiet" data-i18n="riverHelp">নদী দেখাতে প্রথম checkbox দিন, তারপর প্রয়োজনীয় level বাছুন।</p>
     </section>
+    <section class="control-group transport-group"><h2 data-i18n="roadSettings">সড়ক ও মহাসড়ক</h2>
+      <label class="check-row"><input id="roadsEnabled" type="checkbox"><span data-i18n="showRoads">সড়ক দেখান</span></label>
+      <div id="roadLevelOptions" class="river-level-options" hidden>
+        <label class="check-row"><input class="road-level" type="checkbox" value="1"><span data-i18n="roadLevel1">Level 1 · মহাসড়ক / প্রধান করিডর</span></label>
+        <label class="check-row"><input class="road-level" type="checkbox" value="2"><span data-i18n="roadLevel2">Level 2 · প্রাথমিক ও মাধ্যমিক সড়ক</span></label>
+        <label class="check-row"><input class="road-level" type="checkbox" value="3"><span data-i18n="roadLevel3">Level 3 · তৃতীয় শ্রেণির সংযোগ সড়ক</span></label>
+      </div><p class="quiet" data-i18n="roadHelp">সড়ক layer চালু করে দরকারি শ্রেণি বেছে নিন।</p>
+    </section>
+    <section class="control-group transport-group"><h2 data-i18n="railSettings">রেলপথ</h2>
+      <label class="check-row"><input id="railEnabled" type="checkbox"><span data-i18n="showRail">রেলপথ দেখান</span></label>
+      <div id="railOptions" class="river-level-options" hidden>
+        <label class="check-row"><input class="rail-gauge" type="checkbox" value="broad"><span data-i18n="gaugeBroad">ব্রডগেজ</span></label>
+        <label class="check-row"><input class="rail-gauge" type="checkbox" value="meter"><span data-i18n="gaugeMeter">মিটারগেজ</span></label>
+        <label class="check-row"><input class="rail-gauge" type="checkbox" value="dual"><span data-i18n="gaugeDual">ডুয়েলগেজ</span></label>
+        <label class="check-row"><input class="rail-gauge" type="checkbox" value="unknown"><span data-i18n="gaugeUnknown">গেজ অজানা</span></label>
+        <label class="check-row"><input id="railStations" type="checkbox"><span data-i18n="railStations">রেলস্টেশনও দেখান</span></label>
+      </div><p class="quiet" data-i18n="railHelp">গেজের তথ্য OSM tags-এ থাকলে শ্রেণি দেখাবে; অন্য রেখা “গেজ অজানা”তে থাকবে।</p>
+    </section>
+    <section class="control-group transport-group"><h2 data-i18n="aviationSettings">বিমান যোগাযোগ</h2>
+      <label class="check-row"><input id="aviationEnabled" type="checkbox"><span data-i18n="showAviation">বিমান layer চালু করুন</span></label>
+      <div id="aviationOptions" class="river-level-options" hidden>
+        <label class="check-row"><input id="flightRoutes" type="checkbox"><span data-i18n="flightRoutes">দেশীয় রুট দেখান</span></label>
+        <label class="check-row"><input id="airportsShown" type="checkbox"><span data-i18n="airportsShown">বিমানবন্দর দেখান</span></label>
+      </div><p class="quiet" data-i18n="aviationHelp">রুটগুলো বিমানবন্দর-থেকে-বিমানবন্দর নির্দেশক রেখা; প্রকৃত flight path বা live schedule নয়।</p>
+    </section>
     <section class="control-group"><h2 data-i18n="mapTitle">মানচিত্রের শিরোনাম</h2><input id="mapTitle" maxlength="100" value="বাংলাদেশের তথ্যমানচিত্র" aria-label="Map title"></section>
     <section class="control-group"><h2 data-i18n="category">নিজের তথ্যের category</h2>
       <div class="add-layer"><input id="layerName" maxlength="40" placeholder="যেমন: স্বাস্থ্যকেন্দ্র" aria-label="Category name"><input id="layerColor" type="color" value="#16B8A6" aria-label="Category color"><button id="addLayer" class="primary">+ <span data-i18n="addCategory">category যোগ</span></button></div>
@@ -50,8 +75,8 @@
   </aside>
   <section class="canvas-wrap"><div class="canvas-top"><div><span id="levelBadge" class="level-badge">বিভাগ</span><b id="featureCount">মানচিত্র লোড হচ্ছে…</b></div><div class="map-legend" id="legend"></div></div>
     <div class="map-frame" id="mapFrame"><svg id="mapSvg" viewBox="0 0 960 680" role="img" aria-label="বাংলাদেশের প্রশাসনিক মানচিত্র" xmlns="http://www.w3.org/2000/svg"><rect width="960" height="680" fill="#f4f8f7"/><text x="480" y="340" text-anchor="middle" fill="#496579">মানচিত্র লোড হচ্ছে…</text></svg><div id="mapToast" class="map-toast" hidden></div></div>
-    <div class="map-foot"><span id="mapPrompt">এলাকা বেছে নিলে মানচিত্রটি বিস্তারিত হবে।</span><span>সীমানা: <a href="https://ecds.bbs.gov.bd/Home/AboutUs" target="_blank" rel="noopener" id="boundarySource">BBS 2022 boundary layer</a> · নদীর রেখা: <a href="https://www.hydrosheds.org/products/hydrorivers" target="_blank" rel="noopener" id="riverSource">HydroRIVERS v10 · Strahler order</a> · নাম: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a> · Map Studio</span></div>
-    <div class="disclaimer" id="disclaimer">অপারেশনাল সিদ্ধান্তের আগে বর্তমান সরকারি নথির সঙ্গে মিলিয়ে নিন; ward/union সীমানা বদলাতে পারে।</div>
+    <div class="map-foot"><span id="mapPrompt">এলাকা বেছে নিলে মানচিত্রটি বিস্তারিত হবে।</span><span>সীমানা: <a href="https://ecds.bbs.gov.bd/Home/AboutUs" target="_blank" rel="noopener" id="boundarySource">BBS 2022 boundary layer</a> · নদীর রেখা: <a href="https://www.hydrosheds.org/products/hydrorivers" target="_blank" rel="noopener" id="riverSource">HydroRIVERS v10 · Strahler order</a> · পরিবহন: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap / HOTOSM</a>, <a href="https://new.caab.gov.bd/airportsf.html" target="_blank" rel="noopener">CAAB</a> · Map Studio</span></div>
+    <div class="disclaimer" id="disclaimer">পরিবহন data সাধারণ reference; সড়ক/রেল OSM-ভিত্তিক, বিমান route নির্দেশক। জরুরি সিদ্ধান্তের আগে বর্তমান সরকারি উৎস যাচাই করুন।</div>
   </section>
 </main>
 <script src="map-studio.js"></script>
