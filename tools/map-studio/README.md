@@ -8,7 +8,7 @@ Static browser app, linked from the SCOPE site navigation. It draws administrati
 - Custom category layers, colors, place labels and notes. Click the map to add a location.
 - Browser auto-save and project JSON import/export.
 - PNG download and browser print-to-PDF.
-- Bundled river lines that remain visible from division down to union/EPI ward scale, with a river legend and source credit.
+- Optional river overlay with four independently selectable stream-order levels, saved with the user's project and included in PNG/PDF exports.
 - English/Bangla controls, SCOPE logo and brand palette.
 
 ## Boundary data
@@ -22,9 +22,18 @@ Check the source and current administrative records before using the map for off
 
 ### River lines
 
-The map overlays 2,076 generalized river line features from the public BIWTA_Topo ArcGIS layer named “Rivers (World Mapping Initiative)”. The data is bundled in `data/rivers.js`, rendered above area fills at every map extent, and included in PNG/PDF exports. Attribution is shown in the map footer. This generalized reference network is not a complete or current BWDB river inventory; small rivers, canals and recent channel changes may be missing.
+The optional river overlay is derived from the Asia release of HydroRIVERS v10. Its actual Strahler stream-order attribute is grouped into four selectable levels:
 
-- [Rivers (World Mapping Initiative) ArcGIS layer](https://services.arcgis.com/zmBQLV64TsFvEpV0/ArcGIS/rest/services/BIWTA_Topo/FeatureServer/7)
+- Level 1: orders 6 and higher — main rivers.
+- Level 2: orders 4–5 — larger tributaries.
+- Level 3: orders 2–3 — smaller tributaries.
+- Level 4: order 1 — headwater reaches.
+
+The bundled data contains 26,497 generalized river reaches. Rivers are off by default. Turning the river layer on reveals independent checkboxes for each level; any combination can be displayed. Line widths also decrease from Level 1 to Level 4. The selected visibility and levels persist in the browser and in exported project JSON. River reach geometries are generalized for display and included in PNG/PDF exports. The selection mask is simplified from the bundled BBS administrative polygons and buffered by 0.03 degrees to keep river channels that sit just outside land boundaries; short reaches near an international/coastal border can therefore extend outside the administrative outline.
+
+HydroRIVERS maps rivers with catchment area of at least 10 km² or average flow of at least 0.1 m³/s. It is a generalized reference network, not a complete/current BWDB inventory; many small streams, canals and recent channel changes are not represented. Check current official records before operational use. Source and license details are on the [HydroRIVERS product page](https://www.hydrosheds.org/products/hydrorivers); attribution is shown in the map footer.
+
+- [HydroRIVERS v10](https://www.hydrosheds.org/products/hydrorivers)
 
 ### EPI wards and villages
 

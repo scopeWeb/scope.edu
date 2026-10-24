@@ -14,3 +14,7 @@
 
 .river-swatch{width:14px!important;height:0!important;border-top:2px solid #1976d2;border-radius:0!important}
 .river-feature{pointer-events:none}
+.control-group .check-row{display:flex;align-items:flex-start;gap:9px;margin:9px 0;color:var(--ms-ink);font-size:13px;font-weight:650;cursor:pointer}
+.control-group .check-row input[type=checkbox]{width:17px;height:17px;flex:none;margin:1px 0 0;accent-color:var(--ms-blue);cursor:pointer}
+.river-level-options{display:grid;gap:1px;margin:8px 0 0 15px;padding:7px 10px;border-left:2px solid #b9dce9;background:#f5f9fb;border-radius:0 9px 9px 0}
+.river-level-options[hidden]{display:none}
