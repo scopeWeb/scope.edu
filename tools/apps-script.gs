@@ -139,6 +139,8 @@ function sendVerified() {
 
 function international_(p) {
  const titles = {"meal":"Practical MEAL Training for NGO & Humanitarian Professionals","office-skills":"Computer Skills for Office Work","mis":"MIS & Information Management: Excel, Power BI and Data Management","data-analytics":"Data Analytics: Excel and Power BI","medical-data-science":"Data Science for Medical Data: Breast Cancer Classification","public-health-ml-research":"Public Health Research with Machine Learning","medical-nlp-evidence-review":"Medical NLP: Clinical Evidence Review Assistant","python-sql":"Python and SQL for Data Analysis","research":"Research Methods: SPSS, R, Proposal and Report Writing"};
+ const international=p.interestMode==='international'&&(p.course==='meal'||p.course==='mis');
+ const mis=p.course==='mis';
  const readiness=["feeEnglishWilling","internetAccess","reliableInternet","laptopAccess"];
  if(readiness.some(k=>["Yes","No"].indexOf(p[k])===-1))return json_({ok:false,error:"validation"});
  const required=['name','email','country','callingCode','phone','occupation','timezone'];
@@ -146,10 +148,10 @@ function international_(p) {
  const keys=['name','email','country','callingCode','phone','occupation','organisation','university','universityCountry','qualification','experience','timezone','preferredTimes'];
  const head=['Timestamp','Reference','Course slug','Course title'].concat(keys,['Fee','Currency','Duration','Classes','Launch threshold','Terms','Contact consent','Status']);
  head.push.apply(head,readiness);
- const sh=sheet_('International Interest',head,head.map((_,i)=>i+1));
+ const sh=sheet_(p.interestMode==='general'?'Course Interest':'International Interest',head,head.map((_,i)=>i+1));
  sh.getRange(1,1,1,head.length).setValues([head]);
- if(sh.getLastRow()>1&&sh.getRange(2,2,sh.getLastRow()-1,1).getValues().some(r=>r[0]===p.reference))return json_({ok:true,type:'international',reference:p.reference});
+ if(sh.getLastRow()>1&&sh.getRange(2,2,sh.getLastRow()-1,1).getValues().some(r=>r[0]===p.reference))return json_({ok:true,type:'international',schema:2,reference:p.reference});
  const safe=v=>{v=String(v||'').trim();return /^[=+\-@]/.test(v)?"'"+v:v;};
- sh.appendRow([new Date(),p.reference,p.course,titles[p.course]].concat(keys.map(k=>safe(p[k])),[80,'USD','3 months',36,'More than 500 interested learners per course by 25 November 2026; conditional start 5 December 2026',true,true,'Interested — no payment'],readiness.map(k=>p[k])));
- SpreadsheetApp.flush();return json_({ok:true,type:'international',reference:p.reference});
+ sh.appendRow([new Date(),p.reference,p.course,titles[p.course]].concat(keys.map(k=>safe(p[k])),[international?(mis?100:80):'',international?'USD':'',international?'3 months':'',international?36:'',international?(mis?'At least 500 by 30 December 2026; conditional launch January 2027':'More than 500 by 25 November 2026; conditional start 5 December 2026'):'To be announced',true,true,'Interested — no payment'],readiness.map(k=>p[k])));
+ SpreadsheetApp.flush();return json_({ok:true,type:'international',schema:2,reference:p.reference});
 }

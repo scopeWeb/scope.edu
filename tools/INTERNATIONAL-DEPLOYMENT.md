@@ -11,3 +11,5 @@ The website requires an explicit international save response. Until the existing
 Automated local checks covered syntax, server validation, formula escaping and idempotent row handling with mocked Sheets. Live saving and mobile/browser behavior still require verification.
 
 Country names and calling codes use the mledoze/countries dataset. Country selection fills the calling code; learners may select another code for their phone. Four required Yes/No answers record willingness to study in English for USD 80, internet access, reliable connectivity and laptop access. Redeploy the updated backend to validate and save these new fields. Existing columns remain in their original order; new columns are appended.
+
+Updated course routing: upcoming/general interest goes to Course Interest in the existing spreadsheet, without fixed fees or dates. International MEAL remains USD 80 with its November threshold. International MIS is USD 100, at least 500 interested learners by 30 December 2026, conditional January 2027 launch. Redeploy this version before collection: the website requires schema 2 confirmation to avoid accepting outdated fee metadata.
