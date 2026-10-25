@@ -1,4 +1,4 @@
-(()=>{
+window.renderInternationalInterest=()=>{
 const q=new URLSearchParams(location.search);if(q.get('mode')!=='international')return;
 const S=window.SCOPE,app=document.querySelector('#app'),esc=s=>String(s).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
 document.documentElement.lang='en';
@@ -11,4 +11,5 @@ const timer=setInterval(()=>{if(window.turnstile){clearInterval(timer);widget=tu
 f.country.onchange=()=>{f.callingCode.value=countries.find(c=>c[0]===f.country.value)?.[1]||'';};
 f.timezone.value=Intl.DateTimeFormat().resolvedOptions().timeZone;
 f.onsubmit=async e=>{e.preventDefault();if(!f.reportValidity())return;if(!/^\+[1-9][0-9]{0,3}$/.test(f.callingCode.value)||! /^[0-9 ()+.-]{4,25}$/.test(f.phone.value)){status.textContent='Check the country calling code and phone number.';return;}const b=f.querySelector('button');b.disabled=true;status.textContent='Saving…';try{const d=new URLSearchParams(new FormData(f));d.set('type','international');d.set('reference',ref);const r=await fetch(S.endpoint,{method:'POST',body:d});const v=await r.json();if(!v.ok||v.type!=='international'||v.reference!==ref)throw Error();status.textContent='Your interest was saved. Reference: '+ref;f.querySelectorAll('input,select,textarea,button').forEach(x=>x.disabled=true);}catch{status.textContent='Saving could not be confirmed. Your details are retained. Please retry; if this persists, contact SCOPE. International collection requires the updated backend.';b.disabled=false;if(widget!==undefined)turnstile.reset(widget);}};
-})();
+};
+window.renderInternationalInterest();
