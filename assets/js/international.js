@@ -13,6 +13,10 @@ const syncPrefix=()=>{document.querySelector('#phone-prefix').textContent=f.call
 f.callingCode.onchange=syncPrefix;
 f.country.onchange=()=>{f.callingCode.value=countries.find(c=>c[0]===f.country.value)?.[1]||'';syncPrefix();};
 
+const emphasize=(element)=>{
+ const text=element.textContent;
+ element.innerHTML=esc(text).replace(/more than 500 learners|at least 500 learners|25 November 2026|30 December 2026|5 December 2026|January 2027|USD (?:80|100)|conditional on meeting this interest threshold|Submitting interest is free|no payment is collected now|does not confirm admission or reserve a seat|Course fees, language, duration, timetable and launch details will be announced when confirmed|confirmed timetable and payment instructions|by email/gi,match=>'<strong class="intl-highlight">'+match+'</strong>');
+};
 const originalTerms=f.querySelector('fieldset:last-child .intl-help').textContent;
 const updateCourse=()=>{
  const slug=f.course.value,live=['meal','mis'].includes(slug)&&q.get('mode')==='international',mis=slug==='mis',fee=mis?100:80;
@@ -25,6 +29,9 @@ const updateCourse=()=>{
  f.terms.parentElement.lastChild.textContent=live?'I accept these course terms, including the USD '+fee+' fee. Submitting interest is free.':'I understand that course details will be announced later. Submitting interest is free.';
  document.querySelector('.intl-eyebrow').textContent=live?'SCOPE · INTERNATIONAL LEARNING':'SCOPE · COURSE INTEREST';
  f.terms.checked=false;
+ emphasize(f.querySelector('fieldset:last-child .intl-help'));
+ emphasize(document.querySelector('.intl-card header>p:not(.intl-eyebrow)'));
+ const termsLabel=f.terms.parentElement;const termsText=termsLabel.lastChild;const span=document.createElement('span');span.textContent=termsText.textContent;termsText.replaceWith(span);emphasize(span);
 };f.course.onchange=updateCourse;updateCourse();
 f.timezone.value=Intl.DateTimeFormat().resolvedOptions().timeZone;
 f.onsubmit=async e=>{e.preventDefault();if(!f.reportValidity())return;if(!/^\+[1-9][0-9]{0,3}$/.test(f.callingCode.value)||! /^[0-9 ()+.-]{4,25}$/.test(f.phone.value)){status.textContent='Check the country calling code and phone number.';return;}const b=f.querySelector('button');b.disabled=true;status.textContent='Saving…';try{const d=new URLSearchParams(new FormData(f));d.set('type','international');d.set('interestMode',q.get('mode')==='international'?'international':'general');['internetAccess','reliableInternet','laptopAccess'].forEach(k=>d.set(k,f.learningSetup.value));d.set('reference',ref);const r=await fetch(S.endpoint,{method:'POST',body:d});const v=await r.json();if(!v.ok||v.schema!==2||v.type!=='international'||v.reference!==ref)throw Error();status.textContent='Your interest was saved. Reference: '+ref;f.querySelectorAll('input,select,textarea,button').forEach(x=>x.disabled=true);}catch{status.textContent='Saving could not be confirmed. Your details are retained. Please retry; if this persists, contact SCOPE. International collection requires the updated backend.';b.disabled=false;if(widget!==undefined)turnstile.reset(widget);}};
