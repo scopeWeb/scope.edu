@@ -152,7 +152,8 @@ if(p==="about")return sub(t.about)+sec("light","",`<p class="lead">${t.aboutP}</
 if(p==="learn")return sub(t.learn)+sec("light","",`<ul class="lead">${t.lP.map(x=>`<li>${x}</li>`).join("")}</ul>`);
 if(p==="contact")return sub(t.contact)+sec("light","",`<p>${t.cP}</p><p><a class="btn" href="${S.fb}" target="_blank" rel="noopener noreferrer">${t.fb}</a> <a class="btn ghost-d" href="${regUrl()}">${t.form}</a></p>`+t.faq.map(f=>`<details><summary>${f[0]}</summary><p>${f[1]}</p></details>`).join(""));
 if(p==="register"){const q=new URLSearchParams(location.search),slug=q.get("course");enrolC=null;
-if(q.get("mode")!=="interest")enrolC=slug?S.courses.find(x=>x.slug===slug&&x.st==="current")||open():m||open();
+if(q.get("mode")!=="local")return `<section class="sec light"><h1>Are you Bangladeshi or an international learner?</h1><p><a class="btn" href="?mode=local&course=${encodeURIComponent(slug||"meal")}">Bangladesh</a> <a class="btn" href="?mode=international&course=${encodeURIComponent(slug||"meal")}">International</a></p></section>`;
+if(q.get("mode")!=="interest")enrolC=slug?S.courses.find(x=>x.slug===slug&&x.st==="current") :m||open();
 return enrolC?enrolPage(enrolC):interestPage()}
 return sub(t.nf,t.nfp)+sec("light","",`<a class="btn" href="${P("index.html")}">${t.home}</a>`)}
 /* ---------- form behaviour ---------- */
