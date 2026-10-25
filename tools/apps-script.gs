@@ -139,13 +139,17 @@ function sendVerified() {
 
 function international_(p) {
  const titles = {"meal":"Practical MEAL Training for NGO & Humanitarian Professionals","office-skills":"Computer Skills for Office Work","mis":"MIS & Information Management: Excel, Power BI and Data Management","data-analytics":"Data Analytics: Excel and Power BI","medical-data-science":"Data Science for Medical Data: Breast Cancer Classification","public-health-ml-research":"Public Health Research with Machine Learning","medical-nlp-evidence-review":"Medical NLP: Clinical Evidence Review Assistant","python-sql":"Python and SQL for Data Analysis","research":"Research Methods: SPSS, R, Proposal and Report Writing"};
+ const readiness=["feeEnglishWilling","internetAccess","reliableInternet","laptopAccess"];
+ if(readiness.some(k=>["Yes","No"].indexOf(p[k])===-1))return json_({ok:false,error:"validation"});
  const required=['name','email','country','callingCode','phone','occupation','timezone'];
  if(!titles[p.course]||required.some(k=>!p[k]||String(p[k]).length>200)||!/^.+@[^\s@]+\.[^\s@]+$/.test(p.email)||!/^\+[1-9][0-9]{0,3}$/.test(p.callingCode)||! /^[0-9 ()+.-]{4,25}$/.test(p.phone)||String(p.experience||'').length>1500||p.terms!=='on'||p.contactConsent!=='on'||! /^[a-f0-9-]{36}$/.test(p.reference||''))return json_({ok:false,error:'validation'});
  const keys=['name','email','country','callingCode','phone','occupation','organisation','university','universityCountry','qualification','experience','timezone','preferredTimes'];
  const head=['Timestamp','Reference','Course slug','Course title'].concat(keys,['Fee','Currency','Duration','Classes','Launch threshold','Terms','Contact consent','Status']);
+ head.push.apply(head,readiness);
  const sh=sheet_('International Interest',head,head.map((_,i)=>i+1));
+ sh.getRange(1,1,1,head.length).setValues([head]);
  if(sh.getLastRow()>1&&sh.getRange(2,2,sh.getLastRow()-1,1).getValues().some(r=>r[0]===p.reference))return json_({ok:true,type:'international',reference:p.reference});
  const safe=v=>{v=String(v||'').trim();return /^[=+\-@]/.test(v)?"'"+v:v;};
- sh.appendRow([new Date(),p.reference,p.course,titles[p.course]].concat(keys.map(k=>safe(p[k])),[80,'USD','3 months',36,'More than 500 interested learners per course',true,true,'Interested — no payment']));
+ sh.appendRow([new Date(),p.reference,p.course,titles[p.course]].concat(keys.map(k=>safe(p[k])),[80,'USD','3 months',36,'More than 500 interested learners per course',true,true,'Interested — no payment'],readiness.map(k=>p[k])));
  SpreadsheetApp.flush();return json_({ok:true,type:'international',reference:p.reference});
 }

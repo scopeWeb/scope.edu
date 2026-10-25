@@ -9,3 +9,5 @@ The website requires an explicit international save response. Until the existing
 5. Submit clearly labelled test details through the international form. Confirm the International Interest tab in the same spreadsheet, all fields and the reference. Repeat with the same reference to verify a single row. Remove the test row afterwards. No email is sent by this new handler.
 
 Automated local checks covered syntax, server validation, formula escaping and idempotent row handling with mocked Sheets. Live saving and mobile/browser behavior still require verification.
+
+Country names and calling codes use the mledoze/countries dataset. Country selection fills the calling code; learners may select another code for their phone. Four required Yes/No answers record willingness to study in English for USD 80, internet access, reliable connectivity and laptop access. Redeploy the updated backend to validate and save these new fields. Existing columns remain in their original order; new columns are appended.
