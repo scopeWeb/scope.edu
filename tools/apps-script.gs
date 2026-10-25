@@ -150,6 +150,6 @@ function international_(p) {
  sh.getRange(1,1,1,head.length).setValues([head]);
  if(sh.getLastRow()>1&&sh.getRange(2,2,sh.getLastRow()-1,1).getValues().some(r=>r[0]===p.reference))return json_({ok:true,type:'international',reference:p.reference});
  const safe=v=>{v=String(v||'').trim();return /^[=+\-@]/.test(v)?"'"+v:v;};
- sh.appendRow([new Date(),p.reference,p.course,titles[p.course]].concat(keys.map(k=>safe(p[k])),[80,'USD','3 months',36,'More than 500 interested learners per course',true,true,'Interested — no payment'],readiness.map(k=>p[k])));
+ sh.appendRow([new Date(),p.reference,p.course,titles[p.course]].concat(keys.map(k=>safe(p[k])),[80,'USD','3 months',36,'More than 500 interested learners per course by 25 November 2026; conditional start 5 December 2026',true,true,'Interested — no payment'],readiness.map(k=>p[k])));
  SpreadsheetApp.flush();return json_({ok:true,type:'international',reference:p.reference});
 }
