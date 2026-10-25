@@ -41,6 +41,7 @@ function doGet(e) {
 
 function doPost(e) {
   const p = (e && e.parameter) || {};
+  if (['enrol','interest','international'].indexOf(p.type) === -1) return json_({ok:false,error:'invalid_type'});
   if (p.website) return json_({ ok: true }); // honeypot: bots see success, nothing is saved
   if ((p.type === 'enrol' || p.type === 'interest' || p.type === 'international') && !verifyTurnstile_(p['cf-turnstile-response'])) return json_({ ok: false, error: 'captcha' });
   const lock = LockService.getScriptLock();
@@ -143,8 +144,9 @@ function international_(p) {
  const mis=p.course==='mis';
  const readiness=["feeEnglishWilling","internetAccess","reliableInternet","laptopAccess"];
  if(readiness.some(k=>["Yes","No"].indexOf(p[k])===-1))return json_({ok:false,error:"validation"});
+ if(p.interestMode!=='international'&&p.interestMode!=='general')return json_({ok:false,error:'validation'});
  const required=['name','email','country','callingCode','phone','occupation','timezone'];
- if(!titles[p.course]||required.some(k=>!p[k]||String(p[k]).length>200)||!/^.+@[^\s@]+\.[^\s@]+$/.test(p.email)||!/^\+[1-9][0-9]{0,3}$/.test(p.callingCode)||! /^[0-9 ()+.-]{4,25}$/.test(p.phone)||String(p.experience||'').length>1500||p.terms!=='on'||p.contactConsent!=='on'||! /^[a-f0-9-]{36}$/.test(p.reference||''))return json_({ok:false,error:'validation'});
+ if(!titles[p.course]||required.some(k=>!p[k]||String(p[k]).length>200)||!/^.+@[^\s@]+\.[^\s@]+$/.test(p.email)||!/^\+[1-9][0-9]{0,6}$/.test(p.callingCode)||! /^[0-9 ()+.-]{4,25}$/.test(p.phone)||String(p.experience||'').length>1500||p.terms!=='on'||p.contactConsent!=='on'||! /^[a-f0-9-]{36}$/.test(p.reference||''))return json_({ok:false,error:'validation'});
  const keys=['name','email','country','callingCode','phone','occupation','organisation','university','universityCountry','qualification','experience','timezone','preferredTimes'];
  const head=['Timestamp','Reference','Course slug','Course title'].concat(keys,['Fee','Currency','Duration','Classes','Launch threshold','Terms','Contact consent','Status']);
  head.push.apply(head,readiness);
