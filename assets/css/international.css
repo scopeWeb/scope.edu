@@ -2,3 +2,5 @@
 
 .intl-card fieldset.intl-extra{background:transparent;border:0;border-top:1px solid #ffffff22;border-radius:0;padding:24px 0 0;margin:0 0 32px;max-width:none;box-shadow:none;backdrop-filter:none}.intl-card .intl-extra legend{padding:0 12px 0 0;color:#8fe3d6}
 
+
+.intl-orbit .intl-logo-sphere{position:relative;display:grid;place-items:center;width:180px;height:180px;padding:0;overflow:hidden;border:1px solid #c8fff3aa;background:radial-gradient(circle at 32% 22%,#ffffff 0%,#f4fffd 40%,#b8e4de 78%,#589b98 100%);box-shadow:inset 7px 9px 18px #fff,inset -10px -14px 24px #17666355,0 14px 30px #0005,0 0 65px #60dfc344;transform:rotate(-5deg)}.intl-logo-sphere img{width:156px;height:85px;object-fit:cover;object-position:center;mix-blend-mode:multiply;transform:rotate(5deg);filter:drop-shadow(0 2px 1px #07152522)}.intl-logo-sphere:after{content:'';position:absolute;inset:7px;border-radius:50%;border-top:2px solid #ffffffbb;border-left:1px solid #ffffff66;pointer-events:none}@media(max-width:600px){.intl-orbit .intl-logo-sphere{width:135px;height:135px}.intl-logo-sphere img{width:119px;height:65px}}
