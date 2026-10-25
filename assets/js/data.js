@@ -12,7 +12,7 @@ office:{p:"M4 5h16v14H4zM4 10h16M4 15h16M10 5v14"},
 mis:{p:"M11 5a8 8 0 1 0 8 8h-8zM13 3a8 8 0 0 1 8 8h-8z"},
 data:{p:"M3 3v18h18M8 17v-5M12 17V8M16 17v-7"},
 research:{p:"M3 3v18h18M6 16L20 8",d:[[8,13],[11,15.5],[13.5,10.5],[16.5,13],[18,8]].map(a=>dot(a[0],a[1])).join("")}},
-opts:{edu:[["Higher secondary","উচ্চ মাধ্যমিক"],["Bachelor's","স্নাতক"],["Master's","স্নাতকোত্তর"],["Other","অন্যান্য"]],src:[["Facebook","ফেসবুক"],["Friend or colleague","বন্ধু বা সহকর্মী"],["Search engine","সার্চ ইঞ্জিন"],["Other","অন্যান্য"]]},
+opts:{edu:[["Higher secondary","উচ্চ মাধ্যমিক"],["Bachelor's","স্নাতক"],["Master's","স্নাতকোত্তর"],["Other","অন্যান্য"]],src:[["Facebook","ফেসবুক"],["LinkedIn","লিংকডইন"],["Friend or colleague","বন্ধু বা সহকর্মী"],["Search engine","সার্চ ইঞ্জিন"],["Other","অন্যান্য"]]},
 facts:[["dur","3 months","৩ মাস"],["fee","BDT 650","৬৫০ টাকা"],["dl","25 November 2026","২৫ নভেম্বর ২০২৬"],["start","5 December 2026","৫ ডিসেম্বর ২০২৬"],["days","Wednesday, Friday, Saturday","বুধবার, শুক্রবার, শনিবার"],["time","10:00 PM–11:30 PM (Bangladesh time)","রাত ১০:০০–১১:৩০ (বাংলাদেশ সময়)"],["del","Online via Google Meet","গুগল মিটে অনলাইনে"],["lang","Bangla","বাংলা"],["cert","SCOPE certificate on completion","সম্পন্ন করলে স্কোপ সার্টিফিকেট"]],
 courses:[
 {slug:"meal",cat:"meal",st:"current",fee:650,hue:170,en:["Practical MEAL Training for NGO & Humanitarian Professionals","Monitoring, Evaluation, Accountability and Learning, taught practically for development and humanitarian work."],bn:["এনজিও ও মানবিক সহায়তা পেশাজীবীদের জন্য ব্যবহারিক মিল (MEAL) প্রশিক্ষণ","উন্নয়ন ও মানবিক কাজের জন্য পর্যবেক্ষণ, মূল্যায়ন, জবাবদিহিতা ও শিখন—হাতে-কলমে।"]},
