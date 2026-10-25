@@ -8,40 +8,42 @@
 <title>Map Studios | SCOPE</title>
 <link rel="icon" href="../../assets/img/logo.png">
 <link rel="stylesheet" href="../../assets/css/site.css">
-<link rel="stylesheet" href="map-studio-hub.css?v=1">
+<link rel="stylesheet" href="map-studio-hub.css?v=2">
 </head>
 <body class="map-hub">
 <header class="hub-header">
   <a class="hub-brand" href="../../index.html" aria-label="SCOPE home"><img src="../../assets/img/logo-trim.png" alt="SCOPE"></a>
   <span>SCOPE · MAP STUDIOS</span>
+  <button class="hub-lang-toggle" id="hubLangToggle" type="button" aria-label="Switch language">বাংলা</button>
 </header>
 <main class="hub-main">
-  <a class="hub-back" href="../../index.html">← <span>Back to SCOPE</span></a>
-  <p class="hub-kicker">MAP YOUR INFORMATION</p>
-  <h1>Choose a Map Studio</h1>
-  <p class="hub-intro">একটি workspace বেছে নিয়ে আপনার তথ্য দিয়ে মানচিত্র তৈরি করুন।</p>
-  <section class="hub-grid" aria-label="Map Studio options">
+  <a class="hub-back" href="../../index.html">← <span data-en="Back to SCOPE" data-bn="SCOPE-এ ফিরে যান">Back to SCOPE</span></a>
+  <p class="hub-kicker" data-en="MAP YOUR INFORMATION" data-bn="আপনার তথ্য মানচিত্রে দেখুন">MAP YOUR INFORMATION</p>
+  <h1 data-en="Choose a Map Studio" data-bn="একটি Map Studio বেছে নিন">Choose a Map Studio</h1>
+  <p class="hub-intro" data-en="Choose a workspace and create a map with your information." data-bn="একটি workspace বেছে নিয়ে আপনার তথ্য দিয়ে মানচিত্র তৈরি করুন।">Choose a workspace and create a map with your information.</p>
+  <section class="hub-grid" aria-label="Map Studio options" data-en-aria="Map Studio options" data-bn-aria="Map Studio-এর অপশন">
     <a class="hub-card humanitarian" href="bangladesh.html?workspace=humanitarian">
       <span class="hub-icon" aria-hidden="true">✳</span>
-      <span class="hub-card-title">Humanitarian Map Studio <i>/ SCOPE</i></span>
-      <span class="hub-card-desc">বাংলাদেশের humanitarian sector, refugee response, camp ও block boundary নিয়ে কাজ করুন।</span>
-      <span class="hub-card-action">Open workspace <b aria-hidden="true">→</b></span>
+      <span class="hub-card-title"><span data-en="Humanitarian Map Studio" data-bn="মানবিক সহায়তা Map Studio">Humanitarian Map Studio</span> <i>/ SCOPE</i></span>
+      <span class="hub-card-desc" data-en="Map humanitarian sectors, refugee response, camps and blocks in Bangladesh." data-bn="বাংলাদেশের মানবিক সহায়তার sector, refugee response, camp ও block-এর মানচিত্র তৈরি করুন।">Map humanitarian sectors, refugee response, camps and blocks in Bangladesh.</span>
+      <span class="hub-card-action"><span data-en="Open workspace" data-bn="workspace খুলুন">Open workspace</span> <b aria-hidden="true">→</b></span>
     </a>
-    <article class="hub-card world" aria-label="World Map Studio, coming soon">
+    <article class="hub-card world" aria-label="World Map Studio, coming soon" data-en-aria="World Map Studio, coming soon" data-bn-aria="World Map Studio, শিগগির আসছে">
       <span class="hub-icon" aria-hidden="true">◎</span>
-      <span class="hub-card-title">World Map Studio <i>/ SCOPE</i></span>
-      <span class="hub-card-desc">বিশ্বের বিভিন্ন দেশের তথ্যমানচিত্র তৈরি করার workspace।</span>
-      <span class="hub-card-action upcoming">Coming soon</span>
+      <span class="hub-card-title"><span>World Map Studio</span> <i>/ SCOPE</i></span>
+      <span class="hub-card-desc" data-en="Create information maps for countries around the world." data-bn="বিশ্বের বিভিন্ন দেশের তথ্যমানচিত্র তৈরি করার workspace।">Create information maps for countries around the world.</span>
+      <span class="hub-card-action upcoming" data-en="Coming soon" data-bn="শিগগির আসছে">Coming soon</span>
     </article>
     <a class="hub-card bangladesh" href="bangladesh.html">
       <span class="hub-icon" aria-hidden="true">⌖</span>
-      <span class="hub-card-title">Bangladesh Map Studio <i>/ SCOPE</i></span>
-      <span class="hub-card-desc">বিভাগ থেকে ইউনিয়ন ও EPI ward পর্যন্ত বাংলাদেশের প্রশাসনিক মানচিত্র তৈরি করুন।</span>
-      <span class="hub-card-action">Open workspace <b aria-hidden="true">→</b></span>
+      <span class="hub-card-title"><span data-en="Bangladesh Map Studio" data-bn="বাংলাদেশ Map Studio">Bangladesh Map Studio</span> <i>/ SCOPE</i></span>
+      <span class="hub-card-desc" data-en="Map Bangladesh from divisions down to unions and EPI wards." data-bn="বিভাগ থেকে ইউনিয়ন ও EPI ward পর্যন্ত বাংলাদেশের প্রশাসনিক মানচিত্র তৈরি করুন।">Map Bangladesh from divisions down to unions and EPI wards.</span>
+      <span class="hub-card-action"><span data-en="Open workspace" data-bn="workspace খুলুন">Open workspace</span> <b aria-hidden="true">→</b></span>
     </a>
   </section>
-  <p class="hub-note">Humanitarian workspace-এ sector layer ও Rohingya response mapping-এর সুবিধা রয়েছে।</p>
+  <p class="hub-note" data-en="The humanitarian workspace includes sector layers and Rohingya response mapping." data-bn="Humanitarian workspace-এ sector layer ও Rohingya response mapping-এর সুবিধা রয়েছে।">The humanitarian workspace includes sector layers and Rohingya response mapping.</p>
 </main>
-<footer class="hub-footer">SCOPE · Learn · Build · Grow</footer>
+<footer class="hub-footer" data-en="SCOPE · Learn · Build · Grow" data-bn="SCOPE · শিখুন · গড়ুন · এগিয়ে যান">SCOPE · Learn · Build · Grow</footer>
+<script src="map-studio-hub.js?v=2"></script>
 </body>
 </html>
