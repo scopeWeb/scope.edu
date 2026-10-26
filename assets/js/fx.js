@@ -55,4 +55,11 @@ io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.cla
 const sp=new WeakMap();function pull(el,tx,ty){let s=sp.get(el);if(!s)sp.set(el,s={x:0,y:0,vx:0,vy:0,on:false});s.tx=tx;s.ty=ty;if(s.on)return;s.on=true;(function f(){s.vx=(s.vx+(s.tx-s.x)*.18)*.72;s.vy=(s.vy+(s.ty-s.y)*.18)*.72;s.x+=s.vx;s.y+=s.vy;el.style.translate=`${s.x}px ${s.y}px`;if(Math.abs(s.vx)+Math.abs(s.vy)+Math.abs(s.tx-s.x)+Math.abs(s.ty-s.y)>.05)requestAnimationFrame(f);else{s.on=false;if(!s.tx&&!s.ty)el.style.translate=""}})()}
 function pointerFx(){let cur=null;D.addEventListener("pointermove",e=>{if(level()!=="full"||e.pointerType!=="mouse")return;const b=e.target.closest&&e.target.closest(".btn");if(cur&&cur!==b)pull(cur,0,0);cur=b;if(b){const r=b.getBoundingClientRect();pull(b,(e.clientX-r.left-r.width/2)*.2,(e.clientY-r.top-r.height/2)*.28)}
 const c=e.target.closest&&e.target.closest(".card");D.querySelectorAll(".card.tilt").forEach(k=>{if(k!==c){k.classList.remove("tilt");k.style.transform=""}});if(c){const r=c.getBoundingClientRect();c.classList.add("tilt");c.style.transform=`perspective(800px) rotateY(${((e.clientX-r.left)/r.width-.5)*8}deg) rotateX(${-((e.clientY-r.top)/r.height-.5)*8}deg) translateY(-4px)`}},{passive:true})}
-Object.assign(api,{level,init(tt,R){H.dataset.motion=level();api.R=R;if(!started){started=true;backdrop();pointerFx()}reveal();orbit(tt)},cycle(){const o=["full","balanced","reduced"];try{localStorage.setItem("scope-motion",o[(o.indexOf(level())+1)%3])}catch(e){}location.reload()}});return api})();
+let mealObserver;
+function mealMotion(){if(mealObserver)mealObserver.disconnect();if(D.body.dataset.slug!=="meal")return;
+const elements=D.querySelectorAll("#app .sec h2,#app .glass-tile,#app .meal-guide-card,#app .meal-module,#app .programme-table,#app .meal-road");
+if(level()==="reduced"||!("IntersectionObserver" in window))return;
+mealObserver=new IntersectionObserver(entries=>entries.forEach(entry=>entry.target.classList.toggle("meal-visible",entry.isIntersecting)),{threshold:.06,rootMargin:"0px 0px 30px 0px"});
+elements.forEach((el,i)=>{el.classList.add("meal-motion-item");el.style.setProperty("--meal-delay",(i%3)*70+"ms");mealObserver.observe(el)});
+}
+Object.assign(api,{level,init(tt,R){H.dataset.motion=level();api.R=R;if(!started){started=true;backdrop();pointerFx()}reveal();orbit(tt);mealMotion()},cycle(){const o=["full","balanced","reduced"];try{localStorage.setItem("scope-motion",o[(o.indexOf(level())+1)%3])}catch(e){}location.reload()}});return api})();
