@@ -147,7 +147,7 @@ const MEAL_PROGRAMME={
         ],
         [
           "Bangladesh delivery is in Bangla. International delivery follows the separately confirmed English-language batch and timetable. An English website does not by itself confirm an international batch. Recordings and a sample video are not currently promised.",
-          "বাংলাদেশি batch-এর ক্লাস বাংলায়। আন্তর্জাতিক batch-এর English delivery ও সময়সূচি আলাদাভাবে নিশ্চিত হবে। ওয়েবসাইট ইংরেজিতে থাকা মানেই আন্তর্জাতিক batch নিশ্চিত নয়। আপাতত recording বা sample video-এর প্রতিশ্রুতি দেওয়া হচ্ছে না।"
+          "বাংলাদেশি batch-এর ভাষা বাংলা ও ইংরেজি। আন্তর্জাতিক batch-এর ভাষা শুধু ইংরেজি। আপাতত recording বা sample video-এর প্রতিশ্রুতি দেওয়া হচ্ছে না।"
         ]
       ]
     ]
@@ -260,12 +260,12 @@ else if(index===4)cards=bn?[
 else if(index===5)cards=bn?[
 ["যা লাগবে","ক্লাস ও কাজের জন্য laptop/desktop-এ উপযোগী Microsoft Excel এবং নির্ভরযোগ্য internet প্রয়োজন।"],
 ["Software ও tools","কোর্সে Excel dashboard শেখানো হবে; <strong>Power BI আলাদা module নয়</strong>। Software licence অন্তর্ভুক্ত নয়। পেমেন্টের আগে compatibility নিশ্চিত করুন।"],
-["ভাষা ও আন্তর্জাতিক batch","বাংলাদেশি batch বাংলায় হবে। International English-language batch ও সময়সূচি আলাদাভাবে নিশ্চিত হবে; website ইংরেজিতে থাকা মানেই batch নিশ্চিত নয়।"],
+["ভাষা ও আন্তর্জাতিক batch","বাংলাদেশি batch-এর ভাষা বাংলা ও ইংরেজি। আন্তর্জাতিক batch-এর ভাষা শুধু ইংরেজি।"],
 ["Recording ও sample","এ মুহূর্তে class recording বা sample video-এর প্রতিশ্রুতি দেওয়া হচ্ছে না।"]
 ]:[
 ["What you need","Use a laptop or desktop with a suitable version of Microsoft Excel and reliable internet."],
 ["Software and tools","The course teaches Excel dashboards; <strong>Power BI is not a separate module</strong>. Software licences are not included. Confirm compatibility before paying."],
-["Language and international batch","The Bangladesh batch is taught in Bangla. An English-language international batch and schedule require separate confirmation; an English website does not confirm a batch."],
+["Language and international batch","Bangladesh batch: Bangla and English. International batch: English only."],
 ["Recordings and sample","Class recordings and a sample video are not currently promised."]
 ];
 else if(index===0)cards=bn?[
