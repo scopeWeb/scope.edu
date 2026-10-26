@@ -12,3 +12,9 @@ for(const lang of ['en','bn']){
  test(`${lang}: unrelated MIS course does not receive MEAL fees`,()=>{const html=render('register','',lang,'?mode=local&course=mis');assert(!html.includes('meal-policy'));assert(!html.includes('I have read the MEAL'));});
 }
 test('international interest policy has course-scoped visibility and no payment collection',()=>{const code=fs.readFileSync(path.join(root,'assets/js/international.js'),'utf8');assert.match(code,/policyNote.hidden=slug!=='meal'/);assert.match(code,/no payment is collected now/);assert.match(code,/const originalTerms=f.querySelector\('fieldset:last-child .intl-help'\)/);});
+
+test('refund route has a localized browser title instead of the interest-form title',()=>{
+ const ctx={window:{}};vm.createContext(ctx);vm.runInContext(fs.readFileSync(path.join(root,'assets/js/data.js'),'utf8'),ctx);
+ assert.equal(ctx.window.SCOPE.t.en.refund,'Refund Policy');
+ assert.equal(ctx.window.SCOPE.t.bn.refund,'ফি ও ফেরত নীতি');
+});
