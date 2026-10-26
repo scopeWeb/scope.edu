@@ -192,3 +192,28 @@ body[data-slug="meal"] .meal-motion-item{opacity:0;transform:translateY(22px);tr
 html[data-motion="reduced"] body[data-slug="meal"] .meal-motion-item{opacity:1;transform:none}html[data-motion="reduced"] .meal-traveller{display:none}html[data-motion="reduced"] .meal-motion-cover:after{animation:none}
 
 body[data-slug="meal"] .meal-road.meal-visible .road-path{stroke-dashoffset:0}body[data-slug="meal"] .meal-road .road-finish{fill:#ffcf5a;stroke:#fff2bf;filter:drop-shadow(0 0 12px #ffd45a)}body[data-slug="meal"] .meal-road .road-progress{fill:#fff;stroke:#16b8a6;stroke-width:3;filter:drop-shadow(0 0 7px #8effef)}html[data-motion="reduced"] body[data-slug="meal"] .meal-road .road-path{stroke-dashoffset:0}@media(prefers-reduced-motion:reduce){body[data-slug="meal"] .meal-road .road-path{stroke-dashoffset:0}}
+
+/* Final MEAL spacing and typography review */
+body[data-slug="meal"] .sec{padding-block:clamp(1.35rem,2.8vw,2.25rem)}
+body[data-slug="meal"] .meal-cover{padding-block:clamp(2rem,4vw,3rem)}
+body[data-slug="meal"] .meal-cover h1{font-size:clamp(1.8rem,3.5vw,2.65rem);line-height:1.25;max-width:30ch}
+body[data-slug="meal"] .sec h2{font-size:clamp(1.35rem,2.4vw,1.9rem);line-height:1.35;margin-bottom:1rem}
+body[data-slug="meal"] .meal-metrics{margin-bottom:1.4rem;gap:.8rem}
+body[data-slug="meal"] .meal-project-grid,body[data-slug="meal"] .meal-guide-grid{gap:.85rem}
+body[data-slug="meal"] .meal-guide-card{padding:1rem;gap:.65rem}
+body[data-slug="meal"] .meal-guide-card h3{font-size:.98rem;line-height:1.45}
+body[data-slug="meal"] .sec p:not(:has(>.btn)){font-size:.94rem;line-height:1.75;word-spacing:normal}
+body[data-slug="meal"] .sec>p{margin-block:.65rem}
+body[data-slug="meal"] .programme-table{margin:.75rem 0}
+body[data-slug="meal"] .programme-table th,body[data-slug="meal"] .programme-table td{padding:.65rem .85rem;font-size:.9rem}
+body[data-slug="meal"] .meal-road{max-width:1000px}
+body[data-slug="meal"] .meal-road-section{padding-block:1.75rem}
+body[data-slug="meal"] .meal-road-section h2{margin-bottom:.5rem}
+body[data-slug="meal"] .meal-allocation{padding:1.1rem;margin-bottom:1rem}
+body[data-slug="meal"] .meal-allocation-row{margin:.6rem 0}
+body[data-slug="meal"] .mis-flow-card{padding:1.1rem}
+body[data-slug="meal"] .lead-aspiration{margin-top:.75rem;font-size:.9rem}
+body[data-slug="meal"] .meal-facts .meal-fact-card{padding:1rem}
+body[data-slug="meal"] .meal-module summary{padding:.8rem .9rem}
+body[data-slug="meal"] .meal-profile-link{margin:.7rem 0 0}
+@media(max-width:600px){body[data-slug="meal"] .sec{padding-block:1.25rem}body[data-slug="meal"] .meal-guide-card{gap:.5rem;padding:.85rem}body[data-slug="meal"] .meal-guide-number{width:26px;height:26px}body[data-slug="meal"] .sec p:not(:has(>.btn)){font-size:.9rem}body[data-slug="meal"] .meal-road-labels b{font-size:.8rem}}
