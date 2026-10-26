@@ -288,7 +288,7 @@ const glanceRows=bn?[
 ["ক্লাস শুরু",["৫ ডিসেম্বর ২০২৬"]],
 ["ক্লাসের দিন",["বুধবার, শুক্রবার, শনিবার"]],
 ["সময়",["বাংলাদেশ সময় (UTC+6): রাত ১০:০০–১১:৩০","EST (UTC−5): সকাল ১১:০০–দুপুর ১২:৩০","আস্তানা সময় (UTC+5): রাত ৯:০০–১০:৩০"]],
-["পদ্ধতি",["SCOPE Custom Platform · Zoom · Google Meet · Google Classroom"]],
+["ডেলিভারি",["SCOPE Custom Platform · Zoom · Google Meet · Google Classroom"]],
 ["ভাষা",["বাংলাদেশি ব্যাচ: বাংলা ও ইংরেজি","আন্তর্জাতিক ব্যাচ: শুধু ইংরেজি"]]
 ]:[
 ["Fee",["Bangladeshi learners batch: <strong>BDT 650</strong>","International learners batch: <strong>USD 80</strong>"]],
@@ -299,7 +299,7 @@ const glanceRows=bn?[
 ["Delivery",["SCOPE Custom Platform · Zoom · Google Meet · Google Classroom"]],
 ["Language",["Bangladesh batch: Bangla and English","International batch: English only"]]
 ];
-const glance=`<dl class="facts meal-facts">${glanceRows.map(([label,lines])=>`<div><dt>${label}</dt><dd>${lines.map(line=>`<span>${line}</span>`).join("")}</dd></div>`).join("")}</dl>`;
+const glance=`<dl class="facts meal-facts">${glanceRows.map(([label,lines])=>`<div><dt>${label}</dt><dd>${lines.map(line=>`<span>${line}</span>`).join("<br>")}</dd></div>`).join("")}</dl>`;
 return sub(c[L][0],bn?"৩ মাস · ১২ teaching week · ৩৬টি লাইভ ক্লাস · ৩টি মূল্যায়িত প্রজেক্ট":"3 months · 12 teaching weeks · 36 live classes · 3 assessed projects",c.hue)+
 sec("light",bn?"কোর্সের তথ্য":"Course at a glance",glance+`<p>${cta("",c)} <a class="btn ghost-d" href="${S.fb}" target="_blank" rel="noopener noreferrer">${bn?"কোর্স সম্পর্কে প্রশ্ন করুন":"Ask about the course"}</a></p>`)+programmeSection(0)+programmeSection(1)+
 sec("light",bn?"প্রজেক্ট, সময় ও ক্রেডিট":"Projects, time and credits",table(bn?["প্রজেক্ট","সপ্তাহ / ক্লাস","লাইভ ঘণ্টা","Internal credits"]:["Project","Weeks / classes","Live hours","Internal credits"],projects)+`<p>${bn?"প্রতি ক্লাস ৯০ মিনিট; সপ্তাহে ৪.৫ ঘণ্টা। প্রতি চার teaching week-এ ১৮ ঘণ্টা। ১ internal credit = ৬.৭৫ নির্ধারিত লাইভ ঘণ্টা; বাসায় অনুশীলনের সময় আলাদা। এই ক্রেডিট SCOPE-এর নিজস্ব মূল্যায়নের ওজন—বিশ্ববিদ্যালয়ের academic বা transferable credit নয়।":"Each class is 90 minutes: 4.5 hours weekly, or 18 hours per four teaching weeks. One internal credit represents 6.75 scheduled live hours; independent practice is additional. Credits are SCOPE’s internal assessment weights, not university academic or transferable credits."}</p>`)+
