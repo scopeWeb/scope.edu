@@ -224,7 +224,7 @@ return out.replace(/MEALBOLDTOKEN(\d+)END/g,(_,index)=>`<strong class="meal-emph
 };
 const mpParagraphs=xs=>xs.map(x=>`<p>${mpEmphasis(mpPick(x))}</p>`).join("");
 function mealPolicy(){return `<div class="meal-policy">${mpParagraphs(MEAL_PROGRAMME.refund)}</div>`}
-function mealGuideCards(items){return `<div class="meal-guide-grid">${items.map((x,i)=>`<article class="meal-guide-card glass-tile"><span class="meal-guide-number">${String(i+1).padStart(2,"0")}</span><div>${x[0]?`<h3>${x[0]}</h3>`:""}<p>${mpEmphasis(x[1])}</p></div></article>`).join("")}</div>`}
+function mealGuideCards(items,trusted=false){return `<div class="meal-guide-grid">${items.map((x,i)=>`<article class="meal-guide-card glass-tile"><span class="meal-guide-number">${String(i+1).padStart(2,"0")}</span><div>${x[0]?`<h3>${x[0]}</h3>`:""}<p>${trusted?x[1]:mpEmphasis(x[1])}</p></div></article>`).join("")}</div>`}
 function programmeSection(index){const s=MEAL_PROGRAMME.sections[index],bn=L==="bn",title=s[bn?1:0];let cards;
 if(index===2)cards=bn?[
 ["প্রজেক্টের নম্বর ও পাসের শর্ত","প্রতিটি প্রজেক্টে মোট <strong>১০০</strong> নম্বর: জমা কাজ <strong>৫০</strong> + individual practical task <strong>৩০</strong> + presentation/viva <strong>২০</strong>। তিনটি project-এর <strong>প্রতিটিতে আলাদাভাবে অন্তত ৬০/১০০</strong> পেতে হবে; অন্য project-এর বেশি নম্বর দিয়ে ফেল করা project-এর ঘাটতি পূরণ হবে না।"],
@@ -277,7 +277,7 @@ else if(index===0)cards=bn?[
 ];
 else cards=s[2].map(x=>["",mpPick(x)]);
 if(index===0)cards=cards.map((card,i)=>[`<span class="lead-card-icon" aria-hidden="true">${i===0?"▱":"⌘"}</span> ${card[0]}`,card[1]]);
-const body=(index===0?'<div class="lead-profile-cards">':"")+mealGuideCards(cards)+(index===0?"</div>":"")+(index===0?`<p class="meal-profile-link"><a href="https://nayeememolin.github.io/Nayeem-Sarker.Professional_Portfolio/" target="_blank" rel="noopener noreferrer">${bn?"পেশাগত পরিচয় ও কাজ দেখুন":"View professional portfolio"} ↗</a></p>`:"");
+const body=(index===0?'<div class="lead-profile-cards">':"")+mealGuideCards(cards,index===0)+(index===0?"</div>":"")+(index===0?`<p class="meal-profile-link"><a href="https://nayeememolin.github.io/Nayeem-Sarker.Professional_Portfolio/" target="_blank" rel="noopener noreferrer">${bn?"পেশাগত পরিচয় ও কাজ দেখুন":"View professional portfolio"} ↗</a></p>`:"");
 return sec("light meal-guides",title,body)}
 function mealPage(t,c){const bn=L==="bn",pick=mpPick;
 const table=(heads,rows)=>`<div class="programme-table" tabindex="0" role="region" aria-label="${esc(heads[0])}"><table><thead><tr>${heads.map(h=>`<th scope="col">${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map((v,i)=>i?`<td>${v}</td>`:`<th scope="row">${v}</th>`).join("")}</tr>`).join("")}</tbody></table></div>`;
