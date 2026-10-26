@@ -284,22 +284,20 @@ const projects=[["Indicator Monitoring Tracker","3 / 9","13.5","2"],["Performanc
 const grade=[["80–100","A+","4.00"],["75–<80","A","3.75"],["70–<75","A−","3.50"],["65–<70","B+","3.25"],["60–<65","B","3.00"],["0–<60","F","0.00"]];
 const glanceRows=bn?[
 ["ফি",["বাংলাদেশি শিক্ষার্থী ব্যাচ: <strong>BDT 650</strong>","আন্তর্জাতিক শিক্ষার্থী ব্যাচ: <strong>USD 80</strong>"]],
-["নিবন্ধনের শেষ তারিখ",["২৫ নভেম্বর ২০২৬"]],
-["ক্লাস শুরু",["৫ ডিসেম্বর ২০২৬"]],
+["নিবন্ধন ও ক্লাস শুরু",["<strong class=\"meal-deadline\">নিবন্ধনের শেষ তারিখ: ২৫ নভেম্বর ২০২৬</strong>","ক্লাস শুরু: ৫ ডিসেম্বর ২০২৬"]],
 ["ক্লাসের দিন",["বুধবার, শুক্রবার, শনিবার"]],
 ["সময়",["বাংলাদেশ সময় (UTC+6): রাত ১০:০০–১১:৩০","EST (UTC−5): সকাল ১১:০০–দুপুর ১২:৩০","আস্তানা সময় (UTC+5): রাত ৯:০০–১০:৩০"]],
-["ডেলিভারি",["SCOPE Custom Platform · Zoom · Google Meet · Google Classroom"]],
+["ডেলিভারি via",["SCOPE Custom Platform · Zoom · Google Meet · Google Classroom","এই প্ল্যাটফর্মগুলোর মাধ্যমে ক্লাস, মূল্যায়ন ও প্রোগ্রামের কার্যক্রম পরিচালিত হবে।"]],
 ["ভাষা",["বাংলাদেশি ব্যাচ: বাংলা ও ইংরেজি","আন্তর্জাতিক ব্যাচ: শুধু ইংরেজি"]]
 ]:[
 ["Fee",["Bangladeshi learners batch: <strong>BDT 650</strong>","International learners batch: <strong>USD 80</strong>"]],
-["Registration deadline",["25 November 2026"]],
-["Classes start",["5 December 2026"]],
+["Registration & class start",["<strong class=\"meal-deadline\">Registration deadline: 25 November 2026</strong>","Classes start: 5 December 2026"]],
 ["Class days",["Wednesday, Friday, Saturday"]],
 ["Time",["Bangladesh time (UTC+6): 10:00 PM–11:30 PM","EST (UTC−5): 11:00 AM–12:30 PM","Astana time (UTC+5): 9:00 PM–10:30 PM"]],
-["Delivery",["SCOPE Custom Platform · Zoom · Google Meet · Google Classroom"]],
+["Delivery via",["SCOPE Custom Platform · Zoom · Google Meet · Google Classroom","Classes, assessments and programme activities are delivered via these platforms."]],
 ["Language",["Bangladesh batch: Bangla and English","International batch: English only"]]
 ];
-const glance=`<dl class="facts meal-facts">${glanceRows.map(([label,lines])=>`<div><dt>${label}</dt><dd>${lines.map(line=>`<span>${line}</span>`).join("<br>")}</dd></div>`).join("")}</dl>`;
+const glance=`<dl class="facts meal-facts">${glanceRows.map(([label,lines])=>`<div class="glass-tile meal-fact-card"><dt>${label}</dt><dd>${lines.map(line=>`<span>${line}</span>`).join("<br>")}</dd></div>`).join("")}</dl>`;
 return sub(c[L][0],bn?"৩ মাস · ১২ teaching week · ৩৬টি লাইভ ক্লাস · ৩টি মূল্যায়িত প্রজেক্ট":"3 months · 12 teaching weeks · 36 live classes · 3 assessed projects",c.hue)+
 sec("light",bn?"কোর্সের তথ্য":"Course at a glance",glance+`<p>${cta("",c)} <a class="btn ghost-d" href="${S.fb}" target="_blank" rel="noopener noreferrer">${bn?"কোর্স সম্পর্কে প্রশ্ন করুন":"Ask about the course"}</a></p>`)+programmeSection(0)+programmeSection(1)+
 sec("light",bn?"প্রজেক্ট, সময় ও ক্রেডিট":"Projects, time and credits",table(bn?["প্রজেক্ট","সপ্তাহ / ক্লাস","লাইভ ঘণ্টা","Internal credits"]:["Project","Weeks / classes","Live hours","Internal credits"],projects)+`<p>${bn?"প্রতি ক্লাস ৯০ মিনিট; সপ্তাহে ৪.৫ ঘণ্টা। প্রতি চার teaching week-এ ১৮ ঘণ্টা। ১ internal credit = ৬.৭৫ নির্ধারিত লাইভ ঘণ্টা; বাসায় অনুশীলনের সময় আলাদা। এই ক্রেডিট SCOPE-এর নিজস্ব মূল্যায়নের ওজন—বিশ্ববিদ্যালয়ের academic বা transferable credit নয়।":"Each class is 90 minutes: 4.5 hours weekly, or 18 hours per four teaching weeks. One internal credit represents 6.75 scheduled live hours; independent practice is additional. Credits are SCOPE’s internal assessment weights, not university academic or transferable credits."}</p>`)+
