@@ -1,3 +1,6 @@
+Warning: truncated output (original token count: 20046)
+Total output lines: 405
+
 (()=>{"use strict";const R=document.currentScript.dataset.root,S=SCOPE,B=document.body,$=(s,r=document)=>r.querySelector(s);
 let L="en";try{L=localStorage.getItem("scope-lang")||"en"}catch(e){}if(!S.t[L])L="en";
 const T=()=>S.t[L],esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])),P=u=>R+u;
@@ -215,17 +218,72 @@ const MEAL_PROGRAMME={
 };
 
 const mpPick=x=>x[L==="bn"?1:0];
-const mpParagraphs=xs=>xs.map(x=>`<p>${esc(mpPick(x))}</p>`).join("");
+const mpEmphasis=text=>{
+const bold=[];let out=esc(text).replace(/&lt;strong&gt;([\s\S]*?)&lt;\/strong&gt;/g,(_,value)=>{const token=`MEALBOLDTOKEN${bold.length}END`;bold.push(value);return token});
+const tokens=L==="bn"?["US\\$10","১৫ দিন","১০০ টাকা","৬০%","বিনা ফিতে","ফেরত দেওয়া হবে না","বাহ্যিক affiliation বা accreditation নেই","বিশ্ববিদ্যালয়ের degree","এখনো চালু হয়নি","আলাদা module নয়","লাইসেন্স অন্তর্ভুক্ত নয়","নিশ্চয়তা নয়","বাংলায়","ইংরেজি batch","মাঠপর্যায়ের ভ্রমণ অন্তর্ভুক্ত নয়"]:["SCOPE Certificate of Achievement","15 days","BDT 100","USD 10","60%","50 marks","30 marks","20 marks","free of charge","not refundable","no external affiliation or accreditation","not a university degree","not currently available","not a separate module","licences are not included","does not guarantee","Bangla","English-language batch","No field visit"];
+const re=new RegExp(`(${tokens.map(x=>x.replace(/[.*+?^${}()|[\\]\\]/g,"\\$&")).join("|")})`,L==="bn"?"g":"gi");
+out=out.replace(re,'<strong class="meal-emphasis">$1</strong>');
+return out.replace(/MEALBOLDTOKEN(\d+)END/g,(_,index)=>`<strong class="meal-emphasis">${bold[Number(index)]}</strong>`)
+};
+const mpParagraphs=xs=>xs.map(x=>`<p>${mpEmphasis(mpPick(x))}</p>`).join("");
 function mealPolicy(){return `<div class="meal-policy">${mpParagraphs(MEAL_PROGRAMME.refund)}</div>`}
-function programmeSection(index){const s=MEAL_PROGRAMME.sections[index];return sec(index%2?"dark":"light",s[L==="bn"?1:0],mpParagraphs(s[2])+(index===0?`<p><a href="https://nayeememolin.github.io/Nayeem-Sarker.Professional_Portfolio/" target="_blank" rel="noopener noreferrer">${L==="bn"?"পেশাগত পরিচয় ও কাজ দেখুন":"View professional portfolio"} ↗</a></p>`:""))}
+function mealGuideCards(items){return `<div class="meal-guide-grid">${items.map((x,i)=>`<article class="meal-guide-card glass-tile"><span class="meal-guide-number">${String(i+1).padStart(2,"0")}</span><div>${x[0]?`<h3>${x[0]}</h3>`:""}<p>${mpEmphasis(x[1])}</p></div></article>`).join("")}</div>`}
+function programmeSection(index){const s=MEAL_PROGRAMME.sections[index],bn=L==="bn",title=s[bn?1:0];let cards;
+if(index===2)cards=bn?[
+["প্রতি প্রজেক্টের মূল্যায়ন","জমা দেওয়া কাজ <strong>৫০</strong> + individual practical task <strong>৩০</strong> + presentation/viva <strong>২০</strong> নম্বর।"],
+["পাসের নিয়ম","তিনটি project-এর <strong>প্রতিটিতে আলাদাভাবে অন্তত ৬০/১০০</strong> পেতে হবে। এক project-এর বেশি নম্বর অন্য project-এর ঘাটতি পূরণ করবে না।"],
+["সামগ্রিক grade point","Indicator GP × <strong>২</strong> + Performance GP × <strong>২</strong> + Dashboard GP × <strong>৪</strong>; মোট ওজন <strong>৮</strong> দিয়ে ভাগ হবে।"],
+["সনদে যা থাকবে","SCOPE Certificate of Achievement-এ নাম, course, batch, সময়কাল, final grade point, <strong>৮টি internal assessment credit</strong>, certificate ID ও issue date থাকবে। Project-wise ফল আলাদা assessment record-এ থাকবে।"],
+["কাজের স্বচ্ছতা","অসম্পূর্ণ submission মূল্যায়ন না হওয়া পর্যন্ত Incomplete থাকবে। Project brief-এ deadline, collaboration ও AI ব্যবহারের নিয়ম থাকবে; শিক্ষার্থীকে নিজের কাজ ব্যাখ্যা করতে হবে।"]
+]:[
+["How each project is scored","Submission <strong>50</strong> + individual practical task <strong>30</strong> + presentation/viva <strong>20</strong> marks."],
+["Pass standard","Score <strong>at least 60/100 in each of the three projects</strong>. A higher score in one project cannot offset a failed project."],
+["Overall grade point","Indicator GP × <strong>2</strong> + Performance GP × <strong>2</strong> + Dashboard GP × <strong>4</strong>, divided by a total weight of <strong>8</strong>."],
+["What the certificate records","The SCOPE Certificate of Achievement lists the learner’s name, course, batch, dates, final grade point, <strong>8 internal assessment credits</strong>, certificate ID and issue date. Project results appear in an accompanying assessment record."],
+["Work and assessment rules","Incomplete submissions remain Incomplete until assessed. Project briefs set deadlines, collaboration and AI-use rules; learners must explain their own work."]
+];
+else if(index===3)cards=bn?[
+["প্রথম রিটেক · বিনা ফিতে","Final assessment-এর <strong>১৫ দিন পরে</strong> প্রথম রিটেক দেওয়া যাবে।"],
+["দ্বিতীয় রিটেক · ফি প্রযোজ্য","প্রথম রিটেকের আরও <strong>১৫ দিন পরে</strong> দ্বিতীয় রিটেক। বাংলাদেশি শিক্ষার্থীর জন্য <strong>১০০ টাকা</strong>, আন্তর্জাতিক শিক্ষার্থীর জন্য <strong>US$10</strong>।"],
+["কোন কাজ আবার হবে","শুধু পাস না করা project-এর পুনর্মূল্যায়ন হবে। দ্বিতীয় রিটেকের ফি একটি assessment round-এর জন্য—প্রতি project-এর জন্য আলাদা নয়। <strong>পাস নম্বর ৬০%</strong>।"],
+["ফল ও প্রচেষ্টা","Feedback ও তারিখ জানানো হবে। সর্বশেষ reassessment result-ই ওই project-এর final result; attempt history রাখা হবে। দ্বিতীয় রিটেকেও শর্ত পূরণ না হলে সনদ হবে না। <strong>তৃতীয় রিটেক নেই</strong>।"]
+]:[
+["First retake · free","The first retake is available <strong>15 days after the final assessment</strong>, at no charge."],
+["Second retake · fee applies","The second retake is available <strong>a further 15 days later</strong>: <strong>BDT 100</strong> for Bangladesh learners or <strong>USD 10</strong> for international learners."],
+["What is reassessed","Only unsuccessful projects are reassessed. The second-retake fee covers one assessment round, not each failed project. The pass mark remains <strong>60%</strong>."],
+["Results and attempts","Feedback and dates will be provided. The latest reassessment result is final for that project, and attempt history is retained. No certificate follows a second unsuccessful retake. <strong>No third retake is offered</strong>."]
+];
+else if(index===4)cards=bn?[
+["সনদ কী নিশ্চিত করে","এটি SCOPE-এর assessment-এ অর্জিত ফল নথিভুক্ত করে। এটি <strong>বিশ্ববিদ্যালয়ের degree, diploma বা professional licence নয়</strong>; কোনো নিয়োগকারী বা প্রতিষ্ঠানের স্বীকৃতি তাদের নিজস্ব সিদ্ধান্ত।"],
+["স্বীকৃতি ও affiliation","SCOPE একটি স্বাধীন professional-training platform; এর <strong>বাহ্যিক affiliation বা accreditation নেই</strong>।"],
+["Online verification","Certificate ID বা QR-ভিত্তিক যাচাই <strong>পরিকল্পিত, এখনো চালু হয়নি</strong>। চালু হলে learner consent অনুযায়ী ফল দেখা যাবে; যোগাযোগ ও payment তথ্য public হবে না। আপাতত সনদ যাচাইয়ে SCOPE-এর সঙ্গে যোগাযোগ করুন।"]
+]:[
+["What the certificate confirms","It records achievement in SCOPE assessments. It is <strong>not a university degree, diploma or professional licence</strong>; recognition by an employer or institution is their decision."],
+["Recognition and affiliation","SCOPE is an independent professional-training platform with <strong>no external affiliation or accreditation</strong>."],
+["Online verification","Certificate ID or QR verification is <strong>planned and not currently available</strong>. When launched, public results will follow learner consent; contact and payment information will remain private. Contact SCOPE for enquiries until then."]
+];
+else if(index===5)cards=bn?[
+["যা লাগবে","ক্লাস ও কাজের জন্য laptop/desktop-এ উপযোগী Microsoft Excel এবং নির্ভরযোগ্য internet প্রয়োজন।"],
+["Software ও tools","কোর্সে Excel dashboard শেখানো হবে; <strong>Power BI আলাদা module নয়</strong>। Software licence অন্তর্ভুক্ত নয়। পেমেন্টের আগে compatibility নিশ্চিত করুন।"],
+["ভাষা ও আন্তর্জাতিক batch","বাংলাদেশি batch বাংলায় হবে। International English-language batch ও সময়সূচি আলাদাভাবে নিশ্চিত হবে; website ইংরেজিতে থাকা মানেই batch নিশ্চিত নয়।"],
+["Recording ও sample","এ মুহূর্তে class recording বা sample video-এর প্রতিশ্রুতি দেওয়া হচ্ছে না।"]
+]:[
+["What you need","Use a laptop or desktop with a suitable version of Microsoft Excel and reliable internet."],
+["Software and tools","The course teaches Excel dashboards; <strong>Power BI is not a separate module</strong>. Software licences are not included. Confirm compatibility before paying."],
+["Language and international batch","The Bangladesh batch is taught in Bangla. An English-language international batch and schedule require separate confirmation; an English website does not confirm a batch."],
+["Recordings and sample","Class recordings and a sample video are not currently promised."]
+];
+else cards=s[2].map(x=>["",mpPick(x)]);
+const body=mealGuideCards(cards)+(index===0?`<p class="meal-profile-link"><a href="https://nayeememolin.github.io/Nayeem-Sarker.Professional_Portfolio/" target="_blank" rel="noopener noreferrer">${bn?"পেশাগত পরিচয় ও কাজ দেখুন":"View professional portfolio"} ↗</a></p>`:"");
+return sec("light meal-guides",title,body)}
 function mealPage(t,c){const bn=L==="bn",pick=mpPick;
 const table=(heads,rows)=>`<div class="programme-table" tabindex="0" role="region" aria-label="${esc(heads[0])}"><table><thead><tr>${heads.map(h=>`<th scope="col">${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map((v,i)=>i?`<td>${v}</td>`:`<th scope="row">${v}</th>`).join("")}</tr>`).join("")}</tbody></table></div>`;
 const projects=[["Indicator Monitoring Tracker","3 / 9","13.5","2"],["Performance Monitoring Tracker","3 / 9","13.5","2"],["Excel Dashboard & Donor Reporting","6 / 18","27","4"],[bn?"মোট":"Total","12 / 36","54","8"]];
 const grade=[["80–100","A+","4.00"],["75–<80","A","3.75"],["70–<75","A−","3.50"],["65–<70","B+","3.25"],["60–<65","B","3.00"],["55–<60","B−","2.75"],["50–<55","C+","2.50"],["45–<50","C","2.25"],["40–<45","D","2.00"],["<40","F","0.00"]];
 return sub(c[L][0],bn?"৩ মাস · ১২ teaching week · ৩৬টি লাইভ ক্লাস · ৩টি মূল্যায়িত প্রজেক্ট":"3 months · 12 teaching weeks · 36 live classes · 3 assessed projects",c.hue)+
 sec("light",bn?"কোর্সের তথ্য":"Course at a glance",facts(["fee","dl","start","days","time","del","lang"])+`<p>${cta("",c)} <a class="btn ghost-d" href="${S.fb}" target="_blank" rel="noopener noreferrer">${bn?"কোর্স সম্পর্কে প্রশ্ন করুন":"Ask about the course"}</a></p>`)+programmeSection(0)+programmeSection(1)+
-sec("light",bn?"প্রজেক্ট, সময় ও ক্রেডিট":"Projects, time and credits",table(bn?["প্রজেক্ট","সপ্তাহ / ক্লাস","লাইভ ঘণ্টা","Internal credits"]:["Project","Weeks / classes","Live hours","Internal credits"],projects)+`<p>${bn?"প্রতি ক্লাস ৯০ মিনিট; সপ্তাহে ৪.৫ ঘণ্টা। প্রতি চার teaching week-এ ১৮ ঘণ্টা। ১ internal credit = ৬.৭৫ নির্ধারিত লাইভ ঘণ্টা; বাসায় অনুশীলনের সময় আলাদা। এই ক্রেডিট SCOPE-এর নিজস্ব মূল্যায়নের ওজন—বিশ্ববিদ্যালয়ের academic বা transferable credit নয়।":"Each class is 90 minutes: 4.5 hours weekly, or 18 hours per four teaching weeks. One internal credit represents 6.75 scheduled live hours; independent practice is additional. Credits are SCOPE’s internal assessment weights, not university academic or transferable credits."}</p>`)+
-sec("dark",bn?"১২ সপ্তাহের syllabus":"12-week syllabus",`<div class="syllabus-grid">${MEAL_PROGRAMME.weeks.map((w,i)=>`<details class="meal-module glass-tile"><summary>${bn?"সপ্তাহ":"Week"} ${i+1} · ${esc(pick(w))}</summary><p>${bn?"৩টি ক্লাস · ৪.৫ ঘণ্টা। ধারণা, guided practice ও build/review activity।":"3 classes · 4.5 hours. Concepts, guided practice and build/review activities."}</p></details>`).join("")}</div>`)+programmeSection(2)+
+sec("light",bn?"প্রজেক্ট, সময় ও ক্রেডিট":"Projects, time and credits",table(bn?["প্রজেক্ট","সপ্তাহ / ক্লাস","লাইভ ঘণ্টা","Internal credits"]:["Project","Weeks / classes","Live hours","Internal credits"],projects)+`<p>${bn?"…46 tokens truncated…rnal credit = ৬.৭৫ নির্ধারিত লাইভ ঘণ্টা; বাসায় অনুশীলনের সময় আলাদা। এই ক্রেডিট SCOPE-এর নিজস্ব মূল্যায়নের ওজন—বিশ্ববিদ্যালয়ের academic বা transferable credit নয়।":"Each class is 90 minutes: 4.5 hours weekly, or 18 hours per four teaching weeks. One internal credit represents 6.75 scheduled live hours; independent practice is additional. Credits are SCOPE’s internal assessment weights, not university academic or transferable credits."}</p>`)+
+sec("light meal-syllabus-section",bn?"১২ সপ্তাহের syllabus":"12-week syllabus",`<p class="meal-syllabus-intro">${mpEmphasis(bn?"প্রতি সপ্তাহে ৩টি ক্লাস ও ৪.৫ ঘণ্টার guided learning। প্রতিটি module-এ ধারণা, অনুশীলন এবং build/review activity থাকবে।":"Each week includes 3 live classes and 4.5 hours of guided learning, combining concepts, practice and build/review activities.")}</p><div class="syllabus-grid">${MEAL_PROGRAMME.weeks.map((w,i)=>`<details class="meal-module glass-tile"><summary><span class="module-week">${bn?"সপ্তাহ":"WEEK"} ${String(i+1).padStart(2,"0")}</span><b>${esc(pick(w))}</b><span class="module-count">${bn?"৩ ক্লাস · ৪.৫ ঘণ্টা":"3 classes · 4.5 hours"}</span></summary><p>${bn?"<strong>৩টি ক্লাস · ৪.৫ ঘণ্টা</strong>। ধারণা, guided practice ও build/review activity।":"<strong>3 classes · 4.5 hours</strong>. Concepts, guided practice and build/review activities."}</p></details>`).join("")}</div>`)+programmeSection(2)+
 sec("light",bn?"Grade ও পাসের শর্ত":"Grades and pass requirement",table(bn?["নম্বর (%)","Grade","Grade point"]:["Mark (%)","Grade","Grade point"],grade)+`<p><strong>${bn?"প্রতিটি প্রজেক্টে পাস: অন্তত ৬০%। এর নিচের grade সনদের যোগ্যতা পূরণ করে না।":"Pass each project with at least 60%. Lower grades do not meet the certificate requirement."}</strong></p><p>${bn?"প্রচলিত ৪.০০ scale ব্যবহার SCOPE-এর UGC অনুমোদন বোঝায় না।":"Using a conventional 4.00 scale does not imply UGC approval of SCOPE."}</p>`)+programmeSection(3)+programmeSection(4)+programmeSection(5)+
 sec("light",bn?"ফি ও ফেরত নীতি":"Fees and refund policy",mealPolicy()+`<p><a href="${P("refund/index.html")}">${bn?"নীতিমালা দেখুন":"Read the policy"}</a></p><p>${cta("",c)}</p>`);
 }
