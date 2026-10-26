@@ -56,10 +56,10 @@ function courseRecords_(){
     const interestCount=ish&&ish.getLastRow()>1?ish.getRange(2,17,ish.getLastRow()-1,1).getDisplayValues().filter(x=>x[0]==='Interest').length:0;
     const cutoff=d.registration&&d.registration.deadline?new Date(String(d.registration.deadline)+'T23:59:59+06:00'):null;
     const registrationOpen=!cutoff||isNaN(cutoff.getTime())||Date.now()<=cutoff.getTime();
-    return {id:String(r[0]),slug:String(r[1]),title:{en:String(r[2]),bn:String(r[3])},status:String(r[4]),duration:String(r[5]),fees:d.fees,registration:Object.assign({},d.registration,{open:registrationOpen}),registrationOpen:registrationOpen,international:Object.assign({},d.international,{interestCount:interestCount}),language:d.language,sessions:d.sessions,delivery:d.delivery,assessment:d.assessment,policies:d.policies,category:d.category,summary:d.summary,sections:d.sections,sheets:d.sheets};
+    return {id:String(r[0]),slug:String(r[1]),title:{en:String(r[2]),bn:String(r[3])},status:String(r[4]),duration:String(r[5]),fees:d.fees,registration:Object.assign({},d.registration,{open:registrationOpen}),registrationOpen:registrationOpen,international:Object.assign({},d.international,{interestCount:interestCount}),language:d.language,sessions:d.sessions,delivery:d.delivery,assessment:d.assessment,policies:d.policies,category:d.category,summary:d.summary,sections:d.sections,sheets:d.sheets,data:d};
   }).filter(Boolean);
 }
-function publicCourses_(){return courseRecords_().map(c=>{const out=Object.assign({},c);delete out.sheets;return out;});}
+function publicCourses_(){return courseRecords_().map(c=>{const out=Object.assign({},c);delete out.sheets;delete out.data;return out;});}
 function findPublishedCourse_(slug){return courseRecords_().find(c=>c.slug===slug)||null;}
 function validateLearner_(p,intl){
   const name=text_(p.name,120),email=text_(p.email,190).toLowerCase(),phone=text_(p.phone,40),country=text_(p.country,80),org=text_(p.organisation,160),role=text_(p.role,120),language=text_(p.language,80);
