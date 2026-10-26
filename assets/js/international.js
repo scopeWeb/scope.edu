@@ -17,9 +17,10 @@ const emphasize=(element)=>{
  const text=element.textContent;
  element.innerHTML=esc(text).replace(/more than 500 learners|at least 500 learners|25 November 2026|30 December 2026|5 December 2026|January 2027|USD (?:80|100)|conditional on meeting this interest threshold|Submitting interest is free|no payment is collected now|does not confirm admission or reserve a seat|Course fees, language, duration, timetable and launch details will be announced when confirmed|confirmed timetable and payment instructions|by email/gi,match=>'<strong class="intl-highlight">'+match+'</strong>');
 };
+const policyNote=document.createElement('p');policyNote.className='meal-policy';policyNote.textContent='MEAL assessment: at least 60% in each project. First retake after 15 days is free; second retake a further 15 days later costs USD 10 for international learners (BDT 100 for Bangladesh learners). Paid fees are not refundable for voluntary withdrawal, non-completion or assessment failure. This form only records free interest; no payment is collected now.';f.querySelector('fieldset:last-child').prepend(policyNote);
 const originalTerms=f.querySelector('fieldset:last-child .intl-help').textContent;
 const updateCourse=()=>{
- const slug=f.course.value,live=['meal','mis'].includes(slug)&&q.get('mode')==='international',mis=slug==='mis',fee=mis?100:80;
+ const slug=f.course.value;policyNote.hidden=slug!=='meal';const live=['meal','mis'].includes(slug)&&q.get('mode')==='international',mis=slug==='mis',fee=mis?100:80;
  document.querySelector('.intl-facts').hidden=!live;
  document.querySelector('.intl-facts b').textContent='USD '+fee;
  const willingness=f.feeEnglishWilling;
