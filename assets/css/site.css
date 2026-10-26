@@ -217,3 +217,8 @@ html[data-motion="reduced"] :is(body[data-slug="meal"],body[data-slug="mis"]) .m
 :is(body[data-slug="meal"],body[data-slug="mis"]) .meal-module summary{padding:.8rem .9rem}
 :is(body[data-slug="meal"],body[data-slug="mis"]) .meal-profile-link{margin:.7rem 0 0}
 @media(max-width:600px){:is(body[data-slug="meal"],body[data-slug="mis"]) .sec{padding-block:1.25rem}:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-guide-card{gap:.5rem;padding:.85rem}:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-guide-number{width:26px;height:26px}:is(body[data-slug="meal"],body[data-slug="mis"]) .sec p:not(:has(>.btn)){font-size:.9rem}:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-road-labels b{font-size:.8rem}}
+
+/* MIS glass-card contrast on dark sections */
+body[data-slug="mis"] .meal-why .glass-tile{color:#123247;background:linear-gradient(135deg,rgba(255,255,255,.94),rgba(226,240,247,.88))}
+body[data-slug="mis"] .meal-why .glass-tile h3,body[data-slug="mis"] .meal-why .glass-tile p{color:#123247}
+body[data-slug="mis"] .meal-why .glass-tile>span{color:#08796f}
