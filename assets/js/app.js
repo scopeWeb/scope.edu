@@ -361,6 +361,19 @@ return `<section class="phero meal-cover" style="--h:${c.hue}"><span class="meal
 `<section class="meal-overview sec light"><h2>${bn?"বাস্তব research workflow":"A practical research workflow"}</h2><div class="meal-project-grid">${weeks.map(w=>`<article class="glass-tile meal-project"><span>${w[0]}</span><h3>${w[1]}</h3><p>${w[2]}</p></article>`).join("")}</div></section>`+
 `<section class="sec dark meal-why"><h2>${bn?"চূড়ান্ত project: Evidence Review Assistant":"Final project: Evidence Review Assistant"}</h2><div class="meal-why-grid"><article class="glass-tile"><span>01</span><h3>${bn?"Abstract থেকে PICO":"PICO from abstracts"}</h3><p>${bn?"Clinical trial abstract থেকে Population, Intervention ও Outcome অংশগুলো চিহ্নিত করে দেখাবে।":"Highlight Population, Intervention and Outcome spans from clinical-trial abstracts."}</p></article><article class="glass-tile"><span>02</span><h3>${bn?"Google Sheets evidence log":"Google Sheets evidence log"}</h3><p>${bn?"PICO field, abstract reference ও confidence-সহ ফল Google Sheets-এ export করুন; researcher প্রতিটি row যাচাই করবেন।":"Export PICO fields, abstract references and confidence to a reviewable Google Sheet; the researcher verifies each row."}</p></article></div><p class="chart-note">${bn?"এটি evidence review-এ সহায়ক শিক্ষামূলক prototype; চিকিৎসা-সিদ্ধান্তের tool নয়।":"An educational evidence-review prototype; not a clinical decision tool."}</p><p><a class="btn" href="${interestUrl(c)}">${interest}</a></p></section>`;
 }
+function misCredits(bn){
+const rows=[["Excel Information Tracker","3","37.5%"],["Data Management Workflow","2","25%"],["Power BI Management Dashboard","3","37.5%"],[bn?"মোট":"Total","8","100%"]];
+const heads=bn?["প্রজেক্ট","Internal Assessment Credits","ফলাফলের ওজন"]:["Project","Internal Assessment Credits","Result weight"];
+return sec("light",bn?"প্রজেক্ট ও মূল্যায়ন ক্রেডিট":"Projects and assessment credits",
+`<div class="programme-table" tabindex="0" role="region" aria-label="${bn?"MIS প্রজেক্টের ক্রেডিট":"MIS project credits"}"><table><thead><tr>${heads.map(h=>`<th scope="col">${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr><th scope="row">${r[0]}</th><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div><p>${bn?"এগুলো SCOPE-এর নিজস্ব মূল্যায়ন ক্রেডিট; প্রজেক্টের ফলাফলের ওজন বোঝায়। এগুলো বিশ্ববিদ্যালয়ের academic বা transferable credit নয় এবং নির্দিষ্ট সংখ্যক লাইভ ঘণ্টার সমতুল্য নয়।":"These are SCOPE’s internal assessment credits, representing each project’s weight in the final result. They are not university academic or transferable credits and do not represent a fixed number of live hours."}</p>`+
+mealGuideCards(bn?[
+["সামগ্রিক Grade Point","(Excel GP × <strong>৩</strong> + Data Management GP × <strong>২</strong> + Power BI GP × <strong>৩</strong>) ÷ <strong>৮</strong>।"],
+["প্রতিটি প্রজেক্টে পাস","প্রতিটি project-এ আলাদাভাবে <strong>অন্তত ৬০/১০০</strong> পেতে হবে। Weighted grade point দিয়ে কোনো failed project-এর ঘাটতি পূরণ হবে না।"]
+]:[
+["Overall grade point","(Excel GP × <strong>3</strong> + Data Management GP × <strong>2</strong> + Power BI GP × <strong>3</strong>) ÷ <strong>8</strong>."],
+["Pass every project","Score <strong>at least 60/100 in each project</strong>. A weighted grade point cannot compensate for a failed project."]
+]));
+}
 function misGuidance(bn){
 const cards=(en,b)=>mealGuideCards(bn?b:en);
 const quality=cards([
@@ -377,16 +390,16 @@ const quality=cards([
 const assessment=cards([
 ["Project assessment","Each project: submission 50 + individual practical 30 + presentation/viva 20 = 100 marks. Pass each project with at least 60%; another project cannot offset a failed result."],
 ["Grades","80–100: A+ (4.00); 75–<80: A (3.75); 70–<75: A− (3.50); 65–<70: B+ (3.25); 60–<65: B (3.00); below 60: F (0.00)."],
-["Assessment record","Project results accompany the SCOPE Certificate of Achievement. MIS project weights and any internal credit allocation will be specified in the project briefs before assessment; MEAL credit allocations do not apply automatically."],
+["Assessment record","The SCOPE Certificate of Achievement records the learner’s name, course, batch, dates, final grade point, 8 internal assessment credits, certificate ID and issue date. Individual project results accompany the certificate."],
 ["Academic integrity","Explain your own work. Briefs specify submission deadlines, permitted collaboration and AI use. Incomplete work remains Incomplete until assessed."]
 ],[
 ["প্রজেক্ট মূল্যায়ন","প্রতি project: submission ৫০ + individual practical ৩০ + presentation/viva ২০ = ১০০ নম্বর। প্রতিটিতে অন্তত ৬০ পেয়ে পাস করতে হবে; অন্য project-এর নম্বর দিয়ে ফেল পূরণ হবে না।"],
 ["গ্রেড","৮০–১০০: A+ (4.00); ৭৫–<৮০: A (3.75); ৭০–<৭৫: A− (3.50); ৬৫–<৭০: B+ (3.25); ৬০–<৬৫: B (3.00); ৬০-এর নিচে: F (0.00)।"],
-["মূল্যায়ন রেকর্ড","SCOPE Certificate of Achievement-এর সঙ্গে project-wise ফল থাকবে। MIS project-এর weight ও internal credit থাকলে তা assessment-এর আগে brief-এ জানানো হবে; MEAL-এর credit স্বয়ংক্রিয়ভাবে প্রযোজ্য নয়।"],
+["মূল্যায়ন রেকর্ড","SCOPE Certificate of Achievement-এ শিক্ষার্থীর নাম, course, batch, সময়কাল, final grade point, ৮টি internal assessment credit, certificate ID ও issue date থাকবে। সঙ্গে project-wise ফলের assessment record থাকবে।"],
 ["কাজের স্বচ্ছতা","নিজের কাজ ব্যাখ্যা করতে হবে। Deadline, collaboration ও AI ব্যবহারের নিয়ম project brief-এ থাকবে। মূল্যায়নের আগে অসম্পূর্ণ কাজ Incomplete থাকবে।"]
 ]);
 return sec("light",bn?"পেশাদার MIS কাজের মান":"Professional MIS working standards",quality)+
-sec("light",bn?"মূল্যায়ন ও সনদ":"Assessment and certification",assessment)+programmeSection(3)+programmeSection(4)+
+misCredits(bn)+sec("light",bn?"মূল্যায়ন ও সনদ":"Assessment and certification",assessment)+programmeSection(3)+programmeSection(4)+
 sec("light",bn?"ভর্তির আগে জেনে নিন":"Before you enrol",cards([
 ["Software readiness","Bring a Windows laptop/desktop compatible with Power BI Desktop, a suitable Excel version and reliable internet. Software licences are not included; confirm compatibility before payment."],
 ["Learning support","Delivery via SCOPE Custom Platform, Zoom, Google Meet and Google Classroom. Bangladesh batch: Bangla and English; international batch: English only. International batch fee: USD 100."],
