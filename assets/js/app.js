@@ -270,7 +270,13 @@ else if(index===5)cards=bn?[
 ["Language and international batch","The Bangladesh batch is taught in Bangla. An English-language international batch and schedule require separate confirmation; an English website does not confirm a batch."],
 ["Recordings and sample","Class recordings and a sample video are not currently promised."]
 ];
-else cards=s[2].map(x=>["",mpPick(x)]);
+else if(index===0)cards=bn?[
+["শিক্ষাগত পটভূমি ও একাডেমিক কোর্সওয়ার্ক","<strong>নাইম সরকার · Programme Lead & Instructor.</strong> SUST থেকে পরিসংখ্যানে স্নাতক ও স্নাতকোত্তর; Computer Science & Engineering-এ postgraduate coursework করেছেন, তবে degree সম্পন্ন হয়নি। Coursework-এর মধ্যে statistical inference, time series, biostatistics, econometrics, data mining, NLP ও machine learning রয়েছে। Humanitarian Data Science-এ PhD গবেষণার আকাঙ্ক্ষী।"],
+["অভিজ্ঞতা ও প্রযুক্তিগত দক্ষতা","CODEC-এর UNHCR-funded EPRC প্রকল্পে Information Management Specialist, Manager ও Senior Officer—IM (২০২৪–২৬); SRAC-এ IM Officer (২০২০–২২); Leading University-তে Research Intern (২০২২–২৪)। ২৬টি ক্যাম্পে কাজের অভিজ্ঞতা। Tools: Excel, Power BI/DAX, SQL/MySQL, Python, R, SPSS, STATA, SAS, ArcGIS/QGIS ও KoboToolbox/XLSForms। Indicator/performance tracker, dashboard, digital form, reporting workflow ও web-based information system তৈরি/পরিচালনা; programme delivery, assessment oversight ও staff training-ও করেন।"]
+]:[
+["Education & Academic Coursework","<strong>Nayeem Sarker · Programme Lead & Instructor.</strong> B.Sc. and M.Sc. in Statistics (SUST); postgraduate coursework in Computer Science & Engineering, degree not completed. Coursework includes statistical inference, time series, biostatistics, econometrics, data mining, NLP and machine learning. Aspiring PhD researcher in Humanitarian Data Science."],
+["Experience & Technical Skills","Information Management Specialist, Manager and Senior Officer—IM with CODEC’s UNHCR-funded EPRC project (2024–26); IM Officer at SRAC (2020–22); Research Intern at Leading University (2022–24). Experience supporting work across 26 camps. Tools: Excel, Power BI/DAX, SQL/MySQL, Python, R, SPSS, STATA, SAS, ArcGIS/QGIS and KoboToolbox/XLSForms. Builds indicator/performance trackers, dashboards, digital forms, reporting workflows and web-based information systems; also supports programme delivery, assessment oversight and staff training."]
+];
 const body=mealGuideCards(cards)+(index===0?`<p class="meal-profile-link"><a href="https://nayeememolin.github.io/Nayeem-Sarker.Professional_Portfolio/" target="_blank" rel="noopener noreferrer">${bn?"পেশাগত পরিচয় ও কাজ দেখুন":"View professional portfolio"} ↗</a></p>`:"");
 return sec("light meal-guides",title,body)}
 function mealPage(t,c){const bn=L==="bn",pick=mpPick;
