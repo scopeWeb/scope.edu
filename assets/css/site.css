@@ -143,14 +143,14 @@ fieldset.stp{border:0;padding:0;margin:0;display:grid;gap:1rem;min-width:0}field
 @media(max-width:420px){.ft-logo img{height:34px;max-width:125px}.ft-nav{gap:.4rem .75rem}.ft-nav a{font-size:.74rem}.ft-top>.mo{font-size:.7rem;padding:.25rem .55rem}}
 
 /* MEAL programme tables and pre-payment policy */
-.programme-table{overflow-x:auto;margin:1.4rem 0;border:1px solid #8ba6b655;border-radius:12px}.programme-table table{width:100%;border-collapse:collapse;min-width:420px}.programme-table th,.programme-table td{padding:.9rem 1rem;text-align:left;border-bottom:1px solid #8ba6b633}.programme-table thead{background:#1769c21a}.meal-policy{padding:1rem 1.25rem;border-left:4px solid #16b8a6;background:#16b8a610;border-radius:8px;margin:1rem 0}.meal-policy p{margin:.5rem 0}body[data-slug="meal"] .sec>p{max-width:80ch;line-height:1.8}.programme-table:focus-visible{outline:3px solid #1769c2;outline-offset:3px}
+.programme-table{overflow-x:auto;margin:1.4rem 0;border:1px solid #8ba6b655;border-radius:12px}.programme-table table{width:100%;border-collapse:collapse;min-width:420px}.programme-table th,.programme-table td{padding:.9rem 1rem;text-align:left;border-bottom:1px solid #8ba6b633}.programme-table thead{background:#1769c21a}.meal-policy{padding:1rem 1.25rem;border-left:4px solid #16b8a6;background:#16b8a610;border-radius:8px;margin:1rem 0}.meal-policy p{margin:.5rem 0}:is(body[data-slug="meal"],body[data-slug="mis"]) .sec>p{max-width:80ch;line-height:1.8}.programme-table:focus-visible{outline:3px solid #1769c2;outline-offset:3px}
 
 /* MEAL syllabus and learner guidance: cool ash surfaces with readable glass cards */
-body[data-slug="meal"] .meal-syllabus-section,
-body[data-slug="meal"] .meal-guides{background:linear-gradient(140deg,#f6f8fb 0%,#e9eef4 100%);color:#102943}
-body[data-slug="meal"] .meal-syllabus-section h2,
-body[data-slug="meal"] .meal-guides h2{color:#102943}
-body[data-slug="meal"] .sec p:not(:has(> .btn)){text-align:justify;line-height:1.8}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-syllabus-section,
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-guides{background:linear-gradient(140deg,#f6f8fb 0%,#e9eef4 100%);color:#102943}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-syllabus-section h2,
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-guides h2{color:#102943}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .sec p:not(:has(> .btn)){text-align:justify;line-height:1.8}
 .meal-syllabus-intro{max-width:76ch;margin:0 0 1.4rem;color:#39536d}
 .syllabus-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.65rem}
 .meal-module.glass-tile{max-width:none;width:100%;padding:0;border:1px solid rgba(255,255,255,.88);background:rgba(255,255,255,.66);color:#102943;box-shadow:0 8px 24px rgba(16,42,67,.09);border-radius:14px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
@@ -182,38 +182,38 @@ body[data-slug="meal"] .sec p:not(:has(> .btn)){text-align:justify;line-height:1
 .lead-skills{display:flex;flex-wrap:wrap;gap:.35rem;margin:.7rem 0;text-align:left}.lead-skills .lead-skill{padding:.12rem .55rem;border-radius:999px;font-size:.8rem;white-space:nowrap}.lead-card-icon{display:inline-flex;align-items:center;justify-content:center;width:2rem;height:2rem;border-radius:10px;background:rgba(21,156,148,.12);color:#136f79;font-size:1.3rem}.lead-profile-cards .meal-guide-card{transition:transform .2s ease,box-shadow .2s ease}.lead-profile-cards .meal-guide-card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(16,42,67,.12)}@media(prefers-reduced-motion:reduce){.lead-profile-cards .meal-guide-card{transition:none}.lead-profile-cards .meal-guide-card:hover{transform:none}}
 
 /* MEAL motion layout, scoped to the MEAL course */
-body[data-slug="meal"] .meal-motion-cover{position:relative;overflow:hidden;background:radial-gradient(ellipse at 85% 20%,#135578 0,transparent 55%),linear-gradient(135deg,#082b35,#102743 70%)}body[data-slug="meal"] .meal-motion-cover:after{content:"";position:absolute;width:330px;height:330px;border:1px solid #74d9d044;border-radius:50%;right:-80px;top:25px;box-shadow:0 0 0 55px #74d9d00a,0 0 0 110px #74d9d008;pointer-events:none;animation:meal-orbit-breathe 10s ease-in-out infinite alternate}
-body[data-slug="meal"] .glass-tile,body[data-slug="meal"] .meal-guide-card{transition:box-shadow .35s ease,translate .35s ease;background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(232,242,248,.65));backdrop-filter:blur(16px)}body[data-slug="meal"] .glass-tile:hover,body[data-slug="meal"] .meal-guide-card:hover{translate:0 -4px;box-shadow:0 15px 36px #102a4318}
-body[data-slug="meal"] .meal-motion-item{opacity:0;transform:translateY(22px);transition:opacity .65s ease var(--meal-delay,0ms),transform .65s cubic-bezier(.2,.65,.3,1) var(--meal-delay,0ms)}body[data-slug="meal"] .meal-motion-item.meal-visible{opacity:1;transform:translateY(0)}
-.meal-allocation{padding:1.5rem;margin-bottom:1.5rem;border-radius:20px}.meal-allocation-row{display:grid;grid-template-columns:minmax(180px,1.3fr) minmax(100px,1fr) auto;gap:1rem;align-items:center;margin:.8rem 0;font-size:.85rem}.meal-allocation-track{height:12px;border-radius:20px;background:#dce8ef;overflow:hidden}.meal-allocation-track i{display:block;width:var(--allocation);height:100%;background:linear-gradient(90deg,#16b8a6,#1769c2);border-radius:inherit;transform:scaleX(0);transform-origin:left;transition:transform 1.3s ease .2s}.meal-visible .meal-allocation-track i{transform:scaleX(1)}.meal-traveller{fill:#ffda80;filter:drop-shadow(0 0 5px #ffda80)}body[data-slug="meal"] .meal-road .road-path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.8s ease}.meal-road.meal-visible .road-path{stroke-dashoffset:0}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-motion-cover{position:relative;overflow:hidden;background:radial-gradient(ellipse at 85% 20%,#135578 0,transparent 55%),linear-gradient(135deg,#082b35,#102743 70%)}:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-motion-cover:after{content:"";position:absolute;width:330px;height:330px;border:1px solid #74d9d044;border-radius:50%;right:-80px;top:25px;box-shadow:0 0 0 55px #74d9d00a,0 0 0 110px #74d9d008;pointer-events:none;animation:meal-orbit-breathe 10s ease-in-out infinite alternate}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .glass-tile,:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-guide-card{transition:box-shadow .35s ease,translate .35s ease;background:linear-gradient(135deg,rgba(255,255,255,.85),rgba(232,242,248,.65));backdrop-filter:blur(16px)}:is(body[data-slug="meal"],body[data-slug="mis"]) .glass-tile:hover,:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-guide-card:hover{translate:0 -4px;box-shadow:0 15px 36px #102a4318}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-motion-item{opacity:0;transform:translateY(22px);transition:opacity .65s ease var(--meal-delay,0ms),transform .65s cubic-bezier(.2,.65,.3,1) var(--meal-delay,0ms)}:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-motion-item.meal-visible{opacity:1;transform:translateY(0)}
+.meal-allocation{padding:1.5rem;margin-bottom:1.5rem;border-radius:20px}.meal-allocation-row{display:grid;grid-template-columns:minmax(180px,1.3fr) minmax(100px,1fr) auto;gap:1rem;align-items:center;margin:.8rem 0;font-size:.85rem}.meal-allocation-track{height:12px;border-radius:20px;background:#dce8ef;overflow:hidden}.meal-allocation-track i{display:block;width:var(--allocation);height:100%;background:linear-gradient(90deg,#16b8a6,#1769c2);border-radius:inherit;transform:scaleX(0);transform-origin:left;transition:transform 1.3s ease .2s}.meal-visible .meal-allocation-track i{transform:scaleX(1)}.meal-traveller{fill:#ffda80;filter:drop-shadow(0 0 5px #ffda80)}:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-road .road-path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.8s ease}.meal-road.meal-visible .road-path{stroke-dashoffset:0}
 @keyframes meal-orbit-breathe{to{transform:translate(-25px,25px) scale(1.08)}}
 @media(max-width:650px){.meal-allocation-row{grid-template-columns:1fr;gap:.35rem}.meal-allocation-track{width:100%}}
-@media(prefers-reduced-motion:reduce){body[data-slug="meal"] .meal-motion-item{opacity:1;transform:none;transition:none}body[data-slug="meal"] .meal-motion-cover:after{animation:none}.meal-traveller{display:none}.meal-allocation-track i{transform:none;transition:none}}
-html[data-motion="reduced"] body[data-slug="meal"] .meal-motion-item{opacity:1;transform:none}html[data-motion="reduced"] .meal-traveller{display:none}html[data-motion="reduced"] .meal-motion-cover:after{animation:none}
+@media(prefers-reduced-motion:reduce){:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-motion-item{opacity:1;transform:none;transition:none}:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-motion-cover:after{animation:none}.meal-traveller{display:none}.meal-allocation-track i{transform:none;transition:none}}
+html[data-motion="reduced"] :is(body[data-slug="meal"],body[data-slug="mis"]) .meal-motion-item{opacity:1;transform:none}html[data-motion="reduced"] .meal-traveller{display:none}html[data-motion="reduced"] .meal-motion-cover:after{animation:none}
 
-body[data-slug="meal"] .meal-road.meal-visible .road-path{stroke-dashoffset:0}body[data-slug="meal"] .meal-road .road-finish{fill:#ffcf5a;stroke:#fff2bf;filter:drop-shadow(0 0 12px #ffd45a)}body[data-slug="meal"] .meal-road .road-progress{fill:#fff;stroke:#16b8a6;stroke-width:3;filter:drop-shadow(0 0 7px #8effef)}html[data-motion="reduced"] body[data-slug="meal"] .meal-road .road-path{stroke-dashoffset:0}@media(prefers-reduced-motion:reduce){body[data-slug="meal"] .meal-road .road-path{stroke-dashoffset:0}}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-road.meal-visible .road-path{stroke-dashoffset:0}:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-road .road-finish{fill:#ffcf5a;stroke:#fff2bf;filter:drop-shadow(0 0 12px #ffd45a)}:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-road .road-progress{fill:#fff;stroke:#16b8a6;stroke-width:3;filter:drop-shadow(0 0 7px #8effef)}html[data-motion="reduced"] :is(body[data-slug="meal"],body[data-slug="mis"]) .meal-road .road-path{stroke-dashoffset:0}@media(prefers-reduced-motion:reduce){:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-road .road-path{stroke-dashoffset:0}}
 
 /* Final MEAL spacing and typography review */
-body[data-slug="meal"] .sec{padding-block:clamp(1.35rem,2.8vw,2.25rem)}
-body[data-slug="meal"] .meal-cover{padding-block:clamp(2rem,4vw,3rem)}
-body[data-slug="meal"] .meal-cover h1{font-size:clamp(1.8rem,3.5vw,2.65rem);line-height:1.25;max-width:30ch}
-body[data-slug="meal"] .sec h2{font-size:clamp(1.35rem,2.4vw,1.9rem);line-height:1.35;margin-bottom:1rem}
-body[data-slug="meal"] .meal-metrics{margin-bottom:1.4rem;gap:.8rem}
-body[data-slug="meal"] .meal-project-grid,body[data-slug="meal"] .meal-guide-grid{gap:.85rem}
-body[data-slug="meal"] .meal-guide-card{padding:1rem;gap:.65rem}
-body[data-slug="meal"] .meal-guide-card h3{font-size:.98rem;line-height:1.45}
-body[data-slug="meal"] .sec p:not(:has(>.btn)){font-size:.94rem;line-height:1.75;word-spacing:normal}
-body[data-slug="meal"] .sec>p{margin-block:.65rem}
-body[data-slug="meal"] .programme-table{margin:.75rem 0}
-body[data-slug="meal"] .programme-table th,body[data-slug="meal"] .programme-table td{padding:.65rem .85rem;font-size:.9rem}
-body[data-slug="meal"] .meal-road{max-width:1000px}
-body[data-slug="meal"] .meal-road-section{padding-block:1.75rem}
-body[data-slug="meal"] .meal-road-section h2{margin-bottom:.5rem}
-body[data-slug="meal"] .meal-allocation{padding:1.1rem;margin-bottom:1rem}
-body[data-slug="meal"] .meal-allocation-row{margin:.6rem 0}
-body[data-slug="meal"] .mis-flow-card{padding:1.1rem}
-body[data-slug="meal"] .lead-aspiration{margin-top:.75rem;font-size:.9rem}
-body[data-slug="meal"] .meal-facts .meal-fact-card{padding:1rem}
-body[data-slug="meal"] .meal-module summary{padding:.8rem .9rem}
-body[data-slug="meal"] .meal-profile-link{margin:.7rem 0 0}
-@media(max-width:600px){body[data-slug="meal"] .sec{padding-block:1.25rem}body[data-slug="meal"] .meal-guide-card{gap:.5rem;padding:.85rem}body[data-slug="meal"] .meal-guide-number{width:26px;height:26px}body[data-slug="meal"] .sec p:not(:has(>.btn)){font-size:.9rem}body[data-slug="meal"] .meal-road-labels b{font-size:.8rem}}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .sec{padding-block:clamp(1.35rem,2.8vw,2.25rem)}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-cover{padding-block:clamp(2rem,4vw,3rem)}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-cover h1{font-size:clamp(1.8rem,3.5vw,2.65rem);line-height:1.25;max-width:30ch}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .sec h2{font-size:clamp(1.35rem,2.4vw,1.9rem);line-height:1.35;margin-bottom:1rem}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-metrics{margin-bottom:1.4rem;gap:.8rem}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-project-grid,:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-guide-grid{gap:.85rem}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-guide-card{padding:1rem;gap:.65rem}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-guide-card h3{font-size:.98rem;line-height:1.45}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .sec p:not(:has(>.btn)){font-size:.94rem;line-height:1.75;word-spacing:normal}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .sec>p{margin-block:.65rem}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .programme-table{margin:.75rem 0}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .programme-table th,:is(body[data-slug="meal"],body[data-slug="mis"]) .programme-table td{padding:.65rem .85rem;font-size:.9rem}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-road{max-width:1000px}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-road-section{padding-block:1.75rem}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-road-section h2{margin-bottom:.5rem}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-allocation{padding:1.1rem;margin-bottom:1rem}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-allocation-row{margin:.6rem 0}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .mis-flow-card{padding:1.1rem}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .lead-aspiration{margin-top:.75rem;font-size:.9rem}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-facts .meal-fact-card{padding:1rem}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-module summary{padding:.8rem .9rem}
+:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-profile-link{margin:.7rem 0 0}
+@media(max-width:600px){:is(body[data-slug="meal"],body[data-slug="mis"]) .sec{padding-block:1.25rem}:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-guide-card{gap:.5rem;padding:.85rem}:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-guide-number{width:26px;height:26px}:is(body[data-slug="meal"],body[data-slug="mis"]) .sec p:not(:has(>.btn)){font-size:.9rem}:is(body[data-slug="meal"],body[data-slug="mis"]) .meal-road-labels b{font-size:.8rem}}
