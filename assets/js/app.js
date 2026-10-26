@@ -16,7 +16,7 @@ const sec=(c,h,b)=>`<section class="sec ${c}">${h?`<h2 class="rv">${h}</h2>`:""}
 const norm=u=>new URL(u,location.href).pathname.replace(/index\.html$/,"");
 function shell(){const t=T(),nav=[["home","index.html"],["meal","courses/index.html"],["about","about/index.html"],["learn","learn/index.html"],["contact","contact/index.html"]],here=norm(location.href);
 $("#hdr").innerHTML=`<header class="hd"><a class="brand" href="${P("index.html")}"><img src="${P("assets/img/logo-trim.png")}" alt="SCOPE: School for Career-Oriented Professional Education" width="140" height="48"></a><button class="bg" aria-expanded="false" aria-controls="nv">${t.menu}</button><nav id="nv" aria-label="Main">${nav.map(n=>`<a href="${P(n[1])}"${norm(P(n[1]))===here?' aria-current="page"':""}>${t[n[0]]}</a>`).join("")}<button class="lg" type="button">${t.lang}</button></nav></header>`;
-$("#ftr").innerHTML=`<footer class="ft"><div class="ft-glass"><div class="ft-top"><a class="ft-logo" href="${P("index.html")}" aria-label="SCOPE home"><img src="${P("assets/img/logo-trim.png")}" alt="SCOPE: School for Career-Oriented Professional Education" width="140" height="48"></a><nav class="ft-nav" aria-label="Footer">${nav.map(n=>`<a href="${P(n[1])}">${t[n[0]]}</a>`).join("")}</nav><button class="mo" type="button">${t.mo}: ${t.ml[FX.level()]}</button></div><div class="ft-bottom"><span>© ${new Date().getFullYear()} SCOPE · ${t.foot}</span><a href="${P("refund/index.html")}">${L==="bn"?"MEAL ফি ও নীতিমালা":"MEAL fees & policy"}</a></div></div></footer>`;
+$("#ftr").innerHTML=`<footer class="ft"><div class="ft-glass"><div class="ft-top"><a class="ft-logo" href="${P("index.html")}" aria-label="SCOPE home"><img src="${P("assets/img/logo-trim.png")}" alt="SCOPE: School for Career-Oriented Professional Education" width="140" height="48"></a><nav class="ft-nav" aria-label="Footer">${nav.map(n=>`<a href="${P(n[1])}">${t[n[0]]}</a>`).join("")}</nav><button class="mo" type="button">${t.mo}: ${t.ml[FX.level()]}</button></div><div class="ft-bottom"><span>© ${new Date().getFullYear()} SCOPE · ${t.foot}</span><a href="${B.dataset.slug==="mis"?P("courses/mis/index.html")+"#mis-policy":P("refund/index.html")}">${B.dataset.slug==="mis"?(L==="bn"?"MIS ফি ও নীতিমালা":"MIS fees & policy"):(L==="bn"?"MEAL ফি ও নীতিমালা":"MEAL fees & policy")}</a></div></div></footer>`;
 $(".bg").onclick=e=>{e.currentTarget.setAttribute("aria-expanded",$("#nv").classList.toggle("open"))};
 $(".lg").onclick=()=>{saved=snap();L=L==="en"?"bn":"en";try{localStorage.setItem("scope-lang",L)}catch(e){}render()};$(".mo").onclick=FX.cycle}
 /* ---------- registration (enrolment with bKash) ---------- */
@@ -408,7 +408,7 @@ sec("light",bn?"ভর্তির আগে জেনে নিন":"Before you
 ["Software প্রস্তুতি","Power BI Desktop-এর উপযোগী Windows laptop/desktop, উপযুক্ত Excel ও নির্ভরযোগ্য internet প্রয়োজন। Software licence অন্তর্ভুক্ত নয়; পেমেন্টের আগে compatibility নিশ্চিত করুন।"],
 ["শেখার ব্যবস্থা","Delivery via SCOPE Custom Platform, Zoom, Google Meet ও Google Classroom। বাংলাদেশি batch: বাংলা ও ইংরেজি; আন্তর্জাতিক batch: শুধু ইংরেজি। আন্তর্জাতিক batch-এর ফি USD 100।"],
 ["Sample ও recording","এখন sample video বা class recording-এর প্রতিশ্রুতি দেওয়া হচ্ছে না।"]
-]))+sec("light",bn?"ফি ও ফেরত নীতি":"Fees and refund policy",mealPolicy().replaceAll("MEAL","MIS"));
+]))+sec("light",bn?"ফি ও ফেরত নীতি":"Fees and refund policy",mealPolicy().replaceAll("MEAL","MIS")).replace('class="sec light"','class="sec light" id="mis-policy"');
 }
 function misPage(t,c){
 const bn=L==="bn",pick=x=>x[bn?1:0],projects=[
