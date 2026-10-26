@@ -16,7 +16,7 @@ const sec=(c,h,b)=>`<section class="sec ${c}">${h?`<h2 class="rv">${h}</h2>`:""}
 const norm=u=>new URL(u,location.href).pathname.replace(/index\.html$/,"");
 function shell(){const t=T(),nav=[["home","index.html"],["meal","courses/index.html"],["about","about/index.html"],["learn","learn/index.html"],["contact","contact/index.html"]],here=norm(location.href);
 $("#hdr").innerHTML=`<header class="hd"><a class="brand" href="${P("index.html")}"><img src="${P("assets/img/logo-trim.png")}" alt="SCOPE: School for Career-Oriented Professional Education" width="140" height="48"></a><button class="bg" aria-expanded="false" aria-controls="nv">${t.menu}</button><nav id="nv" aria-label="Main">${nav.map(n=>`<a href="${P(n[1])}"${norm(P(n[1]))===here?' aria-current="page"':""}>${t[n[0]]}</a>`).join("")}<button class="lg" type="button">${t.lang}</button></nav></header>`;
-$("#ftr").innerHTML=`<footer class="ft"><div class="ft-glass"><div class="ft-top"><a class="ft-logo" href="${P("index.html")}" aria-label="SCOPE home"><img src="${P("assets/img/logo-trim.png")}" alt="SCOPE: School for Career-Oriented Professional Education" width="140" height="48"></a><nav class="ft-nav" aria-label="Footer">${nav.map(n=>`<a href="${P(n[1])}">${t[n[0]]}</a>`).join("")}</nav><button class="mo" type="button">${t.mo}: ${t.ml[FX.level()]}</button></div><div class="ft-bottom"><span>© ${new Date().getFullYear()} SCOPE · ${t.foot}</span></div></div></footer>`;
+$("#ftr").innerHTML=`<footer class="ft"><div class="ft-glass"><div class="ft-top"><a class="ft-logo" href="${P("index.html")}" aria-label="SCOPE home"><img src="${P("assets/img/logo-trim.png")}" alt="SCOPE: School for Career-Oriented Professional Education" width="140" height="48"></a><nav class="ft-nav" aria-label="Footer">${nav.map(n=>`<a href="${P(n[1])}">${t[n[0]]}</a>`).join("")}</nav><button class="mo" type="button">${t.mo}: ${t.ml[FX.level()]}</button></div><div class="ft-bottom"><span>© ${new Date().getFullYear()} SCOPE · ${t.foot}</span><a href="${P("refund/index.html")}">${L==="bn"?"MEAL ফি ও নীতিমালা":"MEAL fees & policy"}</a></div></div></footer>`;
 $(".bg").onclick=e=>{e.currentTarget.setAttribute("aria-expanded",$("#nv").classList.toggle("open"))};
 $(".lg").onclick=()=>{saved=snap();L=L==="en"?"bn":"en";try{localStorage.setItem("scope-lang",L)}catch(e){}render()};$(".mo").onclick=FX.cycle}
 /* ---------- registration (enrolment with bKash) ---------- */
@@ -28,49 +28,208 @@ const nav=(b,n,last)=>`<p class="row">${b!=null?`<button class="btn ghost-d" typ
 return sub(r.h,r.sub,c.hue)+sec("light","",`<div class="reg" style="--h:${c.hue}"><div class="regmain"><ol class="stepper" aria-label="${esc(r.steps.join(" / "))}">${r.steps.map((s,i)=>`<li data-i="${i}"${i?"":' aria-current="step"'}><b>${i+1}</b><span>${s}</span></li>`).join("")}</ol>
 <form id="ef" novalidate data-step="0"><input type="text" name="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 <fieldset class="stp" data-s="0"><legend tabindex="-1">${r.steps[0]}</legend><label>${r.lc}<select name="courseSlug" id="courseSelect" required>${S.courses.filter(x=>x.st==="current").map(x=>`<option value="${x.slug}"${x.slug===c.slug?" selected":""}>${esc(x[L][0])}</option>`).join("")}</select><small id="er-courseSlug" class="er"></small></label>${fld("name",r.nm,"text",1,"name")}${fld("email",t.e,"email",1,"email")}${fld("phone",r.ph,"tel",1,"tel",r.phh)}${fld("org",r.org,"text",0,"organization")}${fld("role",r.role,"text",0,"organization-title")}${selc("edu",r.edu,S.opts.edu)}${selc("src",r.src,S.opts.src)}${nav(null,1)}</fieldset>
-<fieldset class="stp" data-s="1" hidden><legend tabindex="-1">${r.payh}</legend><div class="paybox"><dl class="facts"><div><dt>${r.amt}</dt><dd id="courseFee">${fee}</dd></div><div><dt>${r.to}</dt><dd><span class="num" id="bk">${S.pay.to}</span> <button class="btn sm ghost-d" type="button" id="cp">${r.copy}</button></dd></div></dl><ol class="how">${r.how.map(h=>`<li>${h}</li>`).join("")}</ol><p class="note">${r.manual}</p><p class="safe">${r.safe}</p></div>${fld("sender",r.snd,"tel",1,"tel",r.phh)}${fld("trxid",r.trx,"text",1,"off",r.trxh)}<label class="ck"><input type="checkbox" name="sent" required> ${r.sent}</label>${nav(0,2)}</fieldset>
-<fieldset class="stp" data-s="2" hidden><legend tabindex="-1">${r.revh}</legend><dl class="facts" id="rv"></dl><label class="ck"><input type="checkbox" name="ok2" required> ${r.conf}</label><label class="ck"><input type="checkbox" name="consent" required> ${t.cons}</label><div class="cf-turnstile" data-sitekey="${esc(S.turnstileSiteKey)}" data-theme="light"></div>${nav(1,null,1)}</fieldset>
+<fieldset class="stp" data-s="1" hidden><legend tabindex="-1">${r.payh}</legend><div class="paybox">${c.slug==="meal"?mealPolicy()+`<p><a href="${P("courses/meal/index.html")}" target="_blank" rel="noopener">${L==="bn"?"মূল্যায়ন, রিটেক ও সনদের শর্ত পড়ুন":"Read assessment, retake and certificate requirements"}</a></p>`:""}<dl class="facts"><div><dt>${r.amt}</dt><dd id="courseFee">${fee}</dd></div><div><dt>${r.to}</dt><dd><span class="num" id="bk">${S.pay.to}</span> <button class="btn sm ghost-d" type="button" id="cp">${r.copy}</button></dd></div></dl><ol class="how">${r.how.map(h=>`<li>${h}</li>`).join("")}</ol><p class="note">${r.manual}</p><p class="safe">${r.safe}</p></div>${fld("sender",r.snd,"tel",1,"tel",r.phh)}${fld("trxid",r.trx,"text",1,"off",r.trxh)}<label class="ck"><input type="checkbox" name="sent" required> ${r.sent}</label>${nav(0,2)}</fieldset>
+<fieldset class="stp" data-s="2" hidden><legend tabindex="-1">${r.revh}</legend><dl class="facts" id="rv"></dl><label class="ck"><input type="checkbox" name="ok2" required> ${r.conf}${c.slug==="meal"?(L==="bn"?" আমি MEAL-এর ৬০% পাসের শর্ত, রিটেক ও ফেরত নীতি পড়েছি।":" I have read the MEAL 60% pass requirement, retake and refund policy."):""}</label><label class="ck"><input type="checkbox" name="consent" required> ${t.cons}</label><div class="cf-turnstile" data-sitekey="${esc(S.turnstileSiteKey)}" data-theme="light"></div>${nav(1,null,1)}</fieldset>
 <p id="st" role="status" tabindex="-1"></p></form><p class="note"><a href="${regUrl()}">${r.int}</a></p></div>
 <aside class="sum"><h2>${r.sum}</h2><h3 id="sumCourse">${esc(c[L][0])}</h3><div id="sumFacts">${factsHtml(c,["fee","dl","start","days","time","del","cert"])}</div></aside></div>`)}
-function mealPage(t,c){
-const bn=L==="bn",v=bn?{
- sub:"৩ মাসে ৩৬টি লাইভ ক্লাস—প্র্যাকটিক্যাল MEAL দক্ষতা ও বাস্তব কাজের উপযোগী ডেলিভারেবল তৈরি করুন।",
- metrics:[["৩ মাস","কোর্সের মেয়াদ"],["৩৬","লাইভ ক্লাস"],["৩টি","গাইডেড প্রজেক্ট"],["৫৪ ঘণ্টা","নির্ধারিত ক্লাস সময়"]],
- projects:[["প্রজেক্ট ১","Indicator Monitoring Tracker","ইন্ডিকেটর, বেসলাইন, লক্ষ্য, disaggregation ও অগ্রগতি এক workbook-এ ট্র্যাক করুন।"],["প্রজেক্ট ২","Performance Monitoring Tracker","পরিকল্পিত ও অর্জিত ফলাফল তুলনা, variance শনাক্ত ও follow-up action নথিবদ্ধ করুন।"],["প্রজেক্ট ৩","Real-Time Excel Dashboard & Donor Reporting","ডেটা থেকে live dashboard এবং donor-ready reporting pack তৈরি ও উপস্থাপন করুন।"]],
- roadmapTitle:"শেখা থেকে অর্জন",roadmap:["শুরু","ইন্ডিকেটর ট্র্যাকার","পারফরম্যান্স ট্র্যাকার","ড্যাশবোর্ড ও রিপোর্ট","অর্জন ব্যাজ"],weeks:["সপ্তাহ ১","সপ্তাহ ১–৩","সপ্তাহ ৪–৬","সপ্তাহ ৭–১২","সপ্তাহ ১২"],
- chartTitle:"কোর্সের কাজের পরিসর",barTitle:"প্রজেক্টভিত্তিক সময়",pieTitle:"৩৬ ক্লাসের বণ্টন",pieLabels:["প্রজেক্ট ১ · ৯ ক্লাস","প্রজেক্ট ২ · ৯ ক্লাস","প্রজেক্ট ৩ · ১৮ ক্লাস"],
- whyTitle:"কেন এই কোর্সটি বেছে নেবেন",why:[["হাতে-কলমে তৈরি","শুধু ধারণা নয়—তিনটি ব্যবহারযোগ্য workbook ও reporting deliverable তৈরি হবে।"],["লাইভ শেখা","৩৬টি নির্ধারিত ক্লাসে ধাপে ধাপে তৈরি, অনুশীলন, প্রশ্ন ও feedback-এর সুযোগ।"],["MEAL থেকে রিপোর্টিং","ইন্ডিকেটর ও performance tracking-কে Excel dashboard এবং donor reporting-এর সাথে যুক্ত করুন।"],["কাজে দেখানোর মতো output","নিজের portfolio-তে দেখাতে পারবেন এমন tracker, dashboard ও report pack তৈরি করুন."]],
- syllabusTitle:"১২ সপ্তাহের syllabus",syllabusIntro:"সপ্তাহে ৩টি ক্লাস; ১২ modules × ৩ classes = ৩৬টি ক্লাস। প্রতিটি module-এ ধারণা, guided practice ও build/review কাজ থাকবে.",
- modules:[["MEAL ও project cycle","MEAL framework, project cycle, results chain, stakeholder roles"],["Theory of Change ও logframe","Outcome pathway, assumptions, output/outcome mapping, logframe review"],["Indicator design ও reference sheet","SMART indicators, definition, unit, source, frequency, responsibility"],["Data sources, collection ও accountability","Data collection plan, feedback/complaints loops, ethics and safe handling"],["Baseline, target ও disaggregation","Baseline/target setting, demographic disaggregation, indicator reference sheets"],["Excel data foundations","Tables, formulas, validation, cleaning, consistent data structures"],["Project 1: Indicator Monitoring Tracker","Build, test and review an indicator monitoring tracker"],["Performance monitoring ও variance","Plan vs actual, variance, status rules, analysis and action tracking"],["Project 2: Performance Monitoring Tracker","Build a performance tracker with follow-up and management views"],["Analysis ও visualization","Pivot tables, chart selection, filters, dashboard layout and QA"],["Project 3: Dashboard ও donor reporting","Build a refreshable Excel dashboard and connect findings to donor reporting"],["Capstone, review ও presentation","Quality checks, interpret findings, present the reporting pack and next steps"]],
- classes:"ক্লাস",compTitle:"প্রকাশিত কোর্স ফরম্যাটের সাথে তুলনা",compNote:"তুলনাটি provider-দের প্রকাশিত বিবরণের ভিত্তিতে। Course scope, teaching style ও hour definitions এক নয়—তাই এটিকে সমমানের syllabus ranking হিসেবে পড়বেন না। SCOPE-এর ঘণ্টা ৩৬ × ৯০ মিনিট থেকে গণনা করা।",compHours:"প্রকাশিত/নির্ধারিত সময়",learners:"প্রকাশিত কোর্স-ঘণ্টার তুলনা",cmp:[["SCOPE MEAL","৫৪ ক্লাস-ঘণ্টা · ৩৬ লাইভ ক্লাস · ৩টি guided project","আপনার course plan"],["CIDT · MEL","১২ online learning hours · শেষে multiple-choice test পাস করলে certificate","CIDT course page"],["Skillset Development","২০ modules · ৬৫ contact hours · intermediate · completion certificate","Skillset course page"],["GKPM · PMEAL","১০ দিনের practical live-online course · মোট ঘণ্টা প্রকাশিত নয়","GKPM course page"]],
- close:"১২ সপ্তাহে নিজের MEAL ও reporting toolkit তৈরি শুরু করুন।",reg:"MEAL কোর্সে নিবন্ধন করুন",hours:"ঘণ্টা"
-}:{
- sub:"Build practical MEAL skills and work-ready deliverables in 36 live classes over three months.",
- metrics:[["3 months","Course duration"],["36","Live classes"],["3","Guided projects"],["54 hours","Scheduled class time"]],
- projects:[["PROJECT 1","Indicator Monitoring Tracker","Track indicators, baselines, targets, disaggregation and progress in one structured workbook."],["PROJECT 2","Performance Monitoring Tracker","Compare planned and actual results, flag variance and document follow-up actions."],["PROJECT 3","Real-Time Excel Dashboard & Donor Reporting","Turn project data into a refreshable dashboard and a donor-ready reporting pack." ]],
- roadmapTitle:"From learning to achievement",roadmap:["Start","Indicator tracker","Performance tracker","Dashboard & reporting","Achievement badge"],weeks:["WEEK 1","WEEKS 1–3","WEEKS 4–6","WEEKS 7–12","WEEK 12"],
- chartTitle:"Coursework at a glance",barTitle:"Project build timeline",pieTitle:"36-class allocation",pieLabels:["Project 1 · 9 classes","Project 2 · 9 classes","Project 3 · 18 classes"],
- whyTitle:"Why choose this course",why:[["Build practical tools","Create three usable workbooks and reporting deliverables, not just study concepts."],["Learn live, step by step","Use 36 scheduled classes for guided building, practice, questions and feedback."],["Connect MEAL to reporting","Link indicator and performance tracking to Excel dashboards and donor reporting."],["Leave with demonstrable outputs","Build trackers, a dashboard and reporting pack you can present in your portfolio."]],
- syllabusTitle:"12-week syllabus",syllabusIntro:"Three classes per week: 12 modules × 3 classes = 36 classes. Each module includes concepts, guided practice and build/review work.",
- modules:[["MEAL foundations & project cycle","MEAL frameworks, project cycle, results chain and stakeholder roles"],["Theory of Change & logframes","Outcome pathways, assumptions, output/outcome mapping and logframe review"],["Indicator design & reference sheets","SMART indicators, definitions, units, sources, frequency and responsibility"],["Data sources, collection & accountability","Data collection plans, feedback loops, ethics and safe data handling"],["Baselines, targets & disaggregation","Baseline/target setting, demographic disaggregation and reference sheets"],["Excel data foundations","Tables, formulas, validation, cleaning and consistent data structures"],["Project 1: Indicator Monitoring Tracker","Build, test and review an indicator monitoring tracker"],["Performance monitoring & variance","Plan vs actual, variance, status rules, analysis and action tracking"],["Project 2: Performance Monitoring Tracker","Build a performance tracker with follow-up and management views"],["Analysis & visualization","Pivot tables, chart selection, filters, dashboard layout and QA"],["Project 3: Dashboard & donor reporting","Build a refreshable Excel dashboard and connect findings to donor reporting"],["Capstone, review & presentation","Quality checks, interpretation, reporting pack presentation and next steps"]],
- classes:"CLASSES",compTitle:"Compare published course formats",compNote:"This comparison uses providers’ published descriptions. Course scope, teaching style and hour definitions differ, so it is not a like-for-like syllabus ranking. SCOPE hours are calculated from 36 × 90-minute classes.",compHours:"Published/scheduled hours",learners:"Published course hours (comparison)",cmp:[["SCOPE MEAL","54 class hours · 36 live classes · 3 guided projects","Your course plan"],["CIDT · MEL","12 online learning hours · certificate after passing a multiple-choice test","CIDT course page"],["Skillset Development","20 modules · 65 contact hours · intermediate · completion certificate","Skillset course page"],["GKPM · PMEAL","10-day practical live-online course · total hours not stated","GKPM course page"]],
- close:"Start building your MEAL and reporting toolkit over 12 weeks.",reg:"Register for the MEAL course",hours:"hours"
+
+const MEAL_PROGRAMME={
+  "sections": [
+    [
+      "Your programme lead",
+      "আপনার প্রোগ্রাম লিড",
+      [
+        [
+          "Nayeem Sarker · Programme Lead & Instructor",
+          "নাইম সরকার · প্রোগ্রাম লিড ও প্রশিক্ষক"
+        ],
+        [
+          "Nayeem holds bachelor’s and master’s degrees in Statistics from Shahjalal University of Science and Technology. He previously worked as Information Management Specialist, Information Management Manager and Senior Officer–Information Management with CODEC’s UNHCR-funded EPRC project.",
+          "নাইম সরকার শাহজালাল বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় থেকে পরিসংখ্যানে স্নাতক ও স্নাতকোত্তর সম্পন্ন করেছেন। CODEC-এর UNHCR-funded EPRC প্রকল্পে Information Management Specialist, Information Management Manager এবং Senior Officer–Information Management হিসেবে তাঁর কাজের অভিজ্ঞতা রয়েছে।"
+        ],
+        [
+          "His experience includes humanitarian information management, data quality assurance, indicator monitoring, Excel and Power BI dashboards, reporting and staff training. He leads programme delivery and assessment oversight and teaches indicator trackers, performance trackers and Excel dashboards and reporting.",
+          "তাঁর অভিজ্ঞতার মধ্যে রয়েছে মানবিক সহায়তা কার্যক্রমের তথ্য ব্যবস্থাপনা, ডেটার মান যাচাই, ইন্ডিকেটর পর্যবেক্ষণ, Excel ও Power BI dashboard, reporting এবং কর্মীদের প্রশিক্ষণ। তিনি প্রোগ্রাম পরিচালনা ও মূল্যায়ন তত্ত্বাবধানের পাশাপাশি indicator tracker, performance tracker এবং Excel dashboard ও reporting শেখাবেন।"
+        ],
+        [
+          "Aspiring PhD Researcher in Humanitarian Data Science. This describes a research goal, not current doctoral enrolment or an awarded qualification.",
+          "Humanitarian Data Science-এ PhD গবেষণায় আগ্রহী (Aspiring PhD Researcher)। এটি গবেষণার লক্ষ্য; বর্তমানে PhD-তে ভর্তি বা অর্জিত ডিগ্রির পরিচয় নয়।"
+        ],
+        [
+          "Additional instructors or teaching assistants may join according to cohort size and support needs. Profiles and session responsibilities will be published once confirmed. Previous employment does not imply institutional endorsement of SCOPE.",
+          "শিক্ষার্থীর সংখ্যা ও সহায়তার প্রয়োজন অনুযায়ী অতিরিক্ত প্রশিক্ষক বা teaching assistant যুক্ত হতে পারেন। নিশ্চিত হলে তাঁদের পরিচয় ও session-এর দায়িত্ব জানানো হবে। পূর্ববর্তী কর্ম-অভিজ্ঞতা SCOPE-এর প্রতি সংশ্লিষ্ট প্রতিষ্ঠানের অনুমোদন বোঝায় না।"
+        ]
+      ]
+    ],
+    [
+      "What you will be able to do",
+      "কোর্স শেষে যা করতে পারবেন",
+      [
+        [
+          "Define indicators, baselines, targets and disaggregation; build a structured monitoring workbook.",
+          "ইন্ডিকেটর, baseline, target ও disaggregation নির্ধারণ করে monitoring workbook তৈরি।"
+        ],
+        [
+          "Compare planned and actual results, check data quality and document follow-up actions.",
+          "পরিকল্পনা ও অর্জিত ফল তুলনা, ডেটার মান যাচাই এবং follow-up action নথিবদ্ধ করা।"
+        ],
+        [
+          "Build and refresh an Excel dashboard, explain findings and prepare a reporting pack.",
+          "Excel dashboard তৈরি ও refresh, ফলাফলের ব্যাখ্যা এবং reporting pack প্রস্তুত করা।"
+        ],
+        [
+          "Practice field-assessment planning through online scenarios and simulated data. No field visit is included.",
+          "অনলাইন scenario ও simulated data দিয়ে field assessment planning অনুশীলন। মাঠপর্যায়ের ভ্রমণ অন্তর্ভুক্ত নয়।"
+        ]
+      ]
+    ],
+    [
+      "Assessment and certification",
+      "মূল্যায়ন ও সনদ",
+      [
+        [
+          "Each project: submission 50 marks, individual practical task 30 marks, presentation/viva 20 marks. Each project must independently score at least 60/100. A high overall average cannot compensate for a failed project.",
+          "প্রতি প্রজেক্টে: জমা দেওয়া কাজ ৫০, individual practical task ৩০ এবং presentation/viva ২০ নম্বর। প্রতিটি প্রজেক্টে আলাদাভাবে অন্তত ৬০/১০০ পেতে হবে। অন্য প্রজেক্টের বেশি নম্বর দিয়ে ফেল করা প্রজেক্টের শর্ত পূরণ হবে না।"
+        ],
+        [
+          "Incomplete submissions remain Incomplete until assessed. Project briefs specify deadlines, permitted collaboration and AI use; learners must explain their own work.",
+          "অসম্পূর্ণ কাজ মূল্যায়ন না হওয়া পর্যন্ত Incomplete থাকবে। Project brief-এ সময়সীমা, সহযোগিতা ও AI ব্যবহারের নিয়ম থাকবে; শিক্ষার্থীকে নিজের কাজ ব্যাখ্যা করতে হবে।"
+        ],
+        [
+          "Overall grade point = (Indicator GP × 2 + Performance GP × 2 + Dashboard GP × 4) ÷ 8. Certificate eligibility requires a pass in all three projects.",
+          "সামগ্রিক grade point = (Indicator GP × ২ + Performance GP × ২ + Dashboard GP × ৪) ÷ ৮। সনদের জন্য তিনটি প্রজেক্টেই পাস করতে হবে।"
+        ],
+        [
+          "A SCOPE Certificate of Achievement records the learner’s name, course, batch, dates, final grade point, eight internal assessment credits, certificate ID and issue date. An accompanying assessment record lists project results.",
+          "SCOPE Certificate of Achievement-এ নাম, কোর্স, batch, সময়কাল, final grade point, আটটি internal assessment credit, certificate ID ও issue date থাকবে। সঙ্গে project-wise ফলাফলের assessment record থাকবে।"
+        ]
+      ]
+    ],
+    [
+      "Retake opportunities",
+      "রিটেকের সুযোগ",
+      [
+        [
+          "First retake: 15 days after the final assessment, free of charge. Second retake: a further 15 days after the first retake, BDT 100 for Bangladesh learners or USD 10 for international learners.",
+          "প্রথম রিটেক: final assessment-এর ১৫ দিন পরে, বিনা ফিতে। দ্বিতীয় রিটেক: প্রথম রিটেকের আরও ১৫ দিন পরে; বাংলাদেশি শিক্ষার্থীর জন্য ১০০ টাকা, আন্তর্জাতিক শিক্ষার্থীর জন্য US$10।"
+        ],
+        [
+          "Only unsuccessful projects require reassessment. The second-retake fee covers one assessment round, not each failed project. The pass mark remains 60%. Feedback and confirmed dates will be provided; dates may be adjusted if results are delayed to preserve preparation time.",
+          "শুধু পাস না করা প্রজেক্টে পুনর্মূল্যায়ন হবে। দ্বিতীয় রিটেকের ফি একটি assessment round-এর জন্য, প্রতি প্রজেক্টের জন্য আলাদা নয়। পাস নম্বর ৬০%। Feedback ও নির্দিষ্ট তারিখ জানানো হবে; ফলাফল প্রকাশে দেরি হলে প্রস্তুতির সময় বজায় রেখে তারিখ সমন্বয় হবে।"
+        ],
+        [
+          "The latest reassessment result becomes the final result for that project; attempt history is retained. Learners who do not meet the requirements after the second retake do not receive the achievement certificate. No third retake is currently offered.",
+          "পুনর্মূল্যায়নের সর্বশেষ ফল সংশ্লিষ্ট প্রজেক্টের final result হবে; attempt history সংরক্ষিত থাকবে। দ্বিতীয় রিটেকের পরও শর্ত পূরণ না হলে achievement certificate দেওয়া হবে না। বর্তমানে তৃতীয় রিটেকের সুযোগ নেই।"
+        ]
+      ]
+    ],
+    [
+      "What the certificate means",
+      "সনদের অর্থ ও যাচাই",
+      [
+        [
+          "SCOPE is an independent professional-training platform with no external affiliation or accreditation. This certificate records achievement in SCOPE’s assessments; it is not a university degree, diploma or professional licence. Recognition by an employer or institution is their decision.",
+          "SCOPE একটি স্বাধীন পেশাগত প্রশিক্ষণ প্ল্যাটফর্ম; বাহ্যিক affiliation বা accreditation নেই। এই সনদ SCOPE-এর মূল্যায়নে অর্জিত ফল নথিভুক্ত করে; এটি বিশ্ববিদ্যালয়ের degree, diploma বা professional licence নয়। গ্রহণযোগ্যতা সংশ্লিষ্ট নিয়োগকারী বা প্রতিষ্ঠানের সিদ্ধান্ত।"
+        ],
+        [
+          "Online certificate verification is planned and is not yet available. Once launched, a certificate ID or QR will identify an issued record and its status. Public result details will follow learner consent; contact and payment information will not be public. Until then, contact SCOPE for certificate enquiries.",
+          "অনলাইন certificate verification পরিকল্পিত; এখনো চালু হয়নি। চালু হলে certificate ID বা QR দিয়ে ইস্যু করা সনদ ও তার অবস্থা দেখা যাবে। শিক্ষার্থীর সম্মতি অনুযায়ী ফলাফলের তথ্য প্রকাশ হবে; যোগাযোগ ও পেমেন্টের তথ্য প্রকাশ হবে না। আপাতত সনদ-সংক্রান্ত প্রশ্নে SCOPE-এর সঙ্গে যোগাযোগ করুন।"
+        ]
+      ]
+    ],
+    [
+      "Before you enrol",
+      "ভর্তির আগে জেনে নিন",
+      [
+        [
+          "Use a laptop or desktop with a suitable version of Microsoft Excel and reliable internet. This course teaches Excel dashboards; Power BI is not a separate module. Software licences are not included. Confirm software compatibility with SCOPE before paying.",
+          "উপযোগী Microsoft Excel-সহ laptop/desktop ও নির্ভরযোগ্য internet প্রয়োজন। এই কোর্সে Excel dashboard শেখানো হবে; Power BI আলাদা module নয়। Software licence অন্তর্ভুক্ত নয়। পেমেন্টের আগে SCOPE-এর সঙ্গে software compatibility নিশ্চিত করুন।"
+        ],
+        [
+          "Bangladesh delivery is in Bangla. International delivery follows the separately confirmed English-language batch and timetable. An English website does not by itself confirm an international batch. Recordings and a sample video are not currently promised.",
+          "বাংলাদেশি batch-এর ক্লাস বাংলায়। আন্তর্জাতিক batch-এর English delivery ও সময়সূচি আলাদাভাবে নিশ্চিত হবে। ওয়েবসাইট ইংরেজিতে থাকা মানেই আন্তর্জাতিক batch নিশ্চিত নয়। আপাতত recording বা sample video-এর প্রতিশ্রুতি দেওয়া হচ্ছে না।"
+        ]
+      ]
+    ]
+  ],
+  "weeks": [
+    [
+      "MEAL foundations, results chains, Theory of Change and logframes",
+      "MEAL-এর ভিত্তি, results chain, Theory of Change ও logframe"
+    ],
+    [
+      "SMART indicators, reference sheets, baselines, targets and collection plans",
+      "SMART indicator, reference sheet, baseline, target ও collection plan"
+    ],
+    [
+      "Excel structure, validation and Project 1: Indicator Monitoring Tracker",
+      "Excel structure, validation ও Project 1: Indicator Monitoring Tracker"
+    ],
+    [
+      "Monitoring plans, field-assessment scenarios, sampling basics and tools",
+      "Monitoring plan, field assessment scenario, sampling-এর ভিত্তি ও tools"
+    ],
+    [
+      "Data quality, consent, safe handling, feedback and accountability",
+      "ডেটার মান, consent, নিরাপদ তথ্য ব্যবস্থাপনা, feedback ও accountability"
+    ],
+    [
+      "Variance, follow-up, learning and Project 2: Performance Monitoring Tracker",
+      "Variance, follow-up, learning ও Project 2: Performance Monitoring Tracker"
+    ],
+    [
+      "Excel cleaning, structured tables and essential formulas",
+      "Excel cleaning, structured table ও প্রয়োজনীয় formula"
+    ],
+    [
+      "PivotTables, KPIs, disaggregation and reconciliation",
+      "PivotTable, KPI, disaggregation ও reconciliation"
+    ],
+    [
+      "Chart choice, dashboard layout and accessible presentation",
+      "Chart নির্বাচন, dashboard layout ও accessible presentation"
+    ],
+    [
+      "Refresh workflows, filters, error checks and dashboard testing",
+      "Refresh workflow, filter, error check ও dashboard testing"
+    ],
+    [
+      "Reporting packs, interpretation, limitations and recommendations",
+      "Reporting pack, ফলাফলের ব্যাখ্যা, সীমাবদ্ধতা ও recommendations"
+    ],
+    [
+      "Project 3: Excel Dashboard & Donor Reporting; final practical and viva",
+      "Project 3: Excel Dashboard & Donor Reporting; final practical ও viva"
+    ]
+  ],
+  "refund": [
+    [
+      "MEAL course and retake fees are not refundable if a learner chooses not to attend, withdraws, does not complete the course, or fails an assessment. Payment does not guarantee a certificate.",
+      "শিক্ষার্থী নিজে কোর্স না করলে, ছেড়ে দিলে, অসম্পূর্ণ রাখলে বা মূল্যায়নে ফেল করলে MEAL course ও retake fee ফেরত দেওয়া হবে না। পেমেন্ট সনদ পাওয়ার নিশ্চয়তা নয়।"
+    ],
+    [
+      "This learner-withdrawal policy does not determine the remedy if SCOPE cancels the programme or cannot deliver it. Contact SCOPE before payment for those arrangements. Any applicable statutory rights remain unaffected.",
+      "এই শিক্ষার্থী-প্রত্যাহার নীতি SCOPE নিজে প্রোগ্রাম বাতিল করলে বা পরিচালনা করতে না পারলে কী ব্যবস্থা হবে তা নির্ধারণ করে না। পেমেন্টের আগে সে বিষয়ে SCOPE-এর সঙ্গে যোগাযোগ করুন। প্রযোজ্য আইনগত অধিকার অপরিবর্তিত থাকবে।"
+    ]
+  ]
 };
-const colors=["#16b8a6","#1769c2","#8a6be8"],barRows=v.projects.map((p,i)=>`<div class="meal-bar-row"><div class="meal-bar-label"><b>${p[0]}</b><span>${p[1]}</span></div><div class="meal-bar-track"><i style="--bar:${[50,50,100][i]}%"></i></div><b class="meal-bar-value">${[3,3,6][i]} ${bn?"সপ্তাহ":"weeks"}</b></div>`).join("");
-const pieParts=[25,25,50],circ=263.9;let offset=0;const pie=pieParts.map((percent,i)=>{const dash=percent/100*circ,start=offset;offset+=dash;return `<circle class="meal-pie-part" cx="54" cy="54" r="42" style="--pie:${dash.toFixed(1)} ${(circ-dash).toFixed(1)};--offset:-${start.toFixed(1)};--slice:${colors[i]}"></circle>`}).join("");
-const modules=v.modules.map((m,i)=>`<details class="meal-module glass-tile"><summary><span class="module-week">${bn?"সপ্তাহ":"WEEK"} ${String(i+1).padStart(2,"0")}</span><b>${m[0]}</b><span class="module-count">3 ${v.classes}</span></summary><p>${m[1]}</p></details>`).join("");
-const compSources=["","https://cidt.org.uk/courses/monitoring-evaluation-and-learning/","https://skillsetdevelopment.com/courses/monitoring-evaluation-accountability-and-learning-training-course","https://globalkingprojectmanagement.org/trainings/project-monitoring-evaluation-accountability-and-learning-pmeal/"];
-const comp=v.cmp.map((item,i)=>`<article class="compare-card glass-tile"><h3>${item[0]}</h3><p>${item[1]}</p>${i?`<a href="${compSources[i]}" target="_blank" rel="noopener noreferrer">${item[2]} ↗</a>`:`<span>${item[2]}</span>`}</article>`).join("");
-const courseInfo=`<section class="sec light meal-final"><div class="glass-tile meal-final-card"><h2>${v.close}</h2>${facts(["fee","dl","start","days","time","del","cert"])}<p>${cta("",c)}</p></div></section>`;
-return `<section class="phero meal-cover" style="--h:${c.hue}"><span class="meal-kicker">${bn?"৩ মাস · ৩৬টি লাইভ ক্লাস":"3 MONTHS · 36 LIVE CLASSES"}</span><h1>${esc(c[L][0])}</h1><p>${v.sub}</p><div class="meal-cover-actions">${cta("",c)}<span>${bn?"৩টি গাইডেড প্রজেক্ট · বাস্তব কাজের ডেলিভারেবল":"3 guided projects · work-ready deliverables"}</span></div></section>`+
-courseInfo+
-`<section class="meal-overview sec light"><div class="meal-metrics">${v.metrics.map((m,i)=>`<article class="glass-tile meal-metric" style="--h:${colors[i%3]}"><strong>${m[0]}</strong><span>${m[1]}</span></article>`).join("")}</div><div class="meal-projects"><h2>${bn?"৩টি guided live project":"Three guided live projects"}</h2><div class="meal-project-grid">${v.projects.map((p,i)=>`<article class="glass-tile meal-project"><span>${p[0]}</span><h3>${p[1]}</h3><p>${p[2]}</p></article>`).join("")}</div></div></section>`+
-`<section class="sec dark meal-road-section"><h2>${v.roadmapTitle}</h2><div class="meal-road rv"><svg viewBox="0 0 1000 210" role="img" aria-label="${v.roadmapTitle}"><path id="meal-road-path" class="road-path" pathLength="1" d="M35 178 C170 178 145 143 265 143 S365 110 475 110 S575 74 690 74 S815 34 965 34"/><circle class="road-dot" cx="35" cy="178" r="8"/><circle class="road-dot" cx="265" cy="143" r="8"/><circle class="road-dot" cx="475" cy="110" r="8"/><circle class="road-dot" cx="690" cy="74" r="8"/><circle class="road-dot road-finish" cx="965" cy="34" r="13"/><circle class="road-progress" r="7"><animateMotion dur="10s" repeatCount="indefinite" rotate="auto"><mpath href="#meal-road-path"/></animateMotion></circle></svg><ol class="road-labels">${v.roadmap.map((name,i)=>`<li><small>${v.weeks[i]}</small><b>${name}</b>${i===4?`<span class="achievement-badge">${bn?"✦ অর্জন":"✦ ACHIEVED"}</span>`:""}</li>`).join("")}</ol></div></section>`+
-`<section class="sec light meal-workload"><h2>${v.chartTitle}</h2><div class="meal-chart-grid"><article class="glass-tile meal-chart rv"><h3>${v.barTitle}</h3><div class="meal-bars">${barRows}</div><p class="chart-note">${bn?"প্রকল্প তৈরির সময়: ৩ + ৩ + ৬ সপ্তাহ":"Build schedule: 3 + 3 + 6 weeks"}</p></article><article class="glass-tile meal-chart rv"><h3>${v.pieTitle}</h3><div class="pie-layout"><svg class="meal-pie" viewBox="0 0 108 108" role="img" aria-label="${v.pieTitle}">${pie}</svg><ul>${v.pieLabels.map((n,i)=>`<li><i style="--h:${colors[i]}"></i>${n}</li>`).join("")}</ul></div></article></div></section>`+
-`<section class="sec dark meal-why"><h2>${v.whyTitle}</h2><div class="meal-why-grid">${v.why.map((x,i)=>`<article class="glass-tile"><span>0${i+1}</span><h3>${x[0]}</h3><p>${x[1]}</p></article>`).join("")}</div></section>`+
-`<section class="sec light meal-syllabus"><h2>${v.syllabusTitle}</h2><p class="lead">${v.syllabusIntro}</p><div class="syllabus-grid">${modules}</div></section>`+
-`<section class="sec dark meal-comparison"><h2>${v.compTitle}</h2><p class="comparison-note">${v.compNote}</p><div class="compare-grid">${comp}</div><h3 class="comparison-build-title">${v.learners}</h3><div class="comparison-bars rv">${v.cmp.slice(0,3).map((item,i)=>`<div class="compare-bar-row"><span>${item[0]}</span><div><i style="--bar:${[83,18,100][i]}%;--h:${colors[i%3]}"></i></div><b>${[54,12,65][i]} ${v.hours}</b></div>`).join("")}</div><p class="chart-note">${bn?"প্রকাশিত তথ্য অনুযায়ী: SCOPE ৩৬টি ৯০ মিনিটের ক্লাস; CIDT ১২ online learning hours; Skillset ৬৫ contact hours।":"Published figures: SCOPE 36 × 90-minute classes; CIDT 12 online learning hours; Skillset 65 contact hours."}</p></section>`;
+
+const mpPick=x=>x[L==="bn"?1:0];
+const mpParagraphs=xs=>xs.map(x=>`<p>${esc(mpPick(x))}</p>`).join("");
+function mealPolicy(){return `<div class="meal-policy">${mpParagraphs(MEAL_PROGRAMME.refund)}</div>`}
+function programmeSection(index){const s=MEAL_PROGRAMME.sections[index];return sec(index%2?"dark":"light",s[L==="bn"?1:0],mpParagraphs(s[2])+(index===0?`<p><a href="https://nayeememolin.github.io/Nayeem-Sarker.Professional_Portfolio/" target="_blank" rel="noopener noreferrer">${L==="bn"?"পেশাগত পরিচয় ও কাজ দেখুন":"View professional portfolio"} ↗</a></p>`:""))}
+function mealPage(t,c){const bn=L==="bn",pick=mpPick;
+const table=(heads,rows)=>`<div class="programme-table" tabindex="0" role="region" aria-label="${esc(heads[0])}"><table><thead><tr>${heads.map(h=>`<th scope="col">${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map((v,i)=>i?`<td>${v}</td>`:`<th scope="row">${v}</th>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+const projects=[["Indicator Monitoring Tracker","3 / 9","13.5","2"],["Performance Monitoring Tracker","3 / 9","13.5","2"],["Excel Dashboard & Donor Reporting","6 / 18","27","4"],[bn?"মোট":"Total","12 / 36","54","8"]];
+const grade=[["80–100","A+","4.00"],["75–<80","A","3.75"],["70–<75","A−","3.50"],["65–<70","B+","3.25"],["60–<65","B","3.00"],["55–<60","B−","2.75"],["50–<55","C+","2.50"],["45–<50","C","2.25"],["40–<45","D","2.00"],["<40","F","0.00"]];
+return sub(c[L][0],bn?"৩ মাস · ১২ teaching week · ৩৬টি লাইভ ক্লাস · ৩টি মূল্যায়িত প্রজেক্ট":"3 months · 12 teaching weeks · 36 live classes · 3 assessed projects",c.hue)+
+sec("light",bn?"কোর্সের তথ্য":"Course at a glance",facts(["fee","dl","start","days","time","del","lang"])+`<p>${cta("",c)} <a class="btn ghost-d" href="${S.fb}" target="_blank" rel="noopener noreferrer">${bn?"কোর্স সম্পর্কে প্রশ্ন করুন":"Ask about the course"}</a></p>`)+programmeSection(0)+programmeSection(1)+
+sec("light",bn?"প্রজেক্ট, সময় ও ক্রেডিট":"Projects, time and credits",table(bn?["প্রজেক্ট","সপ্তাহ / ক্লাস","লাইভ ঘণ্টা","Internal credits"]:["Project","Weeks / classes","Live hours","Internal credits"],projects)+`<p>${bn?"প্রতি ক্লাস ৯০ মিনিট; সপ্তাহে ৪.৫ ঘণ্টা। প্রতি চার teaching week-এ ১৮ ঘণ্টা। ১ internal credit = ৬.৭৫ নির্ধারিত লাইভ ঘণ্টা; বাসায় অনুশীলনের সময় আলাদা। এই ক্রেডিট SCOPE-এর নিজস্ব মূল্যায়নের ওজন—বিশ্ববিদ্যালয়ের academic বা transferable credit নয়।":"Each class is 90 minutes: 4.5 hours weekly, or 18 hours per four teaching weeks. One internal credit represents 6.75 scheduled live hours; independent practice is additional. Credits are SCOPE’s internal assessment weights, not university academic or transferable credits."}</p>`)+
+sec("dark",bn?"১২ সপ্তাহের syllabus":"12-week syllabus",`<div class="syllabus-grid">${MEAL_PROGRAMME.weeks.map((w,i)=>`<details class="meal-module glass-tile"><summary>${bn?"সপ্তাহ":"Week"} ${i+1} · ${esc(pick(w))}</summary><p>${bn?"৩টি ক্লাস · ৪.৫ ঘণ্টা। ধারণা, guided practice ও build/review activity।":"3 classes · 4.5 hours. Concepts, guided practice and build/review activities."}</p></details>`).join("")}</div>`)+programmeSection(2)+
+sec("light",bn?"Grade ও পাসের শর্ত":"Grades and pass requirement",table(bn?["নম্বর (%)","Grade","Grade point"]:["Mark (%)","Grade","Grade point"],grade)+`<p><strong>${bn?"প্রতিটি প্রজেক্টে পাস: অন্তত ৬০%। এর নিচের grade সনদের যোগ্যতা পূরণ করে না।":"Pass each project with at least 60%. Lower grades do not meet the certificate requirement."}</strong></p><p>${bn?"প্রচলিত ৪.০০ scale ব্যবহার SCOPE-এর UGC অনুমোদন বোঝায় না।":"Using a conventional 4.00 scale does not imply UGC approval of SCOPE."}</p>`)+programmeSection(3)+programmeSection(4)+programmeSection(5)+
+sec("light",bn?"ফি ও ফেরত নীতি":"Fees and refund policy",mealPolicy()+`<p><a href="${P("refund/index.html")}">${bn?"নীতিমালা দেখুন":"Read the policy"}</a></p><p>${cta("",c)}</p>`);
 }
+
 function publicHealthResearchPage(t,c){
 const bn=L==="bn",title=bn?"৪ সপ্তাহ · ৮টি হাতে-কলমে ক্লাস":"4 WEEKS · 8 HANDS-ON CLASSES",weeks=bn?[
 ["সপ্তাহ ১","গবেষণা প্রশ্ন ও ডেটাসেট","Research question, literature search, diabetes dataset ও codebook বোঝা।"],
@@ -148,7 +307,8 @@ sec("light",t.up,`<p class="note">${t.upn}</p>${research.length?`<section class=
 if(p==="courses")return sub(t.courses)+sec("light","",`<input id="q" type="search" aria-label="${t.search}" placeholder="${t.search}"><div class="chips" id="fl"></div><section class="course-group live-group" id="liveGroup"><h2>${L==="bn"?"● চলমান কোর্স":"● Live courses"}</h2><div class="cards" id="liveGrid"></div></section><section class="course-group research-group" id="researchGroup"><h2>${L==="bn"?"গবেষণা কোর্স":"Research courses"}</h2><div class="cards" id="researchGrid"></div></section><section class="course-group upcoming-group" id="upcomingGroup"><h2>${L==="bn"?"অন্যান্য আসন্ন কোর্স":"Other upcoming courses"}</h2><div class="cards" id="upcomingGrid"></div></section><p id="em" class="note" role="status" hidden>${t.none}</p>`);
 if(p==="course"){const c=S.courses.find(x=>x.slug===B.dataset.slug),cur=c.st==="current";
 return c.slug==="meal"?mealPage(t,c):c.slug==="mis"?misPage(t,c):c.slug==="public-health-ml-research"?publicHealthResearchPage(t,c):c.slug==="medical-data-science"?medicalDataSciencePage(t,c):c.slug==="medical-nlp-evidence-review"?medicalNlpPage(t,c):`<section class="phero" style="--h:${c.hue}">${icon(c.cat)}${badge(c.st)}<h1>${esc(c[L][0])}</h1><p>${esc(c[L][1])}</p>${cur?cta("",c):`<a class="btn ghost" href="${regUrl()}">${t.form}</a>`}</section>`+sec("light",t.cat[c.cat],cur?`${facts()}<p class="note">${t.sep}</p>${cta("",c)}<p class="note">${t.ext}</p>`:`<p>${t.tba}</p><p class="note">${t.upn}</p>`)}
-if(p==="about")return sub(t.about)+sec("light","",`<p class="lead">${t.aboutP}</p>`);
+if(p==="about")return sub(t.about)+sec("light","",`<p class="lead">${t.aboutP}</p>`)+programmeSection(0);
+if(p==="refund")return sub(L==="bn"?"MEAL ফি ও ফেরত নীতি":"MEAL fees and refund policy")+sec("light","",mealPolicy())+programmeSection(3);
 if(p==="learn")return sub(t.learn)+sec("light","",`<ul class="lead">${t.lP.map(x=>`<li>${x}</li>`).join("")}</ul>`);
 if(p==="contact")return sub(t.contact)+sec("light","",`<p>${t.cP}</p><p><a class="btn" href="${S.fb}" target="_blank" rel="noopener noreferrer">${t.fb}</a> <a class="btn ghost-d" href="${regUrl()}">${t.form}</a></p>`+t.faq.map(f=>`<details><summary>${f[0]}</summary><p>${f[1]}</p></details>`).join(""));
 if(p==="register"){const q=new URLSearchParams(location.search),slug=q.get("course");enrolC=null;
