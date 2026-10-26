@@ -277,6 +277,7 @@ else if(index===0)cards=bn?[
 ["Education & Academic Coursework","<strong>Nayeem Sarker · Programme Lead & Instructor.</strong> B.Sc. and M.Sc. in Statistics (SUST); postgraduate coursework in Computer Science & Engineering, degree not completed. Coursework includes statistical inference, time series, biostatistics, econometrics, data mining, NLP and machine learning. Aspiring PhD researcher in Humanitarian Data Science."],
 ["Experience & Technical Skills","Information Management Specialist, Manager and Senior Officer—IM with CODEC’s UNHCR-funded EPRC project (2024–26); IM Officer at SRAC (2020–22); Research Intern at Leading University (2022–24). Experience supporting work across 26 camps. Tools: Excel, Power BI/DAX, SQL/MySQL, Python, R, SPSS, STATA, SAS, ArcGIS/QGIS and KoboToolbox/XLSForms. Builds indicator/performance trackers, dashboards, digital forms, reporting workflows and web-based information systems; also supports programme delivery, assessment oversight and staff training."]
 ];
+else cards=s[2].map(x=>["",mpPick(x)]);
 const body=mealGuideCards(cards)+(index===0?`<p class="meal-profile-link"><a href="https://nayeememolin.github.io/Nayeem-Sarker.Professional_Portfolio/" target="_blank" rel="noopener noreferrer">${bn?"পেশাগত পরিচয় ও কাজ দেখুন":"View professional portfolio"} ↗</a></p>`:"");
 return sec("light meal-guides",title,body)}
 function mealPage(t,c){const bn=L==="bn",pick=mpPick;
