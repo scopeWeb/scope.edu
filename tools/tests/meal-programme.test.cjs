@@ -18,3 +18,8 @@ test('refund route has a localized browser title instead of the interest-form ti
  assert.equal(ctx.window.SCOPE.t.en.refund,'Refund Policy');
  assert.equal(ctx.window.SCOPE.t.bn.refund,'ফি ও ফেরত নীতি');
 });
+
+test('refund page cache-busts the updated shared language catalogue',()=>{
+ const html=fs.readFileSync(path.join(root,'refund/index.html'),'utf8');
+ assert.match(html,/data\\.js\\?v=20261026-refund-title/);
+});
