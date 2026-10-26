@@ -9,7 +9,7 @@ const SHEET_ID_PROPERTY = 'SCOPE_NEW_COURSE_SPREADSHEET_ID';
 const INTERNATIONAL_THRESHOLD = 100;
 
 function doGet() {
-  return HtmlService.createHtmlOutputFromFile('Admin').setTitle('SCOPE Course Admin Manager').addMetaTag('viewport','width=device-width, initial-scale=1');
+  return HtmlService.createTemplateFromFile('Admin').evaluate().setTitle('SCOPE Course Admin Manager').addMetaTag('viewport','width=device-width, initial-scale=1');
 }
 
 function setupCourseSystem() {
@@ -44,11 +44,13 @@ function getCourse(slug) {
 function saveCourse(payload) {
   const p=normalizePayload_(payload), ss=book_(), sh=ensureTab_(ss,'Course Catalog',CATALOG_HEADERS);
   let existing=findCourseRow_(ss,p.slug), createdAt=new Date(), courseId='SCOPE-'+Utilities.formatDate(createdAt,'Etc/UTC','yy')+'-'+p.slug.toUpperCase().replace(/[^A-Z0-9]+/g,'-').slice(0,24);
-  let priorStatus='draft';
-  if(existing){const old=sh.getRange(existing,1,1,CATALOG_HEADERS.length).getValues()[0];let oldData={};try{oldData=JSON.parse(String(old[12]||'{}'));}catch(e){}courseId=String(old[0]);createdAt=old[13]||createdAt;priorStatus=String(old[4]||'draft');p.international.status=oldData.international&&oldData.international.status||String(old[10]||'interest');p.sheets=oldData.sheets||p.sheets;}
+  let priorStatus='draft', publishedAt='';
+  if(existing){const old=sh.getRange(existing,1,1,CATALOG_HEADERS.length).getValues()[0];let oldData={};try{oldData=JSON.parse(String(old[12]||'{}'));}catch(e){}courseId=String(old[0]);createdAt=old[13]||createdAt;priorStatus=String(old[4]||'draft');publishedAt=old[14]||'';p.international.status=oldData.international&&oldData.international.status||String(old[10]||'interest');p.sheets=oldData.sheets||p.sheets;}
   p.courseId=courseId;
+  verifyVisualAssets_(p.visuals);
+  if(JSON.stringify(p).length>45000)throw new Error('Course data exceeds the safe Sheet cell limit. Shorten the content.');
   ensureCourseTabs_(ss,p);
-  const row=catalogRow_(p,priorStatus,createdAt,'');
+  const row=catalogRow_(p,priorStatus,createdAt,publishedAt);
   if(existing) sh.getRange(existing,1,1,row.length).setValues([row]); else sh.appendRow(row);
   return listCourses();
 }
@@ -81,7 +83,7 @@ function ensureTab_(ss,name,headers){let sh=ss.getSheetByName(name);if(!sh){sh=s
 function ensureCourseTabs_(ss,d){const names=d.sheets||{bangladesh:sheetName_(d.slug,'Bangladesh'),international:sheetName_(d.slug,'International')};ensureTab_(ss,names.bangladesh,BD_HEADERS);ensureTab_(ss,names.international,INT_HEADERS);}
 function findCourseRow_(ss,slug){const sh=ss.getSheetByName('Course Catalog');if(!sh||sh.getLastRow()<2)return 0;const i=sh.getRange(2,2,sh.getLastRow()-1,1).getDisplayValues().findIndex(r=>r[0]===slug);return i<0?0:i+2;}
 function sheetName_(slug,region){let base=String(slug||'course').replace(/[^a-zA-Z0-9 _-]/g,'').replace(/[-_]+/g,' ').trim();base=base.split(/\s+/).map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');return (base+' - '+region).slice(0,99);}
-function catalogRow_(d,status,createdAt,publishedAt){return [d.courseId,d.slug,d.titleEn,d.titleBn,status,d.duration,d.feeBdt,d.feeUsd,d.deadline,d.start,d.international.status,d.international.threshold,JSON.stringify(d),createdAt,publishedAt||''];}
+function catalogRow_(d,status,createdAt,publishedAt){return [d.courseId,d.slug,d.titleEn,d.titleBn,status,d.duration,d.fees.bangladesh.amount,d.fees.international.amount,d.registration.deadline,d.registration.bangladeshStart,d.international.status,d.international.threshold,JSON.stringify(d),createdAt,publishedAt||''];}
 function normalizePayload_(x){
   if(!x||typeof x!=='object')throw new Error('Course details are required.');
   const slug=String(x.slug||'').trim().toLowerCase();if(!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug))throw new Error('Use a URL-safe slug such as case-management.');
@@ -90,6 +92,7 @@ function normalizePayload_(x){
   if(!d.titleEn||!d.titleBn)throw new Error('Enter course titles in English and Bangla.');
   if(!d.duration)throw new Error('Enter the course duration.');
   d.sheets={bangladesh:sheetName_(slug,'Bangladesh'),international:sheetName_(slug,'International')};
+  d.visuals=normalizeVisuals_(x.visuals);
   return d;
 }
 function cut_(v,n){return String(v==null?'':v).trim().slice(0,n);}

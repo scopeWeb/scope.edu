@@ -32,7 +32,7 @@ Open the new Sheet and set **File → Settings → Time zone** to **(GMT+06:00) 
 ### 2. Create the private Admin Manager
 
 1. Create a new Apps Script project at `script.google.com` named `SCOPE Course Admin Manager`.
-2. Add the contents of `course-system/apps-script/admin/Code.gs` as `Code.gs` and `Admin.html` as an HTML file.
+2. Add the contents of `course-system/apps-script/admin/Code.gs` as `Code.gs`; also add `Visuals.gs`. Add the HTML files `Admin.html`, `VisualEditor.html`, `VisualRenderer.html`, and `VisualStyles.html` with those exact names.
 3. In **Project Settings → Script properties**, add `SCOPE_NEW_COURSE_SPREADSHEET_ID` with the ID from the new Sheet URL.
 4. Deploy as a web app, **Execute as: Me**, **Who has access: Only myself**. Do not use the public registration deployment for this project.
 5. Open the Admin Manager URL. Its first setup creates the Case Management draft if it is not already in the catalog.
@@ -74,3 +74,13 @@ Course titles and section copy are capped to reduce accidental oversized data. A
 - The website catalog displays no unpublished course and no learner record. The public API returns the aggregate international interest count only.
 - The new system does not write to, migrate, rename, or read the existing MEAL/MIS registration spreadsheet.
 - For any Apps Script code change, deploy a new version through **Deploy → Manage deployments → Edit → New version**.
+
+## Visual course builder
+
+The Admin Manager has repeatable, reorderable bilingual editors for instructors, software/tools, benefits, outcomes, roadmaps, workflows, projects, syllabus, assessment steps, grade bands, retakes, certification and enrolment policies. Projects store weeks, sessions, hours and internal credits; totals and credit bars are computed from those values. These are SCOPE internal training credits, not university accreditation. A separate bar/donut chart accepts administrator-defined labels, values, title and unit.
+
+Instructor cards support a portrait, name, designation, organization/current work, experience, biography and teaching responsibilities. Software cards support a logo, name and bilingual explanation. Upload PNG, JPEG or WebP files up to 8 MB; the browser resizes and compresses to at most 180 KB per image before upload. Unsupported formats and invalid signatures are rejected. Images live in a private Drive folder created by the admin deployment, while the Sheet stores file IDs. Both deployments must run under the same owner, with Drive authorization. Only images referenced by published courses can be retrieved through the public API; neither the media folder nor learner records need public sharing. Removing a card does not delete its underlying Drive file.
+
+English/Bangla previews use the same renderer and styles as public course pages. The visual template uses glass cards, instructor portrait/detail layouts, tool tiles, numbered roadmaps, two-column expandable syllabus, project bars and accessible grading tables. Existing MEAL/MIS pages remain unchanged. Grade bands must cover 0–100 without gaps or overlaps; upper bounds are exclusive except 100. Course JSON is capped at 45,000 characters to stay below the Sheet cell limit.
+
+`VisualRenderer.html` and `VisualStyles.html` are exact wrappers of the shared JS/CSS. Keep them synchronized when changing the public renderer. Verification: `node --test course-system/tests/visuals.test.cjs`. Local tests cover validation, escaping, persistence mappings, media rejection and shared preview consistency. Actual Apps Script authorization, Drive upload and public registration require deployment and must be tested before launch.

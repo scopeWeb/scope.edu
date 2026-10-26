@@ -10,6 +10,7 @@ const PROP_ID='SCOPE_NEW_COURSE_SPREADSHEET_ID';
 
 function doGet(e){
   const p=(e&&e.parameter)||{};
+  if(p.asset)return publicAsset_(String(p.asset));
   if(p.catalog==='1')return json_({ok:true,courses:publicCourses_()});
   if(p.ping==='1')return json_({ok:true,service:'SCOPE new course registration'});
   return json_({ok:false,error:'not_found'});
@@ -56,7 +57,7 @@ function courseRecords_(){
     const interestCount=ish&&ish.getLastRow()>1?ish.getRange(2,17,ish.getLastRow()-1,1).getDisplayValues().filter(x=>x[0]==='Interest').length:0;
     const cutoff=d.registration&&d.registration.deadline?new Date(String(d.registration.deadline)+'T23:59:59+06:00'):null;
     const registrationOpen=!cutoff||isNaN(cutoff.getTime())||Date.now()<=cutoff.getTime();
-    return {id:String(r[0]),slug:String(r[1]),title:{en:String(r[2]),bn:String(r[3])},status:String(r[4]),duration:String(r[5]),fees:d.fees,registration:Object.assign({},d.registration,{open:registrationOpen}),registrationOpen:registrationOpen,international:Object.assign({},d.international,{interestCount:interestCount}),language:d.language,sessions:d.sessions,delivery:d.delivery,assessment:d.assessment,policies:d.policies,category:d.category,summary:d.summary,sections:d.sections,sheets:d.sheets,data:d};
+    return {id:String(r[0]),slug:String(r[1]),title:{en:String(r[2]),bn:String(r[3])},status:String(r[4]),duration:String(r[5]),fees:d.fees,registration:Object.assign({},d.registration,{open:registrationOpen}),registrationOpen:registrationOpen,international:Object.assign({},d.international,{interestCount:interestCount}),language:d.language,sessions:d.sessions,delivery:d.delivery,assessment:d.assessment,policies:d.policies,category:d.category,summary:d.summary,sections:d.sections,visuals:d.visuals||{},sheets:d.sheets,data:d};
   }).filter(Boolean);
 }
 function publicCourses_(){return courseRecords_().map(c=>{const out=Object.assign({},c);delete out.sheets;delete out.data;return out;});}
@@ -75,3 +76,11 @@ function verifyTurnstile_(token){
   try{const res=UrlFetchApp.fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify',{method:'post',payload:{secret:secret,response:token},muteHttpExceptions:true});const out=JSON.parse(res.getContentText());const host=PropertiesService.getScriptProperties().getProperty('PUBLIC_HOSTNAME')||'scopeweb.github.io';return out.success===true&&out.hostname===host;}catch(e){return false;}
 }
 function json_(data){return ContentService.createTextOutput(JSON.stringify(data)).setMimeType(ContentService.MimeType.JSON);}
+
+// Only image IDs referenced by a published course are available publicly.
+function publicAsset_(id){
+  if(!/^[A-Za-z0-9_-]{10,100}$/.test(id))return json_({ok:false,error:'not_found'});
+  const allowed=courseRecords_().some(c=>['instructors','tools'].some(k=>(c.visuals[k]||[]).some(x=>x.image&&x.image.id===id)));
+  if(!allowed)return json_({ok:false,error:'not_found'});
+  try{const f=DriveApp.getFileById(id),b=f.getBlob(),mime=b.getContentType();if(f.isTrashed()||f.getSize()>180000||!['image/png','image/jpeg','image/webp'].includes(mime))return json_({ok:false,error:'not_found'});return json_({ok:true,mime:mime,base64:Utilities.base64Encode(b.getBytes())});}catch(e){return json_({ok:false,error:'not_found'});}
+}
