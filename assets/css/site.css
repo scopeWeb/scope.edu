@@ -222,3 +222,5 @@ html[data-motion="reduced"] :is(body[data-slug="meal"],body[data-slug="mis"]) .m
 body[data-slug="mis"] .meal-why .glass-tile{color:#123247;background:linear-gradient(135deg,rgba(255,255,255,.94),rgba(226,240,247,.88))}
 body[data-slug="mis"] .meal-why .glass-tile h3,body[data-slug="mis"] .meal-why .glass-tile p{color:#123247}
 body[data-slug="mis"] .meal-why .glass-tile>span{color:#08796f}
+
+body[data-slug="mis"] .sec.meal-why .glass-tile p:not(:has(>.btn)),body[data-slug="mis"] .sec.meal-why .glass-tile h3{color:#123247!important}
