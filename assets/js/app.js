@@ -282,8 +282,26 @@ function mealPage(t,c){const bn=L==="bn",pick=mpPick;
 const table=(heads,rows)=>`<div class="programme-table" tabindex="0" role="region" aria-label="${esc(heads[0])}"><table><thead><tr>${heads.map(h=>`<th scope="col">${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map((v,i)=>i?`<td>${v}</td>`:`<th scope="row">${v}</th>`).join("")}</tr>`).join("")}</tbody></table></div>`;
 const projects=[["Indicator Monitoring Tracker","3 / 9","13.5","2"],["Performance Monitoring Tracker","3 / 9","13.5","2"],["Excel Dashboard & Donor Reporting","6 / 18","27","4"],[bn?"মোট":"Total","12 / 36","54","8"]];
 const grade=[["80–100","A+","4.00"],["75–<80","A","3.75"],["70–<75","A−","3.50"],["65–<70","B+","3.25"],["60–<65","B","3.00"],["0–<60","F","0.00"]];
+const glanceRows=bn?[
+["ফি",["বাংলাদেশি শিক্ষার্থী ব্যাচ: <strong>BDT 650</strong>","আন্তর্জাতিক শিক্ষার্থী ব্যাচ: <strong>USD 80</strong>"]],
+["নিবন্ধনের শেষ তারিখ",["২৫ নভেম্বর ২০২৬"]],
+["ক্লাস শুরু",["৫ ডিসেম্বর ২০২৬"]],
+["ক্লাসের দিন",["বুধবার, শুক্রবার, শনিবার"]],
+["সময়",["বাংলাদেশ সময় (UTC+6): রাত ১০:০০–১১:৩০","EST (UTC−5): সকাল ১১:০০–দুপুর ১২:৩০","আস্তানা সময় (UTC+5): রাত ৯:০০–১০:৩০"]],
+["ডেলিভারি",["SCOPE Custom Platform · Zoom · Google Meet · Google Classroom"]],
+["ভাষা",["বাংলাদেশি ব্যাচ: বাংলা ও ইংরেজি","আন্তর্জাতিক ব্যাচ: শুধু ইংরেজি"]]
+]:[
+["Fee",["Bangladeshi learners batch: <strong>BDT 650</strong>","International learners batch: <strong>USD 80</strong>"]],
+["Registration deadline",["25 November 2026"]],
+["Classes start",["5 December 2026"]],
+["Class days",["Wednesday, Friday, Saturday"]],
+["Time",["Bangladesh time (UTC+6): 10:00 PM–11:30 PM","EST (UTC−5): 11:00 AM–12:30 PM","Astana time (UTC+5): 9:00 PM–10:30 PM"]],
+["Delivery",["SCOPE Custom Platform · Zoom · Google Meet · Google Classroom"]],
+["Language",["Bangladesh batch: Bangla and English","International batch: English only"]]
+];
+const glance=`<dl class="facts meal-facts">${glanceRows.map(([label,lines])=>`<div><dt>${label}</dt><dd>${lines.map(line=>`<span>${line}</span>`).join("<br>")}</dd></div>`).join("")}</dl>`;
 return sub(c[L][0],bn?"৩ মাস · ১২ teaching week · ৩৬টি লাইভ ক্লাস · ৩টি মূল্যায়িত প্রজেক্ট":"3 months · 12 teaching weeks · 36 live classes · 3 assessed projects",c.hue)+
-sec("light",bn?"কোর্সের তথ্য":"Course at a glance",facts(["fee","dl","start","days","time","del","lang"])+`<p>${cta("",c)} <a class="btn ghost-d" href="${S.fb}" target="_blank" rel="noopener noreferrer">${bn?"কোর্স সম্পর্কে প্রশ্ন করুন":"Ask about the course"}</a></p>`)+programmeSection(0)+programmeSection(1)+
+sec("light",bn?"কোর্সের তথ্য":"Course at a glance",glance+`<p>${cta("",c)} <a class="btn ghost-d" href="${S.fb}" target="_blank" rel="noopener noreferrer">${bn?"কোর্স সম্পর্কে প্রশ্ন করুন":"Ask about the course"}</a></p>`)+programmeSection(0)+programmeSection(1)+
 sec("light",bn?"প্রজেক্ট, সময় ও ক্রেডিট":"Projects, time and credits",table(bn?["প্রজেক্ট","সপ্তাহ / ক্লাস","লাইভ ঘণ্টা","Internal credits"]:["Project","Weeks / classes","Live hours","Internal credits"],projects)+`<p>${bn?"প্রতি ক্লাস ৯০ মিনিট; সপ্তাহে ৪.৫ ঘণ্টা। প্রতি চার teaching week-এ ১৮ ঘণ্টা। ১ internal credit = ৬.৭৫ নির্ধারিত লাইভ ঘণ্টা; বাসায় অনুশীলনের সময় আলাদা। এই ক্রেডিট SCOPE-এর নিজস্ব মূল্যায়নের ওজন—বিশ্ববিদ্যালয়ের academic বা transferable credit নয়।":"Each class is 90 minutes: 4.5 hours weekly, or 18 hours per four teaching weeks. One internal credit represents 6.75 scheduled live hours; independent practice is additional. Credits are SCOPE’s internal assessment weights, not university academic or transferable credits."}</p>`)+
 sec("light meal-syllabus-section",bn?"১২ সপ্তাহের syllabus":"12-week syllabus",`<p class="meal-syllabus-intro">${mpEmphasis(bn?"প্রতি সপ্তাহে ৩টি ক্লাস ও ৪.৫ ঘণ্টার guided learning। প্রতিটি module-এ ধারণা, অনুশীলন এবং build/review activity থাকবে।":"Each week includes 3 live classes and 4.5 hours of guided learning, combining concepts, practice and build/review activities.")}</p><div class="syllabus-grid">${MEAL_PROGRAMME.weeks.map((w,i)=>`<details class="meal-module glass-tile"><summary><span class="module-week">${bn?"সপ্তাহ":"WEEK"} ${String(i+1).padStart(2,"0")}</span><b>${esc(pick(w))}</b><span class="module-count">${bn?"৩ ক্লাস · ৪.৫ ঘণ্টা":"3 classes · 4.5 hours"}</span></summary><p>${bn?"<strong>৩টি ক্লাস · ৪.৫ ঘণ্টা</strong>। ধারণা, guided practice ও build/review activity।":"<strong>3 classes · 4.5 hours</strong>. Concepts, guided practice and build/review activities."}</p></details>`).join("")}</div>`)+programmeSection(2)+
 sec("light",bn?"Grade ও পাসের শর্ত":"Grades and pass requirement",table(bn?["নম্বর (%)","Grade","Grade point"]:["Mark (%)","Grade","Grade point"],grade)+`<p><strong>${bn?"প্রতিটি প্রজেক্টে পাস: অন্তত ৬০%। ০–৬০-এর কম নম্বরের গ্রেড F (০.০০); ৬০ থেকে পাস।":"Pass each project with at least 60%. Marks from 0 to below 60 receive F (0.00); 60 is the pass mark."}</strong></p><p>${bn?"প্রচলিত ৪.০০ scale ব্যবহার SCOPE-এর UGC অনুমোদন বোঝায় না।":"Using a conventional 4.00 scale does not imply UGC approval of SCOPE."}</p>`)+programmeSection(3)+programmeSection(4)+programmeSection(5)+
