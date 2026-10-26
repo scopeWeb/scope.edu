@@ -227,14 +227,12 @@ function mealPolicy(){return `<div class="meal-policy">${mpParagraphs(MEAL_PROGR
 function mealGuideCards(items){return `<div class="meal-guide-grid">${items.map((x,i)=>`<article class="meal-guide-card glass-tile"><span class="meal-guide-number">${String(i+1).padStart(2,"0")}</span><div>${x[0]?`<h3>${x[0]}</h3>`:""}<p>${mpEmphasis(x[1])}</p></div></article>`).join("")}</div>`}
 function programmeSection(index){const s=MEAL_PROGRAMME.sections[index],bn=L==="bn",title=s[bn?1:0];let cards;
 if(index===2)cards=bn?[
-["প্রতি প্রজেক্টের মূল্যায়ন","জমা দেওয়া কাজ <strong>৫০</strong> + individual practical task <strong>৩০</strong> + presentation/viva <strong>২০</strong> নম্বর।"],
-["পাসের নিয়ম","তিনটি project-এর <strong>প্রতিটিতে আলাদাভাবে অন্তত ৬০/১০০</strong> পেতে হবে। এক project-এর বেশি নম্বর অন্য project-এর ঘাটতি পূরণ করবে না।"],
+["প্রজেক্টের নম্বর ও পাসের শর্ত","প্রতিটি প্রজেক্টে মোট <strong>১০০</strong> নম্বর: জমা কাজ <strong>৫০</strong> + individual practical task <strong>৩০</strong> + presentation/viva <strong>২০</strong>। তিনটি project-এর <strong>প্রতিটিতে আলাদাভাবে অন্তত ৬০/১০০</strong> পেতে হবে; অন্য project-এর বেশি নম্বর দিয়ে ফেল করা project-এর ঘাটতি পূরণ হবে না।"],
 ["সামগ্রিক grade point","Indicator GP × <strong>২</strong> + Performance GP × <strong>২</strong> + Dashboard GP × <strong>৪</strong>; মোট ওজন <strong>৮</strong> দিয়ে ভাগ হবে।"],
 ["সনদে যা থাকবে","SCOPE Certificate of Achievement-এ নাম, course, batch, সময়কাল, final grade point, <strong>৮টি internal assessment credit</strong>, certificate ID ও issue date থাকবে। Project-wise ফল আলাদা assessment record-এ থাকবে।"],
 ["কাজের স্বচ্ছতা","অসম্পূর্ণ submission মূল্যায়ন না হওয়া পর্যন্ত Incomplete থাকবে। Project brief-এ deadline, collaboration ও AI ব্যবহারের নিয়ম থাকবে; শিক্ষার্থীকে নিজের কাজ ব্যাখ্যা করতে হবে।"]
 ]:[
-["How each project is scored","Submission <strong>50</strong> + individual practical task <strong>30</strong> + presentation/viva <strong>20</strong> marks."],
-["Pass standard","Score <strong>at least 60/100 in each of the three projects</strong>. A higher score in one project cannot offset a failed project."],
+["Project scoring and pass standard","Each project is assessed out of <strong>100</strong>: submission <strong>50</strong> + individual practical task <strong>30</strong> + presentation/viva <strong>20</strong>. Learners must score <strong>at least 60/100 in each project</strong>; a higher score in another project cannot offset a failed project."],
 ["Overall grade point","Indicator GP × <strong>2</strong> + Performance GP × <strong>2</strong> + Dashboard GP × <strong>4</strong>, divided by a total weight of <strong>8</strong>."],
 ["What the certificate records","The SCOPE Certificate of Achievement lists the learner’s name, course, batch, dates, final grade point, <strong>8 internal assessment credits</strong>, certificate ID and issue date. Project results appear in an accompanying assessment record."],
 ["Work and assessment rules","Incomplete submissions remain Incomplete until assessed. Project briefs set deadlines, collaboration and AI-use rules; learners must explain their own work."]
