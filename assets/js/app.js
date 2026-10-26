@@ -218,7 +218,7 @@ const mpPick=x=>x[L==="bn"?1:0];
 const mpEmphasis=text=>{
 const bold=[];let out=esc(text).replace(/&lt;strong&gt;([\s\S]*?)&lt;\/strong&gt;/g,(_,value)=>{const token=`MEALBOLDTOKEN${bold.length}END`;bold.push(value);return token});
 const tokens=L==="bn"?["US\\$10","১৫ দিন","১০০ টাকা","৬০%","বিনা ফিতে","ফেরত দেওয়া হবে না","বাহ্যিক affiliation বা accreditation নেই","বিশ্ববিদ্যালয়ের degree","এখনো চালু হয়নি","আলাদা module নয়","লাইসেন্স অন্তর্ভুক্ত নয়","নিশ্চয়তা নয়","বাংলায়","ইংরেজি batch","মাঠপর্যায়ের ভ্রমণ অন্তর্ভুক্ত নয়"]:["SCOPE Certificate of Achievement","15 days","BDT 100","USD 10","60%","50 marks","30 marks","20 marks","free of charge","not refundable","no external affiliation or accreditation","not a university degree","not currently available","not a separate module","licences are not included","does not guarantee","Bangla","English-language batch","No field visit"];
-const re=new RegExp(`(${tokens.map(x=>x.replace(/[.*+?^${}()|[\\]\\]/g,"\\$&")).join("|")})`,L==="bn"?"g":"gi");
+const re=new RegExp(`(${tokens.map(x=>`${L==="en"&&/^[A-Za-z0-9]/.test(x)?"(?<![A-Za-z0-9])":""}${x.replace(/[.*+?^${}()|[\\]\\]/g,"\\$&")}${L==="en"&&/[A-Za-z0-9]$/.test(x)?"(?![A-Za-z0-9])":""}`).join("|")})`,L==="bn"?"g":"gi");
 out=out.replace(re,'<strong class="meal-emphasis">$1</strong>');
 return out.replace(/MEALBOLDTOKEN(\d+)END/g,(_,index)=>`<strong class="meal-emphasis">${bold[Number(index)]}</strong>`)
 };
