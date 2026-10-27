@@ -74,3 +74,13 @@ body[data-view="course"] #courseView,body[data-view="register"] #courseView{disp
 .course-register-hero .meal-cover-actions{margin-top:1.2rem}
 .course-registration-cta{display:grid;justify-items:start;gap:.5rem}
 .course-registration-cta h2,.course-registration-cta p{margin:.2rem 0}
+
+/* Bangladesh registration follows the existing MEAL form layout. */
+.course-local-registration .formgrid{display:block}
+.course-local-registration .field{display:block}
+.course-local-registration .field input,.course-local-registration .field select{border-radius:5px;padding:.65rem;border-color:#4c9c89}
+.course-local-registration #formSlot > .policy{display:none}
+.course-local-registration .sum .facts{display:block}
+.course-local-registration .sum .facts > div{margin:.65rem 0}
+.course-local-registration .sum .meal-deadline{background:linear-gradient(90deg,#fbe6e7,#fff);color:#a52020;border-left:3px solid #c62828;padding:.75rem}
+.course-local-registration .reg{margin-top:0}
