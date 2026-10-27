@@ -11,6 +11,7 @@ const PROP_ID='SCOPE_NEW_COURSE_SPREADSHEET_ID';
 function doGet(e){
   const p=(e&&e.parameter)||{};
   if(p.asset)return publicAsset_(String(p.asset));
+  if(p.status)return registrationStatus_(String(p.slug||''),String(p.status),String(p.audience||''));
   if(p.catalog==='1')return json_({ok:true,courses:publicCourses_()});
   if(p.ping==='1')return json_({ok:true,service:'SCOPE new course registration'});
   return json_({ok:false,error:'not_found'});
@@ -31,11 +32,12 @@ function doPost(e){
     if(intl&&course.data.international.status!=='open'&&intent!=='interest')return json_({ok:false,error:'interest_only'});
     if(intl&&!['interest','register'].includes(intent))return json_({ok:false,error:'invalid'});
     if(!intl&&intent!=='register')return json_({ok:false,error:'invalid'});
-    const values=validateLearner_(p,intl);
+    const values=validateLearner_(p,intl,intent);
     const ss=book_(),sheetName=intl?course.data.sheets.international:course.data.sheets.bangladesh;
     const sh=ensureSheet_(ss,sheetName,intl?INT_HEADERS:REG_HEADERS);
     const duplicate=duplicateEmail_(sh,values.email,intl,intent);
     if(duplicate)return json_({ok:false,error:'already_submitted'});
+    if(intent==='register'&&duplicatePaymentReference_(ss,values.paymentReference,intl))return json_({ok:false,error:'duplicate_payment_reference'});
     const id=(intl?'SCOPE-I-':'SCOPE-R-')+Utilities.getUuid().replace(/-/g,'').slice(0,14).toUpperCase();
     if(intl&&intent==='interest'){
       sh.appendRow([new Date(),id,course.id,values.name,values.email,values.phone,values.country,values.org,values.role,'',values.timezone,values.language,'','',0,'','Interest',true,'Website','']);
@@ -62,10 +64,43 @@ function courseRecords_(){
 }
 function publicCourses_(){return courseRecords_().map(c=>{const out=Object.assign({},c);delete out.sheets;delete out.data;return out;});}
 function findPublishedCourse_(slug){return courseRecords_().find(c=>c.slug===slug)||null;}
-function validateLearner_(p,intl){
+function validateLearner_(p,intl,intent){
   const name=text_(p.name,120),email=text_(p.email,190).toLowerCase(),phone=text_(p.phone,40),country=text_(p.country,80),org=text_(p.organisation,160),role=text_(p.role,120),language=text_(p.language,80);
-  if(name.length<2||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||!country||!language||String(p.consent)!=='true')throw new Error('invalid');
-  return {name:name,email:email,phone:phone,country:country,org:org,role:role,language:language,education:intl?'':text_(p.education,160),timezone:intl?text_(p.timezone,100):'',paymentMethod:intl?'':text_(p.paymentMethod,60),paymentReference:intl?'':text_(p.paymentReference,100)};
+  if(name.length<2||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||phone.replace(/[^0-9]/g,'').length<6||!country||!language||String(p.consent)!=='true'||String(p.confirmDetails)!=='true'||String(p.acceptPolicies)!=='true')throw new Error('invalid');
+  let paymentMethod='',paymentReference='';
+  if(intent==='register'){
+    paymentMethod=text_(p.paymentMethod,60);paymentReference=text_(p.paymentReference,100).toUpperCase();
+    if(String(p.paymentConfirmed)!=='true')throw new Error('invalid');
+    if(intl){if(paymentMethod.length<2||paymentReference.length<2)throw new Error('invalid');}
+    else if(paymentMethod!=='bKash Send Money'||!/^[A-Z0-9]{8,12}$/.test(paymentReference))throw new Error('invalid');
+  }
+  return {name:name,email:email,phone:phone,country:country,org:org,role:role,language:language,education:intl?'':text_(p.education,160),timezone:intl?text_(p.timezone,100):'',paymentMethod:paymentMethod,paymentReference:paymentReference};
+}
+function duplicatePaymentReference_(ss,reference,intl){
+  const key=String(reference||'').trim().toUpperCase();if(!key)return false;
+  const catalog=ss.getSheetByName('Course Catalog');if(!catalog||catalog.getLastRow()<2)return false;
+  const courses=catalog.getRange(2,1,catalog.getLastRow()-1,CAT_HEADERS.length).getValues();
+  for(const row of courses){
+    if(!row[0]||String(row[4])!=='published')continue;
+    let data={};try{data=JSON.parse(String(row[12]||'{}'));}catch(e){continue;}
+    const name=data.sheets&&(intl?data.sheets.international:data.sheets.bangladesh);if(!name)continue;
+    const sheet=ss.getSheetByName(name);if(!sheet||sheet.getLastRow()<2)continue;
+    const column=intl?14:13,values=sheet.getRange(2,column,sheet.getLastRow()-1,1).getDisplayValues();
+    if(values.some(v=>String(v[0]).trim().toUpperCase()===key))return true;
+  }
+  return false;
+}
+function registrationStatus_(slug,id,audience){
+  if(!/^[a-z0-9][a-z0-9-]{1,79}$/.test(slug)||!/^SCOPE-[RI]-[A-F0-9]{14}$/.test(id)||!['bangladesh','international'].includes(audience))return json_({ok:true,supported:true,state:'pending',verified:false});
+  const course=findPublishedCourse_(slug);if(!course)return json_({ok:true,supported:true,state:'pending',verified:false});
+  const intl=audience==='international',sheetName=course.data.sheets&&(intl?course.data.sheets.international:course.data.sheets.bangladesh),sheet=sheetName?book_().getSheetByName(sheetName):null;
+  if(!sheet||sheet.getLastRow()<2)return json_({ok:true,supported:true,state:'pending',verified:false});
+  const found=sheet.getRange(2,2,sheet.getLastRow()-1,1).createTextFinder(id).matchEntireCell(true).findNext();
+  if(!found)return json_({ok:true,supported:true,state:'pending',verified:false});
+  const state=String(sheet.getRange(found.getRow(),intl?17:16).getDisplayValue()).trim().toLowerCase();
+  if(['verified','confirmed','paid','approved'].includes(state))return json_({ok:true,supported:true,state:'verified',verified:true});
+  if(['rejected','action required','needs correction','failed'].includes(state))return json_({ok:true,supported:true,state:'action_required',verified:false});
+  return json_({ok:true,supported:true,state:'pending',verified:false});
 }
 function duplicateEmail_(sh,email,intl,intent){if(sh.getLastRow()<2)return false;const rows=sh.getRange(2,1,sh.getLastRow()-1,intl?20:19).getDisplayValues();return rows.some(r=>String(r[4]).toLowerCase()===email&&(!intl||r[16]===(intent==='interest'?'Interest':'Registered')));}
 function ensureSheet_(ss,name,headers){let sh=ss.getSheetByName(name);if(!sh){sh=ss.insertSheet(name);sh.getRange(1,1,1,headers.length).setValues([headers]);sh.setFrozenRows(1);sh.getRange(1,1,1,headers.length).setFontWeight('bold');}return sh;}
