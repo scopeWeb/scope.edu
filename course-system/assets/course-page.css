@@ -1,5 +1,5 @@
 /* New-course pages share the MEAL/MIS visual system and page rhythm. */
-body[data-view="course"]{background:var(--navy);color:var(--ink)}
+body[data-view="course"]{background:var(--navy);color:var(--navy)}
 body[data-view="course"] #app{padding:0;min-height:55vh}
 body[data-view="course"] #courseView{display:block}
 .course-kicker{display:inline-block;color:#91eee2;font-size:.8rem;font-weight:800;letter-spacing:.12em}
@@ -37,6 +37,7 @@ body[data-view="course"] #courseView{display:block}
 .course-registration .status.ok{color:#0b6b3a;font-weight:750}
 .course-registration .status.err{color:#a40000;font-weight:650}
 .course-registration .policy{font-size:.88rem;line-height:1.75}
+.course-registration .notice{padding:1rem 1.1rem;border:1px solid rgba(255,255,255,.7);border-radius:14px;background:rgba(255,255,255,.78);color:var(--navy);line-height:1.7}
 .course-registration .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .cv{color:var(--navy);font-family:inherit}
 .cv-section{margin:0;padding:clamp(2.5rem,6vw,4.5rem) 6vw;border:0;border-radius:0;background:var(--lb);box-shadow:none;animation:up .55s both}
