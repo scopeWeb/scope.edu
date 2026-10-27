@@ -4,7 +4,7 @@
  * PUBLIC_HOSTNAME (default: scopeweb.github.io).
  */
 const CAT_HEADERS=['Course ID','Slug','Title (EN)','Title (বাংলা)','Status','Duration','BD Fee (BDT)','International Fee (USD)','Registration Deadline','BD Start Date','International Status','International Threshold','Course Data JSON','Created At','Published At'];
-const REG_HEADERS=['Submitted At','Registration ID','Course ID','Full Name','Email','Phone','Country','Organisation','Role','Education','Language','Payment Method','Payment Reference','Amount','Currency','Payment Status','Consent','Source','Admin Notes'];
+const REG_HEADERS=['Submitted At','Registration ID','Course ID','Full Name','Email','Phone','Country','Organisation','Role','Education','Language','Payment Method','Payment Reference','Amount','Currency','Payment Status','Consent','Source','Admin Notes','bKash Sender'];
 const INT_HEADERS=['Submitted At','Record ID','Course ID','Full Name','Email','Phone','Country','Organisation','Role','Education','Preferred Time Zone','Language','Payment Method','Payment Reference','Amount','Currency','Interest Status','Consent','Source','Admin Notes'];
 const PROP_ID='SCOPE_NEW_COURSE_SPREADSHEET_ID';
 
@@ -45,7 +45,7 @@ function doPost(e){
     }
     const price=intl?course.data.fees.international:course.data.fees.bangladesh;
     if(intl)sh.appendRow([new Date(),id,course.id,values.name,values.email,values.phone,values.country,values.org,values.role,'',values.timezone,values.language,values.paymentMethod||'',values.paymentReference||'',price.amount,price.currency,'Registered',true,'Website','']);
-    else sh.appendRow([new Date(),id,course.id,values.name,values.email,values.phone,values.country,values.org,values.role,values.education||'',values.language,values.paymentMethod||'',values.paymentReference||'',price.amount,price.currency,'Pending',true,'Website','']);
+    else sh.appendRow([new Date(),id,course.id,values.name,values.email,values.phone,values.country,values.org,values.role,values.education||'',values.language,values.paymentMethod||'',values.paymentReference||'',price.amount,price.currency,'Pending',true,values.referralSource||'Website','',values.sender||'']);
     return json_({ok:true,id:id,type:'registration'});
   }catch(err){return json_({ok:false,error:'server_error'});}
   finally{try{lock.releaseLock();}catch(x){}}
@@ -74,7 +74,8 @@ function validateLearner_(p,intl,intent){
     if(intl){if(paymentMethod.length<2||paymentReference.length<2)throw new Error('invalid');}
     else if(paymentMethod!=='bKash Send Money'||!/^[A-Z0-9]{8,12}$/.test(paymentReference))throw new Error('invalid');
   }
-  return {name:name,email:email,phone:phone,country:country,org:org,role:role,language:language,education:intl?'':text_(p.education,160),timezone:intl?text_(p.timezone,100):'',paymentMethod:paymentMethod,paymentReference:paymentReference};
+  const sender=intl?'':text_(p.sender,11);if(sender&&!/^01[0-9]{9}$/.test(sender))throw new Error('invalid');
+  return {sender:sender,referralSource:text_(p.referralSource,80),name:name,email:email,phone:phone,country:country,org:org,role:role,language:language,education:intl?'':text_(p.education,160),timezone:intl?text_(p.timezone,100):'',paymentMethod:paymentMethod,paymentReference:paymentReference};
 }
 function duplicatePaymentReference_(ss,reference,intl){
   const key=String(reference||'').trim().toUpperCase();if(!key)return false;
@@ -103,7 +104,7 @@ function registrationStatus_(slug,id,audience){
   return json_({ok:true,supported:true,state:'pending',verified:false});
 }
 function duplicateEmail_(sh,email,intl,intent){if(sh.getLastRow()<2)return false;const rows=sh.getRange(2,1,sh.getLastRow()-1,intl?20:19).getDisplayValues();return rows.some(r=>String(r[4]).toLowerCase()===email&&(!intl||r[16]===(intent==='interest'?'Interest':'Registered')));}
-function ensureSheet_(ss,name,headers){let sh=ss.getSheetByName(name);if(!sh){sh=ss.insertSheet(name);sh.getRange(1,1,1,headers.length).setValues([headers]);sh.setFrozenRows(1);sh.getRange(1,1,1,headers.length).setFontWeight('bold');}return sh;}
+function ensureSheet_(ss,name,headers){let sh=ss.getSheetByName(name);if(!sh){sh=ss.insertSheet(name);sh.getRange(1,1,1,headers.length).setValues([headers]);sh.setFrozenRows(1);sh.getRange(1,1,1,headers.length).setFontWeight('bold');}if(sh.getLastColumn()<headers.length)sh.getRange(1,sh.getLastColumn()+1,1,headers.length-sh.getLastColumn()).setValues([headers.slice(sh.getLastColumn())]);return sh;}
 function book_(){const id=PropertiesService.getScriptProperties().getProperty(PROP_ID);if(!id)throw new Error('Spreadsheet is not configured.');return SpreadsheetApp.openById(id);}
 function text_(v,n){v=String(v==null?'':v).trim().slice(0,n);return /^[=+\-@]/.test(v)?"'"+v:v;}
 function verifyTurnstile_(token){
