@@ -5,7 +5,7 @@
  */
 const CAT_HEADERS=['Course ID','Slug','Title (EN)','Title (বাংলা)','Status','Duration','BD Fee (BDT)','International Fee (USD)','Registration Deadline','BD Start Date','International Status','International Threshold','Course Data JSON','Created At','Published At'];
 const REG_HEADERS=['Submitted At','Registration ID','Course ID','Full Name','Email','Phone','Country','Organisation','Role','Education','Language','Payment Method','Payment Reference','Amount','Currency','Payment Status','Consent','Source','Admin Notes','bKash Sender'];
-const INT_HEADERS=['Submitted At','Record ID','Course ID','Full Name','Email','Phone','Country','Organisation','Role','Education','Preferred Time Zone','Language','Payment Method','Payment Reference','Amount','Currency','Interest Status','Consent','Source','Admin Notes'];
+const INT_HEADERS=['Submitted At','Record ID','Course ID','Full Name','Email','Phone','Country','Organisation','Role','Education','Preferred Time Zone','Language','Payment Method','Payment Reference','Amount','Currency','Interest Status','Consent','Source','Admin Notes','Calling Code','Fee and English Willingness','Laptop and Internet','Preferred Class Times','Learning Goals'];
 const PROP_ID='SCOPE_NEW_COURSE_SPREADSHEET_ID';
 
 function doGet(e){
@@ -13,7 +13,7 @@ function doGet(e){
   if(p.asset)return publicAsset_(String(p.asset));
   if(p.status)return registrationStatus_(String(p.slug||''),String(p.status),String(p.audience||''));
   if(p.catalog==='1')return json_({ok:true,courses:publicCourses_()});
-  if(p.ping==='1')return json_({ok:true,service:'SCOPE new course registration'});
+  if(p.ping==='1')return json_({ok:true,service:'SCOPE new course registration',internationalFormVersion:2});
   return json_({ok:false,error:'not_found'});
 }
 
@@ -40,11 +40,11 @@ function doPost(e){
     if(intent==='register'&&duplicatePaymentReference_(ss,values.paymentReference,intl))return json_({ok:false,error:'duplicate_payment_reference'});
     const id=(intl?'SCOPE-I-':'SCOPE-R-')+Utilities.getUuid().replace(/-/g,'').slice(0,14).toUpperCase();
     if(intl&&intent==='interest'){
-      sh.appendRow([new Date(),id,course.id,values.name,values.email,values.phone,values.country,values.org,values.role,'',values.timezone,values.language,'','',0,'','Interest',true,'Website','']);
+      sh.appendRow([new Date(),id,course.id,values.name,values.email,values.phone,values.country,values.org,values.role,values.education,values.timezone,values.language,'','',0,'','Interest',true,'Website','',values.callingCode,values.feeEnglishWilling,values.learningSetup,values.preferredTimes,values.learningGoals]);
       return json_({ok:true,id:id,type:'interest'});
     }
     const price=intl?course.data.fees.international:course.data.fees.bangladesh;
-    if(intl)sh.appendRow([new Date(),id,course.id,values.name,values.email,values.phone,values.country,values.org,values.role,'',values.timezone,values.language,values.paymentMethod||'',values.paymentReference||'',price.amount,price.currency,'Registered',true,'Website','']);
+    if(intl)sh.appendRow([new Date(),id,course.id,values.name,values.email,values.phone,values.country,values.org,values.role,values.education,values.timezone,values.language,values.paymentMethod||'',values.paymentReference||'',price.amount,price.currency,'Registered',true,'Website','',values.callingCode,values.feeEnglishWilling,values.learningSetup,values.preferredTimes,values.learningGoals]);
     else sh.appendRow([new Date(),id,course.id,values.name,values.email,values.phone,values.country,values.org,values.role,values.education||'',values.language,values.paymentMethod||'',values.paymentReference||'',price.amount,price.currency,'Pending',true,values.referralSource||'Website','',values.sender||'']);
     return json_({ok:true,id:id,type:'registration'});
   }catch(err){return json_({ok:false,error:'server_error'});}
@@ -74,8 +74,9 @@ function validateLearner_(p,intl,intent){
     if(intl){if(paymentMethod.length<2||paymentReference.length<2)throw new Error('invalid');}
     else if(paymentMethod!=='bKash Send Money'||!/^[A-Z0-9]{8,12}$/.test(paymentReference))throw new Error('invalid');
   }
+  if(intl&&intent==='interest'&&String(p.internationalFormVersion)==='2'&&(!/^\+[1-9][0-9]{0,6}$/.test(String(p.callingCode||''))||!['Yes','No'].includes(p.feeEnglishWilling)||!['Yes','No'].includes(p.learningSetup)||!String(p.timezone||'').trim()||!role))throw new Error('invalid');
   const sender=intl?'':text_(p.sender,11);if(sender&&!/^01[0-9]{9}$/.test(sender))throw new Error('invalid');
-  return {sender:sender,referralSource:text_(p.referralSource,80),name:name,email:email,phone:phone,country:country,org:org,role:role,language:language,education:intl?'':text_(p.education,160),timezone:intl?text_(p.timezone,100):'',paymentMethod:paymentMethod,paymentReference:paymentReference};
+  return {sender:sender,referralSource:text_(p.referralSource,80),name:name,email:email,phone:phone,country:country,org:org,role:role,language:language,education:text_(p.education,160),callingCode:text_(p.callingCode,8),feeEnglishWilling:text_(p.feeEnglishWilling,3),learningSetup:text_(p.learningSetup,3),preferredTimes:text_(p.preferredTimes,200),learningGoals:text_(p.learningGoals,1500),timezone:intl?text_(p.timezone,100):'',paymentMethod:paymentMethod,paymentReference:paymentReference};
 }
 function duplicatePaymentReference_(ss,reference,intl){
   const key=String(reference||'').trim().toUpperCase();if(!key)return false;
@@ -120,3 +121,4 @@ function publicAsset_(id){
   if(!allowed)return json_({ok:false,error:'not_found'});
   try{const f=DriveApp.getFileById(id),b=f.getBlob(),mime=b.getContentType();if(f.isTrashed()||f.getSize()>180000||!['image/png','image/jpeg','image/webp'].includes(mime))return json_({ok:false,error:'not_found'});return json_({ok:true,mime:mime,base64:Utilities.base64Encode(b.getBytes())});}catch(e){return json_({ok:false,error:'not_found'});}
 }
+
