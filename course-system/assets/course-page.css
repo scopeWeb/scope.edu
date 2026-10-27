@@ -1,7 +1,7 @@
 /* New-course pages share the MEAL/MIS visual system and page rhythm. */
-body[data-view="course"]{background:var(--navy);color:var(--navy)}
-body[data-view="course"] #app{padding:0;min-height:55vh}
-body[data-view="course"] #courseView{display:block}
+body[data-view="course"],body[data-view="register"]{background:var(--navy);color:var(--navy)}
+body[data-view="course"] #app,body[data-view="register"] #app{padding:0;min-height:55vh}
+body[data-view="course"] #courseView,body[data-view="register"] #courseView{display:block}
 .course-kicker{display:inline-block;color:#91eee2;font-size:.8rem;font-weight:800;letter-spacing:.12em}
 .course-hero-summary{max-width:72ch;font-size:1.08rem;line-height:1.8}
 .course-hero-actions{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:1.25rem;color:#fff}
@@ -70,3 +70,7 @@ body[data-view="course"] #courseView{display:block}
 @media(max-width:820px){.course-facts{grid-template-columns:repeat(2,minmax(0,1fr))}.course-registration .reg{grid-template-columns:1fr}.course-registration .sum{position:static}}
 @media(max-width:620px){.course-facts,.course-registration .formgrid,.cv-syllabus{grid-template-columns:1fr}.course-facts .meal-fact-card{padding:1rem}.cv-instructor{grid-template-columns:1fr}.cv-portrait-wrap{max-width:210px}.cv-section{padding:2.5rem 5vw}.cv-cards,.cv-tools{grid-template-columns:1fr}.cv-section:nth-child(even){background:#102943}}
 @media(prefers-reduced-motion:reduce){.cv-section{animation:none}}
+
+.course-register-hero .meal-cover-actions{margin-top:1.2rem}
+.course-registration-cta{display:grid;justify-items:start;gap:.5rem}
+.course-registration-cta h2,.course-registration-cta p{margin:.2rem 0}
