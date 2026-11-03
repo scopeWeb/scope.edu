@@ -2,8 +2,8 @@
 // (Sheet > Extensions > Apps Script). Credentials never go in the website.
 const SHEET_ID = '';   // leave empty when the script is opened from the Sheet itself (recommended)
 const COURSES = {
-  meal: { title: 'Practical MEAL Training for NGO & Humanitarian Professionals', fee: 650, sheet: 'MEAL Registrations' },
-  mis: { title: 'MIS & Information Management: Excel, Power BI and Data Management', fee: 850, sheet: 'MIS Registrations' }
+  meal: { title: 'Practical MEAL Training for NGO & Humanitarian Professionals', fee: 650, feeIntl: 80, sheet: 'MEAL Registrations' },
+  mis: { title: 'MIS & Information Management: Excel, Power BI and Data Management', fee: 850, feeIntl: 100, sheet: 'MIS Registrations' }
 };
 const REGISTRATION_SHEETS = ['MEAL Registrations', 'MIS Registrations', 'Registrations']; // keep legacy rows working
 const SCHOOL = 'SCOPE';
@@ -11,6 +11,8 @@ const MEET_LINK = '';  // optional: Google Meet link, added to the "payment veri
 const STATUS = ['Pending', 'Verified', 'Rejected'];
 const ENROL_HEAD = ['Time', 'Reference', 'Course', 'Name', 'Email', 'Phone', 'Organisation', 'Role', 'Education', 'Heard from', 'bKash sender', 'TrxID', 'Amount', 'Status', 'Verified email sent'];
 const INT_HEAD = ['Time', 'Name', 'Email', 'Phone', 'Course interest'];
+const INT_PAY_HEAD = ['Time','Payment ID','Interest Reference','Course slug','Course','Learner Name','Email','Country','Amount','Currency','Status','Verified email sent','Admin notes'];
+const INT_PAY_STATUSES = ['Instructions sent','Pending','Verified','Rejected','Email failed'];
 
 function json_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
 function s_(v) { v = String(v == null ? '' : v).trim().slice(0, 200); return /^[=+\-@]/.test(v) ? "'" + v : v; } // blocks spreadsheet formula injection
@@ -26,7 +28,9 @@ function sheet_(name, head, textCols) {
 }
 
 function doGet(e) {
-  const ref = e && e.parameter && e.parameter.status;
+  const p = (e && e.parameter) || {};
+  if (p.internationalPayments === '1') return json_({ok:true,open:internationalPaymentsOpen_()});
+  const ref = p.status;
   if (!ref) return json_({ ok: true, service: 'SCOPE form endpoint' });
   const ss = book_();
   for (let s = 0; s < REGISTRATION_SHEETS.length; s++) {
@@ -41,13 +45,14 @@ function doGet(e) {
 
 function doPost(e) {
   const p = (e && e.parameter) || {};
-  if (['enrol','interest','international'].indexOf(p.type) === -1) return json_({ok:false,error:'invalid_type'});
+  if (['enrol','interest','international','payment_request'].indexOf(p.type) === -1) return json_({ok:false,error:'invalid_type'});
   if (p.website) return json_({ ok: true }); // honeypot: bots see success, nothing is saved
-  if ((p.type === 'enrol' || p.type === 'interest' || p.type === 'international') && !verifyTurnstile_(p['cf-turnstile-response'])) return json_({ ok: false, error: 'captcha' });
+  if (!verifyTurnstile_(p['cf-turnstile-response'])) return json_({ ok: false, error: 'captcha' });
   const lock = LockService.getScriptLock();
   try {
     lock.waitLock(20000);
     if (p.type === 'international') return international_(p);
+    if (p.type === 'payment_request') return internationalPaymentRequest_(p);
     return p.type === 'enrol' ? enrol_(p) : interest_(p);
   } catch (err) {
     return json_({ ok: false, error: 'server' });
@@ -106,9 +111,13 @@ function interest_(p) {
 
 // Create an installable spreadsheet On edit trigger for statusChanged (MailApp needs authorization).
 function statusChanged(e) {
-  if (!e || !e.range || REGISTRATION_SHEETS.indexOf(e.range.getSheet().getName()) === -1 ||
-      e.range.getColumn() !== 14 || e.value !== 'Verified') return;
-  sendVerifiedRow_(e.range.getSheet().getName(), e.range.getRow());
+  if (!e || !e.range || e.value !== 'Verified') return;
+  const name = e.range.getSheet().getName();
+  if (name === 'International Payments' && e.range.getColumn() === 11) {
+    sendInternationalVerifiedRow_(e.range.getRow());
+    return;
+  }
+  if (REGISTRATION_SHEETS.indexOf(name) !== -1 && e.range.getColumn() === 14) sendVerifiedRow_(name, e.range.getRow());
 }
 function sendVerifiedRow_(sheetName, row) {
   const sh = book_().getSheetByName(sheetName);
@@ -135,7 +144,103 @@ function sendVerified() {
     for (let row = 2; row <= sh.getLastRow(); row++)
       if (sendVerifiedRow_(REGISTRATION_SHEETS[i], row)) n++;
   }
+  const intl = book_().getSheetByName('International Payments');
+  if (intl && intl.getLastRow() > 1) for (let row = 2; row <= intl.getLastRow(); row++) if (sendInternationalVerifiedRow_(row)) n++;
   SpreadsheetApp.getUi().alert(n + ' email(s) sent.');
+}
+
+function escapeHtml_(value) {
+  return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) {
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+function internationalPaymentsOpen_() {
+  const props = PropertiesService.getScriptProperties();
+  const required = ['SCOPE_PAYMENT_ADMIN_EMAIL','SCOPE_REMITTANCE_BANK_NAME','SCOPE_REMITTANCE_SWIFT','SCOPE_REMITTANCE_ROUTING','SCOPE_REMITTANCE_ACCOUNT_NUMBER','SCOPE_REMITTANCE_ACCOUNT_NAME'];
+  return props.getProperty('SCOPE_INTL_PAYMENTS_OPEN') === 'true' && required.every(k => !!props.getProperty(k));
+}
+
+function internationalPaymentRequest_(p) {
+  const reference = String(p.reference || '').trim();
+  const email = String(p.email || '').trim().toLowerCase();
+  const slug = String(p.course || '').trim();
+  if (!/^[a-f0-9-]{36}$/.test(reference) || !/^.+@[^\s@]+\.[^\s@]+$/.test(email) || !['meal','mis'].includes(slug))
+    return json_({ok:false,error:'validation'});
+  const interest = book_().getSheetByName('International Interest');
+  if (!interest || interest.getLastRow() < 2) return json_({ok:false,error:'interest_not_found'});
+  const matches = interest.getRange(2,1,interest.getLastRow()-1,29).getDisplayValues();
+  const learner = matches.find(r => r[1] === reference && r[2] === slug && String(r[5]).trim().toLowerCase() === email &&
+    String(r[24]).trim().indexOf('Interested') === 0 && String(r[25]).trim() === 'Yes' && String(r[26]).trim() === 'Yes' && String(r[27]).trim() === 'Yes' && String(r[28]).trim() === 'Yes');
+  if (!learner) return json_({ok:false,error:'interest_not_found'});
+  const course = COURSES[slug];
+  const props = PropertiesService.getScriptProperties();
+  if (!internationalPaymentsOpen_()) return json_({ok:false,error:'payment_not_open'});
+  const bank = {
+    name: props.getProperty('SCOPE_REMITTANCE_BANK_NAME') || '',
+    swift: props.getProperty('SCOPE_REMITTANCE_SWIFT') || '',
+    routing: props.getProperty('SCOPE_REMITTANCE_ROUTING') || '',
+    account: props.getProperty('SCOPE_REMITTANCE_ACCOUNT_NUMBER') || '',
+    accountName: props.getProperty('SCOPE_REMITTANCE_ACCOUNT_NAME') || '',
+    adminEmail: props.getProperty('SCOPE_PAYMENT_ADMIN_EMAIL') || ''
+  };
+  if (Object.keys(bank).some(k => !bank[k])) return json_({ok:false,error:'payment_not_configured'});
+  const ss = book_();
+  const sh = sheet_('International Payments', INT_PAY_HEAD, [2,3,4,7]);
+  sh.getRange(1,1,1,INT_PAY_HEAD.length).setValues([INT_PAY_HEAD]);
+  sh.getRange(2,11,Math.max(sh.getMaxRows()-1,1),1).setDataValidation(SpreadsheetApp.newDataValidation().requireValueInList(INT_PAY_STATUSES,true).build());
+  let row = 0, paymentId = '';
+  if (sh.getLastRow() > 1) {
+    const existing = sh.getRange(2,1,sh.getLastRow()-1,INT_PAY_HEAD.length).getDisplayValues();
+    const found = existing.findIndex(r => r[2] === reference);
+    if (found >= 0) {
+      row = found + 2;
+      paymentId = existing[found][1];
+      const state = existing[found][10];
+      if (state === 'Verified') return json_({ok:false,error:'already_verified'});
+      if (state !== 'Email failed') return json_({ok:true,type:'payment_instructions',paymentId:paymentId,alreadySent:true});
+    }
+  }
+  if (!row) {
+    paymentId = 'SCOPE-P-' + Utilities.formatDate(new Date(), Session.getScriptTimeZone(), 'yyyyMMdd') + '-' + Utilities.getUuid().replace(/-/g,'').slice(0,8).toUpperCase();
+    row = sh.getLastRow()+1;
+    sh.appendRow([new Date(),paymentId,reference,slug,course.title,learner[4],email,learner[6],course.feeIntl,'USD','Pending','', '']);
+  }
+  const esc = escapeHtml_;
+  const subject = 'SCOPE bank transfer instructions · ' + paymentId;
+  const body = 'Dear ' + learner[4] + ',\n\nYou requested international bank transfer instructions for ' + course.title + '.\n\nPayment ID: ' + paymentId + '\nAmount: USD ' + course.feeIntl + '\nBank: ' + bank.name + '\nSWIFT/BIC: ' + bank.swift + '\nRouting number: ' + bank.routing + '\nAccount name: ' + bank.accountName + '\nAccount number: ' + bank.account + '\nPayment reference/purpose: SCOPE course fee · ' + slug.toUpperCase() + ' · ' + paymentId + '\n\nPlease check any sender/intermediary bank charges before transfer. A payment is not confirmed until SCOPE verifies that the funds have arrived. After sending, reply to this email with the transfer receipt or bank reference.\n\n— SCOPE';
+  const htmlBody = '<p>Dear ' + esc(learner[4]) + ',</p><p>You requested international bank transfer instructions for <strong>' + esc(course.title) + '</strong>.</p><p><strong>Payment ID:</strong> ' + esc(paymentId) + '<br><strong>Amount:</strong> USD ' + course.feeIntl + '</p><p><strong>Bank:</strong> ' + esc(bank.name) + '<br><strong>SWIFT/BIC:</strong> ' + esc(bank.swift) + '<br><strong>Routing number:</strong> ' + esc(bank.routing) + '<br><strong>Account name:</strong> ' + esc(bank.accountName) + '<br><strong>Account number:</strong> ' + esc(bank.account) + '</p><p><strong>Payment reference/purpose:</strong> SCOPE course fee · ' + slug.toUpperCase() + ' · ' + esc(paymentId) + '</p><p>Please check any sender/intermediary bank charges before transfer. A payment is not confirmed until SCOPE verifies that the funds have arrived. After sending, reply to this email with the transfer receipt or bank reference.</p><p>— SCOPE</p>';
+  try {
+    MailApp.sendEmail({to:email,name:SCHOOL,subject:subject,body:body,htmlBody:htmlBody,replyTo:bank.adminEmail});
+    sh.getRange(row,11).setValue('Pending');
+    sh.getRange(row,13).setValue('Transfer instructions emailed');
+  } catch (err) {
+    sh.getRange(row,11).setValue('Email failed');
+    sh.getRange(row,13).setValue('Email delivery failed; learner may retry.');
+    return json_({ok:false,error:'email_failed'});
+  }
+  const admin = props.getProperty('SCOPE_PAYMENT_ADMIN_EMAIL');
+  if (admin) {
+    try { MailApp.sendEmail({to:admin,name:SCHOOL,subject:'International payment request · '+paymentId,body:'A learner requested bank transfer details.\nPayment ID: '+paymentId+'\nCourse: '+course.title+'\nAmount: USD '+course.feeIntl+'\nLearner: '+learner[4]+' <'+email+'>\nCountry: '+learner[6]+'\nStatus: Pending. Check the International Payments tab after funds arrive.'}); } catch (err) {}
+  }
+  return json_({ok:true,type:'payment_instructions',paymentId:paymentId});
+}
+
+function sendInternationalVerifiedRow_(row) {
+  const sh = book_().getSheetByName('International Payments');
+  if (!sh || row < 2) return false;
+  const r = sh.getRange(row,1,1,INT_PAY_HEAD.length).getValues()[0];
+  if (String(r[10]).trim() !== 'Verified' || r[11]) return false;
+  try {
+    const courseName = String(r[4]), paymentId = String(r[1]), learner = String(r[5]), email = String(r[6]);
+    MailApp.sendEmail({to:email,name:SCHOOL,subject:SCHOOL+': payment verified · '+paymentId,
+      body:'Dear '+learner+',\n\nSCOPE has verified receipt of your international course payment.\n\nCourse: '+courseName+'\nAmount: USD '+r[8]+'\nPayment ID: '+paymentId+'\nStatus: Payment verified. SCOPE will send any class/access details separately.\n\n— '+SCHOOL});
+    sh.getRange(row,12).setValue(new Date()).setNote('Payment verification email sent.');
+    return true;
+  } catch (err) {
+    sh.getRange(row,13).setNote('Verification email failed: '+String(err).slice(0,300));
+    return false;
+  }
 }
 
 function international_(p) {
