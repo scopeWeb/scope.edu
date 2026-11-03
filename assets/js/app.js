@@ -155,7 +155,7 @@ const MEAL_PROGRAMME={
           "উপযোগী Microsoft Excel-সহ laptop/desktop ও নির্ভরযোগ্য internet প্রয়োজন। এই কোর্সে Excel dashboard শেখানো হবে; Power BI আলাদা module নয়। Software licence অন্তর্ভুক্ত নয়। পেমেন্টের আগে SCOPE-এর সঙ্গে software compatibility নিশ্চিত করুন।"
         ],
         [
-          "Bangladesh delivery is in Bangla. International delivery follows the separately confirmed English-language batch and timetable. An English website does not by itself confirm an international batch. Recordings and a sample video are not currently promised.",
+          "Bangladesh delivery is in Bangla and English. International learners can enrol directly in the English-language batch and pay by direct bank transfer (SWIFT). SCOPE emails the bank instructions privately; a seat is confirmed after the bank credit is verified. Recordings and a sample video are not currently promised.",
           "বাংলাদেশি batch-এর ভাষা বাংলা ও ইংরেজি। আন্তর্জাতিক batch-এর ভাষা শুধু ইংরেজি। আপাতত recording বা sample video-এর প্রতিশ্রুতি দেওয়া হচ্ছে না।"
         ]
       ]
