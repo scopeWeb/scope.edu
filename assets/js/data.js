@@ -2,7 +2,7 @@
 // Statistics icons (24x24 grid). p = stroked lines, d = filled dots. Used on the home orbit planets and the course cards.
 const dot=(x,y)=>`M${x-1.3} ${y}a1.3 1.3 0 1 0 2.6 0a1.3 1.3 0 1 0-2.6 0`;
 window.SCOPE={
-fb:"https://www.facebook.com/profile.php?id=61576867631685",
+fb:"https://www.facebook.com/profile.php?id=61576867631685",email:"nayeemsarker.dataexpert@gmail.com",whatsapp:"+8801521407522",
 endpoint:"https://script.google.com/macros/s/AKfycbw1so3E1FC--Dp_E30qRHAv2_aMtcoHa46Jd_EJHMP-6wD7sRHoJRvEjV0KonncKt7tmw/exec", // paste NEW Apps Script web-app URL here (see README); empty = form says "not connected"
 turnstileSiteKey:"0x4AAAAAAFhBicfXcfrqVcNW", // public Cloudflare Turnstile site key; secret belongs in Apps Script properties
 pay:{to:"01521407522",amount:650}, // bKash Send Money number; course fees are configured per live course below
