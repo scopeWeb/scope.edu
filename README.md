@@ -39,7 +39,7 @@ Levels: Full, Balanced (phones, <4 cores, save-data), Reduced (OS setting). Foot
 `pip install playwright && playwright install chromium && python3 tools/check.py` (serves the site from a repo-like subpath and runs every check).
 
 ## International bank-transfer instructions (manual)
-International learners can first submit the existing free-interest form. On the live international MEAL/MIS flow, learners who confirm the USD fee can request bank-transfer instructions by email. The public website never returns or embeds the bank account details. The payment-instructions button appears only when the API confirms that the owner-only setup is complete and the payment window is open; the public status response contains only an open/closed flag.
+International learners enrol directly for live MEAL/MIS courses. They submit the enrolment form, confirm the USD fee and laptop/internet readiness, then explicitly request private SWIFT bank instructions by email. The public website never returns or embeds the bank account details. The payment-instructions button appears only when the API confirms that the owner-only setup is complete and the payment window is open; the public status response contains only an open/closed flag.
 
 Before enabling this:
 1. Replace `tools/apps-script.gs` in the connected Apps Script project with the current repository version. Save, then deploy a new web-app version (Execute as **Me**, access **Anyone**). The existing public endpoint URL stays the same.
@@ -52,7 +52,7 @@ Before enabling this:
    - `SCOPE_REMITTANCE_ACCOUNT_NAME`
    - `SCOPE_PAYMENT_ADMIN_EMAIL`: the SCOPE inbox that receives request alerts and learner replies.
 3. Enter the bank's exact details in Script Properties. Never paste account details into `assets/js/data.js`, HTML/JavaScript, email templates committed to GitHub, or a public spreadsheet. Script Properties remain server-side.
-4. Deploy a **new version** after the script and properties are ready. The first eligible request creates a private `International Payments` sheet tab and emails transfer instructions to the learner. The learner's amount and payment ID are recorded; the browser page never receives the account details.
+4. Deploy a **new version** after the script and properties are ready. The first eligible enrolment creates a private `International Interest` row with status `Enrolment pending payment`. The first instruction request creates a private `International Payments` row and emails transfer instructions to the learner. The learner's amount and payment ID are recorded; the browser page never receives the account details.
 5. Confirm the incoming bank credit against Pubali's record. In `International Payments`, set column **K — Status** to **Verified** only after funds arrive. The existing installable `statusChanged` spreadsheet trigger sends the payment-verification email. If no trigger exists, install the same From spreadsheet → On edit trigger described above. Use **SCOPE → Retry unsent verification emails** if an email fails.
 6. Leave `SCOPE_INTL_PAYMENTS_OPEN=false` again when the payment window closes. A bank transfer request or receipt does not itself confirm payment; confirmation is sent only after the sheet status is changed to Verified.
 
