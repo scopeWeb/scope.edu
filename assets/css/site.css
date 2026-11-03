@@ -224,3 +224,19 @@ body[data-slug="mis"] .meal-why .glass-tile h3,body[data-slug="mis"] .meal-why .
 body[data-slug="mis"] .meal-why .glass-tile>span{color:#08796f}
 
 body[data-slug="mis"] .sec.meal-why .glass-tile p:not(:has(>.btn)),body[data-slug="mis"] .sec.meal-why .glass-tile h3{color:#123247!important}
+
+/* Enrollment-first footer and clear course-fee labels */
+.course-fees{display:flex;flex-wrap:wrap;gap:.35rem .9rem;margin:.35rem 0 .9rem;padding:.6rem .7rem;border:1px solid #1769c226;border-radius:10px;background:linear-gradient(110deg,#e9f8f5,#eef4fb);color:#173c5b;font-size:.78rem;font-weight:800;line-height:1.5}
+.course-fees span{white-space:nowrap}
+.ft-main{display:grid;grid-template-columns:minmax(220px,1.2fr) repeat(3,minmax(145px,1fr));gap:clamp(1.2rem,3vw,2.4rem);padding:1.4rem 1.4rem 1.1rem}
+.ft-about p{max-width:34ch;margin:.8rem 0;color:#c6d6e3;font-size:.88rem;line-height:1.7}
+.ft-social{display:inline-flex;align-items:center;gap:.3rem;color:#8fe3d5;font-weight:750;text-decoration:none}
+.ft-col{display:flex;flex-direction:column;align-items:flex-start;gap:.55rem}
+.ft-col h2{margin:0 0 .25rem;color:#fff;font-size:.9rem;letter-spacing:.03em}
+.ft-col a{color:#d4e0ea;font-size:.84rem;line-height:1.55;text-decoration:none}
+.ft-col a:hover,.ft-social:hover{color:#8fe3d5;text-decoration:underline}
+.ft-col .ft-cta{margin-top:.2rem;color:#8fe3d5;font-weight:800}
+.ft-bottom{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin:0 1.4rem;padding:.8rem 0 .15rem;border-top:1px solid #ffffff22;color:#b7c8d6;font-size:.76rem}
+.ft-bottom .mo{margin-left:auto}
+@media(max-width:850px){.ft-main{grid-template-columns:repeat(2,minmax(0,1fr))}.ft-about{grid-column:1/-1}.ft-about p{max-width:60ch}}
+@media(max-width:520px){.ft-main{grid-template-columns:1fr;padding:1.1rem}.ft-about{grid-column:auto}.ft-col{padding-top:.2rem}.ft-bottom{margin:0 1.1rem}.ft-bottom .mo{margin-left:0}}
