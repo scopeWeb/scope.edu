@@ -11,7 +11,7 @@ const MEET_LINK = '';  // optional: Google Meet link, added to the "payment veri
 const STATUS = ['Pending', 'Verified', 'Rejected'];
 const ENROL_HEAD = ['Time', 'Reference', 'Course', 'Name', 'Email', 'Phone', 'Organisation', 'Role', 'Education', 'Heard from', 'bKash sender', 'TrxID', 'Amount', 'Status', 'Verified email sent'];
 const INT_HEAD = ['Time', 'Name', 'Email', 'Phone', 'Course interest'];
-const INT_PAY_HEAD = ['Time','Payment ID','Interest Reference','Course slug','Course','Learner Name','Email','Country','Amount','Currency','Status','Verified email sent','Admin notes'];
+const INT_PAY_HEAD = ['Time','Payment ID','Registration Reference','Course slug','Course','Learner Name','Email','Country','Amount','Currency','Status','Verified email sent','Admin notes'];
 const INT_PAY_STATUSES = ['Instructions sent','Pending','Verified','Rejected','Email failed'];
 
 function json_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
@@ -170,9 +170,11 @@ function internationalPaymentRequest_(p) {
   const interest = book_().getSheetByName('International Interest');
   if (!interest || interest.getLastRow() < 2) return json_({ok:false,error:'interest_not_found'});
   const matches = interest.getRange(2,1,interest.getLastRow()-1,29).getDisplayValues();
-  const learner = matches.find(r => r[1] === reference && r[2] === slug && String(r[5]).trim().toLowerCase() === email &&
-    String(r[24]).trim().indexOf('Interested') === 0 && String(r[25]).trim() === 'Yes' && String(r[26]).trim() === 'Yes' && String(r[27]).trim() === 'Yes' && String(r[28]).trim() === 'Yes');
-  if (!learner) return json_({ok:false,error:'interest_not_found'});
+  const learnerIndex = matches.findIndex(r => r[1] === reference && r[2] === slug && String(r[5]).trim().toLowerCase() === email &&
+    (String(r[24]).trim() === 'Enrolment pending payment' || String(r[24]).trim() === 'Payment instructions emailed — pending verification' || String(r[24]).trim().indexOf('Interested') === 0) &&
+    String(r[25]).trim() === 'Yes' && String(r[26]).trim() === 'Yes' && String(r[27]).trim() === 'Yes' && String(r[28]).trim() === 'Yes');
+  if (learnerIndex < 0) return json_({ok:false,error:'registration_not_found'});
+  const learner = matches[learnerIndex];
   const course = COURSES[slug];
   const props = PropertiesService.getScriptProperties();
   if (!internationalPaymentsOpen_()) return json_({ok:false,error:'payment_not_open'});
@@ -207,13 +209,14 @@ function internationalPaymentRequest_(p) {
     sh.appendRow([new Date(),paymentId,reference,slug,course.title,learner[4],email,learner[6],course.feeIntl,'USD','Pending','', '']);
   }
   const esc = escapeHtml_;
-  const subject = 'SCOPE bank transfer instructions · ' + paymentId;
-  const body = 'Dear ' + learner[4] + ',\n\nYou requested international bank transfer instructions for ' + course.title + '.\n\nPayment ID: ' + paymentId + '\nAmount: USD ' + course.feeIntl + '\nBank: ' + bank.name + '\nSWIFT/BIC: ' + bank.swift + '\nRouting number: ' + bank.routing + '\nAccount name: ' + bank.accountName + '\nAccount number: ' + bank.account + '\nPayment reference/purpose: SCOPE course fee · ' + slug.toUpperCase() + ' · ' + paymentId + '\n\nPlease check any sender/intermediary bank charges before transfer. A payment is not confirmed until SCOPE verifies that the funds have arrived. After sending, reply to this email with the transfer receipt or bank reference.\n\n— SCOPE';
+  const subject = 'SCOPE international enrolment · SWIFT payment instructions · ' + paymentId;
+  const body = 'Dear ' + learner[4] + ',\n\nYour enrolment for ' + course.title + ' is recorded as pending payment. Here are the private SWIFT bank instructions for completing your enrolment.\n\nPayment ID: ' + paymentId + '\nAmount: USD ' + course.feeIntl + '\nBank: ' + bank.name + '\nSWIFT/BIC: ' + bank.swift + '\nRouting number: ' + bank.routing + '\nAccount name: ' + bank.accountName + '\nAccount number: ' + bank.account + '\nPayment reference/purpose: SCOPE course fee · ' + slug.toUpperCase() + ' · ' + paymentId + '\n\nPlease check any sender/intermediary bank charges before transfer. A payment is not confirmed until SCOPE verifies that the funds have arrived. After sending, reply to this email with the transfer receipt or bank reference.\n\n— SCOPE';
   const htmlBody = '<p>Dear ' + esc(learner[4]) + ',</p><p>You requested international bank transfer instructions for <strong>' + esc(course.title) + '</strong>.</p><p><strong>Payment ID:</strong> ' + esc(paymentId) + '<br><strong>Amount:</strong> USD ' + course.feeIntl + '</p><p><strong>Bank:</strong> ' + esc(bank.name) + '<br><strong>SWIFT/BIC:</strong> ' + esc(bank.swift) + '<br><strong>Routing number:</strong> ' + esc(bank.routing) + '<br><strong>Account name:</strong> ' + esc(bank.accountName) + '<br><strong>Account number:</strong> ' + esc(bank.account) + '</p><p><strong>Payment reference/purpose:</strong> SCOPE course fee · ' + slug.toUpperCase() + ' · ' + esc(paymentId) + '</p><p>Please check any sender/intermediary bank charges before transfer. A payment is not confirmed until SCOPE verifies that the funds have arrived. After sending, reply to this email with the transfer receipt or bank reference.</p><p>— SCOPE</p>';
   try {
     MailApp.sendEmail({to:email,name:SCHOOL,subject:subject,body:body,htmlBody:htmlBody,replyTo:bank.adminEmail});
     sh.getRange(row,11).setValue('Pending');
     sh.getRange(row,13).setValue('Transfer instructions emailed');
+    interest.getRange(learnerIndex+2,25).setValue('Payment instructions emailed — pending verification');
   } catch (err) {
     sh.getRange(row,11).setValue('Email failed');
     sh.getRange(row,13).setValue('Email delivery failed; learner may retry.');
@@ -221,7 +224,7 @@ function internationalPaymentRequest_(p) {
   }
   const admin = props.getProperty('SCOPE_PAYMENT_ADMIN_EMAIL');
   if (admin) {
-    try { MailApp.sendEmail({to:admin,name:SCHOOL,subject:'International payment request · '+paymentId,body:'A learner requested bank transfer details.\nPayment ID: '+paymentId+'\nCourse: '+course.title+'\nAmount: USD '+course.feeIntl+'\nLearner: '+learner[4]+' <'+email+'>\nCountry: '+learner[6]+'\nStatus: Pending. Check the International Payments tab after funds arrive.'}); } catch (err) {}
+    try { MailApp.sendEmail({to:admin,name:SCHOOL,subject:'International enrolment · payment instructions emailed · '+paymentId,body:'A learner enrolled and requested private SWIFT transfer details.\nPayment ID: '+paymentId+'\nCourse: '+course.title+'\nAmount: USD '+course.feeIntl+'\nLearner: '+learner[4]+' <'+email+'>\nCountry: '+learner[6]+'\nStatus: Pending. Check the International Payments tab after funds arrive.'}); } catch (err) {}
   }
   return json_({ok:true,type:'payment_instructions',paymentId:paymentId});
 }
@@ -234,7 +237,7 @@ function sendInternationalVerifiedRow_(row) {
   try {
     const courseName = String(r[4]), paymentId = String(r[1]), learner = String(r[5]), email = String(r[6]);
     MailApp.sendEmail({to:email,name:SCHOOL,subject:SCHOOL+': payment verified · '+paymentId,
-      body:'Dear '+learner+',\n\nSCOPE has verified receipt of your international course payment.\n\nCourse: '+courseName+'\nAmount: USD '+r[8]+'\nPayment ID: '+paymentId+'\nStatus: Payment verified. SCOPE will send any class/access details separately.\n\n— '+SCHOOL});
+      body:'Dear '+learner+',\n\nSCOPE has verified receipt of your international course payment. Your seat is confirmed.\n\nCourse: '+courseName+'\nAmount: USD '+r[8]+'\nPayment ID: '+paymentId+'\nStatus: Payment verified. SCOPE will send any class/access details separately.\n\n— '+SCHOOL});
     sh.getRange(row,12).setValue(new Date()).setNote('Payment verification email sent.');
     return true;
   } catch (err) {
@@ -253,12 +256,12 @@ function international_(p) {
  const required=['name','email','country','callingCode','phone','occupation','timezone'];
  if(!titles[p.course]||required.some(k=>!p[k]||String(p[k]).length>200)||!/^.+@[^\s@]+\.[^\s@]+$/.test(p.email)||!/^\+[1-9][0-9]{0,6}$/.test(p.callingCode)||! /^[0-9 ()+.-]{4,25}$/.test(p.phone)||String(p.experience||'').length>1500||p.terms!=='on'||p.contactConsent!=='on'||! /^[a-f0-9-]{36}$/.test(p.reference||''))return json_({ok:false,error:'validation'});
  const keys=['name','email','country','callingCode','phone','occupation','organisation','university','universityCountry','qualification','experience','timezone','preferredTimes'];
- const head=['Timestamp','Reference','Course slug','Course title'].concat(keys,['Fee','Currency','Duration','Classes','Launch threshold','Terms','Contact consent','Status']);
+ const head=['Timestamp','Reference','Course slug','Course title'].concat(keys,['Fee','Currency','Duration','Classes','Enrolment type','Terms','Contact consent','Status']);
  head.push.apply(head,readiness);
  const sh=sheet_(p.interestMode==='general'?'Course Interest':'International Interest',head,head.map((_,i)=>i+1));
  sh.getRange(1,1,1,head.length).setValues([head]);
  if(sh.getLastRow()>1&&sh.getRange(2,2,sh.getLastRow()-1,1).getValues().some(r=>r[0]===p.reference))return json_({ok:true,type:'international',schema:2,reference:p.reference});
  const safe=v=>{v=String(v||'').trim();return /^[=+\-@]/.test(v)?"'"+v:v;};
- sh.appendRow([new Date(),p.reference,p.course,titles[p.course]].concat(keys.map(k=>safe(p[k])),[international?(mis?100:80):'',international?'USD':'',international?'3 months':'',international?36:'',international?(mis?'At least 500 by 30 December 2026; conditional launch January 2027':'More than 500 by 25 November 2026; conditional start 5 December 2026'):'To be announced',true,true,'Interested — no payment'],readiness.map(k=>p[k])));
+ sh.appendRow([new Date(),p.reference,p.course,titles[p.course]].concat(keys.map(k=>safe(p[k])),[international?(mis?100:80):'',international?'USD':'',international?'3 months':'',international?36:'',international?'Direct enrolment — SWIFT bank payment':'To be announced',true,true,international?'Enrolment pending payment':'Interested — no payment'],readiness.map(k=>p[k])));
  SpreadsheetApp.flush();return json_({ok:true,type:'international',schema:2,reference:p.reference});
 }
